@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>云南AI招投标数据库</title>
+<style>
+  :root{
+    --bg:#F5F6F4; --surface:#FFFFFF; --ink:#22282F; --muted:#6B7480;
+    --line:#E3E6E1; --accent:#2F6B5A; --accent-soft:#E4EFE9; --accent-ink:#24523F;
+    --chip-bid-bg:#E7EDF8; --chip-bid-fg:#3A5E9C;
+    --chip-win-bg:#E4EFE9; --chip-win-fg:#2F6B5A;
+    --chip-stop-bg:#F7E7E5; --chip-stop-fg:#A8453E;
+    --chip-ref-bg:#EEEFEC; --chip-ref-fg:#6B7480;
+    --amount:#7A5518;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#14181C; --surface:#1C2228; --ink:#E6E9EC; --muted:#99A2AC;
+      --line:#2A323A; --accent:#63A98F; --accent-soft:#20362E; --accent-ink:#8FC5AF;
+      --chip-bid-bg:#243349; --chip-bid-fg:#93B2E3;
+      --chip-win-bg:#20362E; --chip-win-fg:#8FC5AF;
+      --chip-stop-bg:#3D2523; --chip-stop-fg:#DE9A93;
+      --chip-ref-bg:#262C32; --chip-ref-fg:#99A2AC;
+      --amount:#D3AB63;
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#F5F6F4; --surface:#FFFFFF; --ink:#22282F; --muted:#6B7480;
+    --line:#E3E6E1; --accent:#2F6B5A; --accent-soft:#E4EFE9; --accent-ink:#24523F;
+    --chip-bid-bg:#E7EDF8; --chip-bid-fg:#3A5E9C;
+    --chip-win-bg:#E4EFE9; --chip-win-fg:#2F6B5A;
+    --chip-stop-bg:#F7E7E5; --chip-stop-fg:#A8453E;
+    --chip-ref-bg:#EEEFEC; --chip-ref-fg:#6B7480;
+    --amount:#7A5518;
+  }
+  :root[data-theme="dark"]{
+    --bg:#14181C; --surface:#1C2228; --ink:#E6E9EC; --muted:#99A2AC;
+    --line:#2A323A; --accent:#63A98F; --accent-soft:#20362E; --accent-ink:#8FC5AF;
+    --chip-bid-bg:#243349; --chip-bid-fg:#93B2E3;
+    --chip-win-bg:#20362E; --chip-win-fg:#8FC5AF;
+    --chip-stop-bg:#3D2523; --chip-stop-fg:#DE9A93;
+    --chip-ref-bg:#262C32; --chip-ref-fg:#99A2AC;
+    --amount:#D3AB63;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Source Han Sans SC","Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    line-height:1.65; font-size:15px;
+  }
+  .wrap{max-width:1060px; margin:0 auto; padding:32px 20px 64px}
+  header.top{border-bottom:2px solid var(--ink); padding-bottom:20px; margin-bottom:20px}
+  .eyebrow{font-size:12px; letter-spacing:.18em; color:var(--accent); font-weight:600; text-transform:uppercase; margin-bottom:6px}
+  h1{margin:0 0 8px; font-size:30px; line-height:1.25; text-wrap:balance; letter-spacing:.01em}
+  .lede{color:var(--muted); max-width:46em; margin:0}
+  .metaline{display:flex; flex-wrap:wrap; gap:8px 20px; margin-top:14px; font-size:13px; color:var(--muted)}
+  .metaline b{color:var(--ink); font-weight:600}
+  .metaline .num{font-variant-numeric:tabular-nums; color:var(--accent-ink); font-weight:700}
+
+  .toolbar{display:flex; flex-direction:column; gap:10px; margin:18px 0 6px}
+  .frow{display:flex; flex-wrap:wrap; align-items:center; gap:6px}
+  .flabel{font-size:12px; color:var(--muted); letter-spacing:.08em; min-width:3.5em}
+  .pill{
+    border:1px solid var(--line); background:var(--surface); color:var(--ink);
+    border-radius:999px; padding:3px 12px; font-size:13px; cursor:pointer; font-family:inherit;
+  }
+  .pill:hover{border-color:var(--accent)}
+  .pill.on{background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600}
+  :root[data-theme="dark"] .pill.on, .dark-on{color:#0F1512}
+  .pill .cnt{opacity:.7; font-size:12px; font-variant-numeric:tabular-nums}
+  .searchbox{
+    flex:1; min-width:200px; border:1px solid var(--line); background:var(--surface); color:var(--ink);
+    border-radius:8px; padding:6px 12px; font-size:14px; font-family:inherit;
+  }
+  .searchbox:focus{outline:2px solid var(--accent); outline-offset:1px; border-color:var(--accent)}
+  .resultline{font-size:13px; color:var(--muted); margin:10px 2px; font-variant-numeric:tabular-nums}
+
+  .cards{display:flex; flex-direction:column; gap:12px}
+  .card{
+    background:var(--surface); border:1px solid var(--line); border-radius:10px;
+    padding:16px 18px; border-left:4px solid var(--line);
+  }
+  .card.ai-core{border-left-color:var(--accent)}
+  .card.ai-edge{border-left-color:var(--chip-bid-fg)}
+  .card .row1{display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-bottom:6px}
+  .chip{font-size:12px; padding:1px 9px; border-radius:999px; white-space:nowrap}
+  .chip.org{background:var(--accent-soft); color:var(--accent-ink); font-weight:600}
+  .chip.bid{background:var(--chip-bid-bg); color:var(--chip-bid-fg)}
+  .chip.win{background:var(--chip-win-bg); color:var(--chip-win-fg)}
+  .chip.stop{background:var(--chip-stop-bg); color:var(--chip-stop-fg)}
+  .chip.ref{background:var(--chip-ref-bg); color:var(--chip-ref-fg)}
+  .chip.aicore{border:1px solid var(--accent); color:var(--accent-ink); background:transparent}
+  .chip.aiedge{border:1px solid var(--line); color:var(--muted); background:transparent}
+  .chip.st{border:1px dashed var(--line); color:var(--muted); background:transparent}
+  .card .date{margin-left:auto; font-size:13px; color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap}
+  .card h3{margin:2px 0 6px; font-size:16.5px; line-height:1.45; font-weight:600}
+  .kv{display:flex; flex-wrap:wrap; gap:4px 22px; font-size:13.5px; margin-bottom:6px}
+  .kv span{color:var(--muted)}
+  .kv b{font-weight:600; color:var(--ink)}
+  .kv .money{color:var(--amount); font-variant-numeric:tabular-nums; font-weight:700}
+  .card p.sum{margin:4px 0 8px; color:var(--ink); font-size:14px; max-width:62em}
+  .card a.src{font-size:13px; color:var(--accent-ink); text-decoration:none; border-bottom:1px solid var(--accent-soft); word-break:break-all}
+  .card a.src:hover{border-bottom-color:var(--accent)}
+  .empty{padding:40px; text-align:center; color:var(--muted); background:var(--surface); border:1px dashed var(--line); border-radius:10px}
+
+  details.notes{margin-top:32px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:4px 18px}
+  details.notes summary{cursor:pointer; font-weight:600; padding:12px 0; list-style-position:inside}
+  details.notes h4{margin:14px 0 4px; font-size:14px; color:var(--accent-ink)}
+  details.notes p, details.notes li{font-size:13.5px; color:var(--muted); max-width:70em}
+  footer{margin-top:36px; padding-top:16px; border-top:1px solid var(--line); font-size:12.5px; color:var(--muted); display:flex; flex-wrap:wrap; gap:6px 24px}
+  .cfglist{display:flex; flex-wrap:wrap; gap:6px; margin:6px 0 10px}
+  .cfgitem{display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); background:var(--bg);
+    border-radius:8px; padding:4px 10px; font-size:13px}
+  .cfgitem .pend{font-size:11px; padding:0 7px; border-radius:999px; background:var(--chip-stop-bg); color:var(--chip-stop-fg)}
+  .cfgitem .active{font-size:11px; padding:0 7px; border-radius:999px; background:var(--chip-win-bg); color:var(--chip-win-fg)}
+  .cfgitem button{border:none; background:none; color:var(--muted); cursor:pointer; font-size:13px; padding:0 2px}
+  .cfgitem button:hover{color:var(--chip-stop-fg)}
+  .cfgform{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:4px 0 14px}
+  .cfgform .searchbox{flex:1; min-width:160px}
+  .addbtn{background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600}
+  .cfgta{width:100%; border:1px solid var(--line); background:var(--bg); color:var(--ink);
+    border-radius:8px; padding:10px 12px; font-size:13px; font-family:inherit; resize:vertical; box-sizing:border-box}
+  @media (prefers-reduced-motion: no-preference){
+    .card{transition:border-color .15s}
+  }
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">云南 · 人工智能招投标追踪</div>
+  <h1>云南重点单位人工智能招投标数据库</h1>
+  <p class="lede">追踪南方电网云南分公司（云南电网）、云南省低空产业投资有限公司、云南省公路局、云南省公路科学技术研究院四家单位2010年以来与人工智能、大模型相关，以及信息化建设、软件开发定制、算法开发定制方向的公开招标、采购与中标信息。</p>
+  <div class="metaline">
+    <span>收录项目 <b class="num" id="statTotal">–</b> 个</span>
+    <span>可统计金额合计约 <b class="num" id="statAmount">–</b> 万元</span>
+    <span>数据区间 <b>2014年12月 – 2026年7月</b></span>
+    <span>最后更新 <b>2026-07-21</b> · 每周自动更新</span>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="frow"><span class="flabel">单位</span><span id="fOrg"></span></div>
+  <div class="frow"><span class="flabel">年份</span><span id="fYear"></span></div>
+  <div class="frow"><span class="flabel">标的类型</span><span id="fSt"></span></div>
+  <div class="frow"><span class="flabel">公告</span><span id="fCat"></span>
+    <span class="flabel" style="margin-left:14px">AI关联</span><span id="fAi"></span></div>
+  <div class="frow"><input class="searchbox" id="q" type="search" placeholder="搜索项目名称、内容、中标单位…" aria-label="搜索"></div>
+</div>
+<div class="resultline" id="resultline"></div>
+<div class="cards" id="cards"></div>
+
+<details class="notes" id="cfgPanel">
+  <summary>⚙ 检索配置 — 新增检索单位／招投标类型</summary>
+  <p>本页数据由后台检索代理维护：<b>每周一上午9点</b>自动按下方配置重新检索全部单位与类型。网页本身受浏览器安全策略限制无法直接联网检索，因此新增条目后请点「复制更新指令」，将指令<b>发送给 Claude</b>（任意对话窗口均可），几分钟内即可完成检索并更新本页；新增的单位/类型也会写入本页配置，此后每周自动纳入检索。</p>
+
+  <h4>检索单位（<span id="unitCount"></span>）</h4>
+  <div class="cfglist" id="unitList"></div>
+  <div class="cfgform">
+    <input class="searchbox" id="newUnitName" type="text" placeholder="单位全称，如：昆明市交通运输局">
+    <input class="searchbox" id="newUnitNote" type="text" placeholder="备注（可选）：隶属关系、别名、常用采购平台等">
+    <button class="pill addbtn" id="addUnitBtn">＋ 添加单位</button>
+  </div>
+
+  <h4>标的类型（<span id="stCount"></span>）</h4>
+  <p style="margin-top:0">按项目采购内容分类，用于上方「标的类型」筛选栏，如软件、硬件、服务、科研；可自定义新增（例如：算力租赁、数据服务、无人机装备）。新增后已收录项目会重新归类，后续新项目也按新分类标注。</p>
+  <div class="cfglist" id="stList"></div>
+  <div class="cfgform">
+    <input class="searchbox" id="newStName" type="text" placeholder="新的标的类型，如：算力租赁 / 数据服务 / 无人机装备">
+    <button class="pill addbtn" id="addStBtn">＋ 添加标的类型</button>
+  </div>
+
+  <h4>检索关键词（<span id="typeCount"></span>）</h4>
+  <p style="margin-top:0">每周自动检索时与单位名称组合使用的技术关键词。</p>
+  <div class="cfglist" id="typeList"></div>
+  <div class="cfgform">
+    <input class="searchbox" id="newTypeName" type="text" placeholder="新增检索关键词，如：无人机 / 数据标注 / 智能体">
+    <button class="pill addbtn" id="addTypeBtn">＋ 添加关键词</button>
+  </div>
+
+  <div id="pendingBox" hidden>
+    <h4>待生效的新增项 — 复制下方指令发送给 Claude 即可生效</h4>
+    <textarea class="cfgta" id="pendingText" readonly rows="5"></textarea>
+    <div class="cfgform">
+      <button class="pill addbtn" id="copyBtn">📋 复制更新指令</button>
+      <button class="pill" id="clearBtn">清空待生效项</button>
+      <span id="copyStatus" style="font-size:13px;color:var(--accent-ink)"></span>
+    </div>
+  </div>
+</details>
+
+<details class="notes">
+  <summary>数据来源、口径与局限性说明</summary>
+  <h4>数据口径</h4>
+  <p>「核心AI」指公告中明确出现人工智能／AI／大模型／机器学习／深度学习／智能识别等技术内容的项目；「智能化相关」指智慧平台、数据中心、智能监测等公告未直接注明AI算法、但属智能化建设链条的边缘项目；「非AI·参考」为单位体量小、作为背景参考收录的非AI项目。金额既含预算价也含中标／成交价，以各条目标注为准。</p>
+  <p>「标的类型」按项目采购内容分类：软件·平台（AI示范区、创新平台分节点等平台性基础设施建设）、软件开发·定制（面向具体业务的应用系统、大模型应用等定制开发）、算法开发·定制（以算法／模型组件开发调优为标的，如算法"赛马"、语音识别能力建设）、信息化（综合性信息化建设项目）、硬件·设备（服务器、安全设备、机器人等实物）、服务·运维（运维、运营、租赁、检测、数据处理等服务）、科研·研发（技术研究与样机试制类科技项目）；一个项目含多类内容时按主要标的归类。</p>
+  <h4>南方电网云南分公司（云南电网）</h4>
+  <p>数据主要来自南方电网供应链统一服务平台（bidding.csg.cn）及聚合标讯平台。南网体系采购基本只走自有平台，不进政府采购网；部分2021-2022年历史公告页面已失效，多数招标项目的中标结果未公开或需平台会员权限查看，2025年信息化第2批各AI标段精确日期与预算待核实。2021年-2022年上半年明确冠名"人工智能"的采购极少（AI内容多隐含在科技项目批次中），可能存在漏项。</p>
+  <h4>云南省低空产业投资有限公司</h4>
+  <p>该公司2025年9月10日注册成立（云南交投集团牵头，联合云南机场集团、云南交发公司，注册资本6亿元），公开可查记录均为其作为投标人／中标人的项目；未发现其作为采购人的公告，其自身采购可能走云南交投内部电子采购平台（未被公开索引）。弥勒项目信息来自官方媒体报道，原始公告金额未公开。</p>
+  <h4>云南省公路局</h4>
+  <p>2021-2023年未检索到明确含AI模块的采购公告，不代表不存在——早期公告在聚合平台多为付费可见。「公路AI智能巡检系统」（预算138.73万元）的中标结果未被公开索引，待核实。云南省公共资源交易网与政采云为动态页面，部分字段仅能依据搜索快照。</p>
+  <h4>云南省公路科学技术研究院</h4>
+  <p>该院系云南省公路局下属公益二类事业单位（注意区别于云南交投旗下的"云南省交通科学研究院有限公司"）。中国政府采购网上该院公告最早见于2024年初，2021年7月-2023年12月检索为0条，该时段数据基本缺失，需通过云南省政府采购网历史库或付费标讯平台补查。其AI研发（如桥梁结构图像识别智能检测）多以省交通运输厅科技项目形式立项，不走招投标程序，故未收录。</p>
+  <h4>共性局限</h4>
+  <p>千里马、采招网、剑鱼标讯、比地招标等聚合平台需登录付费，关键字段（金额、中标人）对非会员加密；云南省公共资源交易信息网为JS动态页面无法直接抓取。因此本库为公开可索引信息的汇总，覆盖度受限，标注"未公开／待核实"的字段建议以原始公告为准。</p>
+  <h4>2010-2021年历史区间的特别说明</h4>
+  <p>检索起点为2010年，但早期公告存世极少：中国政府采购网已清除约2021年以前的公告详情页，南方电网采购平台旧版页面大量失效（已通过互联网档案馆回溯其2013-2019年存档916个公告页），云南省级交易平台历史库不对公开引擎开放。目前最早可核验记录为2014年12月；2010-2014年基本无公开可查公告，2015-2021年条目主要来自采招网等存档页，其中标单位多被隐名（需会员查看），金额标"约"者为存档页换算值。该时段无以AI为直接标的的采购记录——四家单位明确的AI采购均始于2022年之后。</p>
+</details>
+
+<footer>
+  <span>数据截至 2026-07-21 · 每周自动重新检索并更新</span>
+  <span>来源：南方电网供应链平台、中国政府采购网、全国公共资源交易平台及各标讯聚合平台</span>
+  <span>仅汇总公开信息，供研究参考，以官方原始公告为准</span>
+</footer>
+</div>
+
+<script>
+// ===== 检索配置（每周例程按此配置执行检索；新增单位/类型请用页面下方“检索配置”面板） =====
+const CONFIG = {
+  units: [
+    {key:"csg", name:"南方电网云南分公司", full:"云南电网有限责任公司及下属各供电局（南方电网体系，主要来源 bidding.csg.cn）", status:"active"},
+    {key:"dk",  name:"云南省低空产业投资", full:"云南省低空产业投资有限公司（云南交投系，2025年9月成立，多以中标人身份出现）", status:"active"},
+    {key:"glj", name:"云南省公路局", full:"云南省公路局（含云南省公路信息中心等直属单位，来源 ccgp.gov.cn）", status:"active"},
+    {key:"gky", name:"云南省公路科学技术研究院", full:"云南省公路科学技术研究院（省公路局下属事业单位，来源 ccgp.gov.cn）", status:"active"}
+  ],
+  stypes: [
+    {key:"sw", label:"软件·平台"},
+    {key:"rjkf", label:"软件开发·定制"},
+    {key:"ad", label:"算法开发·定制"},
+    {key:"xxh", label:"信息化"},
+    {key:"hw", label:"硬件·设备"},
+    {key:"sv", label:"服务·运维"},
+    {key:"rd", label:"科研·研发"}
+  ],
+  keywords: ["人工智能","AI","大模型","机器学习","深度学习","智能识别","智能巡检","语音识别","知识图谱","算力","GPU","智能客服","数字员工","RPA","信息化","软件开发","算法开发","定制开发"]
+};
+const ORGS = {};
+CONFIG.units.forEach(u => { ORGS[u.key] = u.name; });
+const STYPES = {};
+CONFIG.stypes.forEach(s => { STYPES[s.key] = s.label; });
+// cat: bid=招标/采购公告, win=中标/成交, stop=终止
+// ai: core=核心AI, edge=智能化相关, ref=非AI参考
+// amt: 可统计金额（万元，预算或成交价，null=未公开）
+const DATA = [
+ {org:"csg",cat:"win",ai:"core",date:"2022-10",ds:202210,st:"hw",name:"基于视频智能识别技术的配网工作票现场安全监察应用研究项目 GPU服务器采购",buyer:"云南云电同方科技有限公司（云南电网体系相关企业）",type:"单一来源采购公示",amt:null,amtT:"未公开",winner:"待核实（原公示页面已失效）",sum:"为配网工作票现场安全监察AI视频识别研究采购GPU服务器算力设备。",url:"http://www.bidding.csg.cn/zbhxrgs/1200320406.jhtml"},
+ {org:"csg",cat:"bid",ai:"core",date:"2023-01-17",ds:202301,st:"rd",name:"2023年第一批科技项目采购 标05：基于AI识图模型化的二次系统快速定位与安措隔离智能指引技术研究",buyer:"云南电网有限责任公司",type:"采购公告（竞争性谈判）",amt:140,amtT:"预算140万元",winner:"未公开",sum:"运用AI识图与模型化技术，研究二次系统快速定位与安全措施隔离的智能指引方法。",url:"https://www.bidding.csg.cn/fzbgg/1200326531.jhtml"},
+ {org:"csg",cat:"bid",ai:"core",date:"2023-01-17",ds:202301,st:"rd",name:"2023年第一批科技项目采购 标34：基于群体智能与深度学习的台区户变关系多元分析模型研究",buyer:"云南电网有限责任公司",type:"采购公告（竞争性谈判）",amt:124,amtT:"预算124万元",winner:"未公开",sum:"利用群体智能与深度学习算法构建配电台区户变关系多元分析模型。",url:"https://www.bidding.csg.cn/fzbgg/1200326531.jhtml"},
+ {org:"csg",cat:"bid",ai:"core",date:"2023-01-17",ds:202301,st:"rd",name:"2023年第一批科技项目采购 标39：文本关键信息提取与图谱构建技术研究",buyer:"云南电网有限责任公司",type:"采购公告（竞争性谈判）",amt:86,amtT:"预算86万元",winner:"未公开",sum:"研究电力文本关键信息抽取（NLP）与知识图谱构建技术。",url:"https://www.bidding.csg.cn/fzbgg/1200326531.jhtml"},
+ {org:"csg",cat:"bid",ai:"core",date:"2024-02-02",ds:202402,st:"rd",name:"2024年第一批科技项目专项采购 标12：AI电力运行路径智能规划与自动巡航研究及电网调度智能驾驶舱系统试制",buyer:"云南电网有限责任公司（调度中心）",type:"公开招标",amt:238,amtT:"预算238万元",winner:"未公开",sum:"基于AI技术研究电力运行路径智能规划与自动巡航，试制电网调度智能驾驶舱系统。",url:"https://www.bidding.csg.cn/zbgg/1200351246.jhtml"},
+ {org:"csg",cat:"bid",ai:"core",date:"2024-02-02",ds:202402,st:"rd",name:"2024年第一批科技项目专项采购 标31：DNN、CF等多种人工智能算法研究及数字化生产指挥智能专家辅助应用原型系统试制",buyer:"云南电网有限责任公司",type:"公开招标",amt:248,amtT:"预算248万元",winner:"未公开",sum:"研究DNN、协同过滤等多种AI算法，试制数字化生产指挥智能专家辅助应用原型系统。",url:"https://www.bidding.csg.cn/zbgg/1200351246.jhtml"},
+ {org:"csg",cat:"bid",ai:"core",date:"2024-02-02",ds:202402,st:"rd",name:"2024年第一批科技项目专项采购 标37：基于人工智能的线路智能生成施工方案研究及人工智能设备试制",buyer:"云南电网有限责任公司",type:"公开招标",amt:245,amtT:"预算245万元",winner:"未公开",sum:"研究基于AI的线路施工方案智能生成技术并试制配套AI设备。",url:"https://www.bidding.csg.cn/zbgg/1200351246.jhtml"},
+ {org:"csg",cat:"bid",ai:"core",date:"2024-02-02",ds:202402,st:"rd",name:"2024年第一批科技项目专项采购 标38：5G智能拣选机器人关键技术研究及电力物资拣选机器人系统试制",buyer:"云南电网有限责任公司",type:"公开招标",amt:270,amtT:"预算270万元",winner:"未公开",sum:"研究5G智能拣选机器人关键技术，试制电力物资仓储智能拣选机器人系统。",url:"https://www.bidding.csg.cn/zbgg/1200351246.jhtml"},
+ {org:"csg",cat:"bid",ai:"core",date:"2024-03-01",ds:202403,st:"7",name:"2024年第一批信息化项目服务类专项采购 标7：95598智能客服与坐席支撑功能优化提升",buyer:"云南电网有限责任公司",type:"公开招标",amt:638.37,amtT:"预算638.37万元",winner:"未公开",sum:"对95598客服热线的智能客服（智能语音／问答）与坐席支撑功能优化提升。",url:"https://www.bidding.csg.cn/zbgg/1200352672.jhtml"},
+ {org:"csg",cat:"bid",ai:"core",date:"2024-06-21",ds:202406,st:"法",name:"2024年云南电网公司人工智能应用场景（数字生产）算法“赛马”",buyer:"云南电网公司信息中心",type:"算法竞赛采购公告",amt:438.14,amtT:"预算合计438.135万元（19包）",winner:"按赛马成绩确定，未公开",sum:"面向主网输电线路、变电设备、配网线路的19类生产域缺陷识别AI算法调优竞赛，要求“数据、算法不出云”，在内网AI平台训练调优。",url:"https://www.bidding.csg.cn/ggxx/1200361513.jhtml"},
+ {org:"csg",cat:"bid",ai:"core",date:"2024-09-20",ds:202409,st:"1",name:"2024年第三批信息化项目服务类专项采购 标13：主网运行策略与风险分析智能决策平台建设",buyer:"云南电网有限责任公司",type:"公开招标",amt:112.56,amtT:"预算112.56万元",winner:"未公开",sum:"建设主网运行策略与风险分析智能决策平台，应用智能分析算法辅助电网运行决策。",url:"https://www.bidding.csg.cn/zbgg/1200371890.jhtml"},
+ {org:"csg",cat:"bid",ai:"core",date:"2025-04-30",ds:202504,st:"务",name:"基于电力行业大模型的财务智能化应用探索及建设",buyer:"云南电网有限责任公司",type:"公开招标",amt:null,amtT:"未公开（需登录查看）",winner:"未公开",sum:"依托电力行业大模型构建企业级财务智能中枢，实现财务数据汇聚、档案管理、智能问答与报表生成，服务期12个月。",url:"https://wap.qianlima.com/zb/detail/20250430_503701569.html"},
+ {org:"csg",cat:"bid",ai:"core",date:"2025（待核实）",ds:202507,st:"sw",name:"2025年信息化项目第2批 昆明供电局人工智能综合应用示范区建设项目（一期）服务",buyer:"云南电网有限责任公司昆明供电局",type:"公开招标",amt:null,amtT:"未公开",winner:"待核实",sum:"昆明供电局作为南方电网7家AI集中应用示范区建设单位之一，开展输变配智能巡检等AI典型场景一期建设。",url:"https://www.dlztbw.cn/news/political/252.html"},
+ {org:"csg",cat:"bid",ai:"core",date:"2025（待核实）",ds:202507,st:"sw",name:"2025年信息化项目第2批 玉溪供电局人工智能综合应用示范区建设项目（一期）服务",buyer:"云南电网有限责任公司玉溪供电局",type:"公开招标",amt:null,amtT:"未公开",winner:"待核实",sum:"玉溪供电局AI示范区一期建设；玉溪局同期上线基于“大瓦特+DeepSeek”的配网抢修“指挥官”智能体。",url:"https://www.dlztbw.cn/news/political/252.html"},
+ {org:"csg",cat:"bid",ai:"core",date:"2025（待核实）",ds:202507,st:"销",name:"2025年信息化项目第2批 基于人工智能的营销业务智能化应用建设服务",buyer:"云南电网有限责任公司（市场部）",type:"公开招标",amt:null,amtT:"未公开",winner:"待核实",sum:"运用AI对营销业务（业扩、稽查、客服等）开展智能化应用建设。",url:"https://www.dlztbw.cn/news/political/252.html"},
+ {org:"csg",cat:"bid",ai:"core",date:"2025（待核实）",ds:202507,st:"sv",name:"2025年信息化项目第2批 人工智能组件安全适应性改造服务",buyer:"云南电网有限责任公司（信息中心）",type:"公开招标",amt:null,amtT:"未公开",winner:"待核实",sum:"对在用AI组件（算法／模型服务）进行安全适应性改造，满足AI应用安全合规要求。",url:"https://www.dlztbw.cn/news/political/252.html"},
+ {org:"csg",cat:"bid",ai:"core",date:"2025（待核实）",ds:202507,st:"sw",name:"2025年信息化项目第2批 电力行业人工智能创新平台云南分节点建设服务",buyer:"云南电网有限责任公司（信息中心）",type:"公开招标",amt:null,amtT:"未公开",winner:"待核实",sum:"建设南方电网电力行业AI创新平台（全栈国产化）云南分节点，支撑省内AI训练推理算力与模型服务。",url:"https://www.dlztbw.cn/news/political/252.html"},
+ {org:"csg",cat:"bid",ai:"core",date:"2025-11-04",ds:202511,st:"5",name:"2025年信息化项目第3批 标5：AI赋能云网后勤业务专业大模型应用场景建设",buyer:"云南电网有限责任公司",type:"公开招标",amt:274.94,amtT:"预算274.94万元",winner:"未公开",sum:"面向后勤业务建设专业大模型应用场景。",url:"https://www.anfangzhaobiao.com/news-469d0b9ffc91d94b498f2b40330ca3bc/"},
+ {org:"csg",cat:"bid",ai:"core",date:"2025-11-04",ds:202511,st:"1",name:"2025年信息化项目第3批 标11：方言语音识别能力建设",buyer:"云南电网有限责任公司",type:"公开招标",amt:645.87,amtT:"预算645.87万元",winner:"未公开",sum:"建设云南方言语音识别能力，提升客服及业务场景语音智能处理水平。",url:"https://www.anfangzhaobiao.com/news-469d0b9ffc91d94b498f2b40330ca3bc/"},
+ {org:"csg",cat:"bid",ai:"core",date:"2025-11-04",ds:202511,st:"1",name:"2025年信息化项目第3批 标12：基于大语言模型的面试智能分析系统",buyer:"云南电网有限责任公司",type:"公开招标",amt:688.26,amtT:"预算688.26万元",winner:"未公开",sum:"基于大语言模型（LLM）构建人力资源面试智能分析系统。",url:"https://www.anfangzhaobiao.com/news-469d0b9ffc91d94b498f2b40330ca3bc/"},
+ {org:"csg",cat:"bid",ai:"core",date:"2025-11-04",ds:202511,st:"1",name:"2025年信息化项目第3批 标13：管理体系融合落地人工智能场景应用建设",buyer:"云南电网有限责任公司",type:"公开招标",amt:801.92,amtT:"预算801.92万元",winner:"未公开",sum:"围绕管理体系融合落地建设人工智能场景应用。",url:"https://www.anfangzhaobiao.com/news-469d0b9ffc91d94b498f2b40330ca3bc/"},
+ {org:"csg",cat:"bid",ai:"core",date:"2025-11-04",ds:202511,st:"1",name:"2025年信息化项目第3批 标14：信息化项目全生命周期文档智能审查",buyer:"云南电网有限责任公司",type:"公开招标",amt:267.97,amtT:"预算267.97万元",winner:"未公开",sum:"利用智能文档审查（NLP／大模型）技术对信息化项目全生命周期文档自动审查。",url:"https://www.anfangzhaobiao.com/news-469d0b9ffc91d94b498f2b40330ca3bc/"},
+ {org:"csg",cat:"win",ai:"core",date:"2025-12-10",ds:202512,st:"hw",name:"2025年第27批货物类整合专项采购 安全设备采购（大模型安全防护设备）",buyer:"云南电网有限责任公司",type:"中标公示",amt:414.70,amtT:"中标414.70万元",winner:"南方电网数据平台与安全（广东）有限公司",sum:"采购大模型安全防护设备，为大模型应用提供内容安全与攻击防护；同批含边缘计算节点建设（银鹏科技中标105.83万元）。",url:"https://www.bbda.com/bidDetail/c11f27cadc7a9ab2b1a911fa0e324f8dc437dec5e8d4aa7fc2ec1ff2f94b5ac4.html"},
+ {org:"csg",cat:"bid",ai:"core",date:"2026-03-27",ds:202603,st:"sv",name:"2026-2027年信息化项目第1批服务类框架采购 标9：人工智能、RPA平台运营",buyer:"云南电网有限责任公司",type:"公开招标（框架采购）",amt:700,amtT:"预估700万元（两包合计）",winner:"未公开",sum:"公司人工智能平台和RPA（数字员工）平台2026-2027年运营服务框架采购。",url:"https://www.bidding.csg.cn/zbgg/1200425943.jhtml"},
+
+ {org:"dk",cat:"win",ai:"ref",date:"2026-02-10",ds:202602,st:"sv",name:"云南省林草局2026年森林草原航空消防租机服务项目（大型固定翼无人机）3标段",buyer:"云南省林业和草原局（采购人）",type:"中标结果公告",amt:750,amtT:"中标750万元（标段预算780万元）",winner:"云南省低空产业投资有限公司／成都天域航通科技（联合体）",sum:"公司成立后首个公开中标项目：大型固定翼无人机森林草原航空消防租机服务，服务期120天、计划飞行360小时。公告未直接涉及AI，作为该公司业务参考收录。",url:"https://lcj.yn.gov.cn/html/2026/zhengfucaigou_0210/76131.html"},
+ {org:"dk",cat:"win",ai:"core",date:"2026-02",ds:202602,st:"sv",name:"弥勒市智能巡检无人机租赁服务采购项目",buyer:"弥勒市政府方（具体采购部门待核实）",type:"中标信息（据官方媒体报道）",amt:null,amtT:"未公开",winner:"云南省低空产业投资有限公司（牵头联合体）",sum:"部署56套无人机全自动机场及“一网统飞”智能管控平台，融合AI识别实现全域7×24小时无人化监测与事件闭环处置，覆盖公共安全、应急、城管、生态等八大政务场景；试运行累计飞行437.9小时、处置问题267个。",url:"https://www.zgjtb.com/zhitong/2026-02/10/content_506865.html"},
+
+ {org:"glj",cat:"bid",ai:"core",date:"2024-05-30",ds:202405,st:"sv",name:"云南省公路信息中心 公路AI智能巡检系统",buyer:"云南省公路信息中心（省公路局直属）",type:"公开招标",amt:138.73,amtT:"预算138.73万元",winner:"未公开（结果公告未被索引，待核实）",sum:"对曲靖、楚雄、临沧三个公路局管养的3821公里普通国省道开展公路病害AI智能巡检，要求路面病害检出率≥90%、面积长度测算准确率≥85%，并对交安设施每年不少于6次AI识别，合同期一年。",url:"http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202405/t20240530_22254177.htm"},
+ {org:"glj",cat:"bid",ai:"core",date:"2026-06（截止06-18）",ds:202606,st:"sv",name:"288个重点路段路网运行视频监控及系统运行维护2026年度项目",buyer:"云南省公路局",type:"竞争性磋商",amt:null,amtT:"未公开",winner:"未公开（截至检索时未见成交公告）",sum:"对全省288套重点路段路网监控视频、17套视频平台及事件检测系统提供运维保障，明确要求提供“路网运行监测公路事件视频AI智能分析功能”及可视化管理分析平台。",url:"https://cntcitc.com.cn/more.html?chanId=12&chanType=3&contentId=eb4fe0d3430742e29a475423e7ebd621"},
+
+ {org:"gky",cat:"win",ai:"edge",date:"2024-05-13",ds:202405,st:"速",name:"云南省高速公路养护管理监管系统开发技术服务",buyer:"云南省公路科学技术研究院（采购人）",type:"竞争性磋商·成交公告",amt:439,amtT:"成交439万元",winner:"武汉光谷卓越科技股份有限公司",sum:"构建高速公路“养护一张图”数字化监管平台，实现基础要素数字化、大数据汇集分析与全过程信息化管理（数据平台类边缘项目）。",url:"http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202405/t20240513_22099927.htm"},
+ {org:"gky",cat:"win",ai:"edge",date:"2024-07-22",ds:202407,st:"数",name:"云南公路养护大数据中心数据仓库建设服务",buyer:"云南省公路科学技术研究院（采购人）",type:"竞争性磋商·成交公告",amt:88.8,amtT:"成交88.8万元",winner:"云南优软科技有限公司",sum:"建设公路养护大数据中心数据仓库，统一管理分发多系统数据，支撑桥隧科学决策、智慧养护与应急管理。",url:"http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202407/t20240722_22691853.htm"},
+ {org:"gky",cat:"win",ai:"edge",date:"2024-07-23",ds:202407,st:"能",name:"普通国省干线公路事故多发路段交通风险状态智能仿真可视化平台测试技术服务",buyer:"云南省公路科学技术研究院（采购人）",type:"竞争性磋商·成交公告",amt:18.93,amtT:"成交18.93万元",winner:"昆明理工大学",sum:"开发交通风险状态智能仿真可视化平台架构及数据处理、分析、可视化模块，实现交通风险仿真与数字化评估。",url:"http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202407/t20240723_22704324.htm"},
+ {org:"gky",cat:"win",ai:"edge",date:"2024-09-26",ds:202409,st:"村",name:"云南农村公路养护管理高质量发展数字平台建设",buyer:"云南省公路科学技术研究院（采购人）",type:"竞争性磋商·成交公告",amt:39.68,amtT:"成交39.68万元",winner:"云南时讯空间科技有限公司",sum:"建设农村公路养护数字平台，整合5个既有系统分散数据，用于绩效考核与资金分配。",url:"http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202409/t20240926_23253127.htm"},
+ {org:"gky",cat:"win",ai:"edge",date:"2024-11-07",ds:202411,st:"道",name:"隧道机电设施智慧养护管控平台模块开发测试（第1期）",buyer:"云南省公路科学技术研究院（采购人）",type:"竞争性磋商·成交公告",amt:9.18,amtT:"成交9.18万元",winner:"武汉展盛科技有限公司",sum:"在凤凰山、甘家寨、大普吉三条山区隧道部署智慧养护管控平台，实现设备统一接入、集中管控与故障预警。",url:"http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202411/t20241107_23553331.htm"},
+ {org:"gky",cat:"win",ai:"edge",date:"2025-02-19",ds:202502,st:"sv",name:"路面、路基、沿线设施病害图像人工识别处理服务",buyer:"云南省公路科学技术研究院（采购人）",type:"竞争性磋商·成交公告",amt:48.02,amtT:"成交48.02万元",winner:"昆明路通科技发展中心",sum:"对16875公里农村公路自动化检测采集的图像数据进行病害识别处理；公告明确为“人工识别”，系自动化检测数据链条的配套环节（边缘项目）。",url:"http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202502/t20250219_24187917.htm"},
+ {org:"gky",cat:"win",ai:"edge",date:"2025-07-30",ds:202507,st:"hw",name:"结构健康监测系统集成服务",buyer:"云南省公路科学技术研究院（采购人）",type:"竞争性磋商·成交公告",amt:41.78,amtT:"成交41.78万元（预算45万元）",winner:"智性科技南通有限公司",sum:"建设桥梁等结构健康监测数据采集传输存储系统，与省公路局企业级平台数据对接，为监测数据智能分析提供数据基础。",url:"http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202507/t20250730_25070955.htm"},
+ {org:"gky",cat:"stop",ai:"edge",date:"2025-09-06",ds:202509,st:"sv",name:"“智慧站所”管理平台格点气象数据服务",buyer:"云南省公路科学技术研究院（采购人）",type:"竞争性磋商（已终止）",amt:null,amtT:"预算100万元（未成交）",winner:"无（发布11天后终止采购）",sum:"拟采购1km×1km格点气象数据，实现路网与气象数据叠加融合，支撑暴雨、团雾、路面结冰等极端天气公里级、小时级智能预警。",url:"http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202509/t20250906_25304517.htm"},
+ {org:"gky",cat:"win",ai:"core",date:"2026-01-30",ds:202601,st:"hw",name:"AI算力中心GPU服务器采购（二次）",buyer:"云南省公路科学技术研究院（采购人）",type:"竞争性谈判·成交公告",amt:89.9,amtT:"成交89.9万元",winner:"云南厦深科技有限公司",sum:"为该院AI算力中心采购AI图像识别用GPU服务器2台（单价28万元/台），支撑图像识别等人工智能计算任务。",url:"http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202601/t20260130_26137004.htm"},
+ {org:"gky",cat:"win",ai:"edge",date:"2026-06-11",ds:202606,st:"sv",name:"复杂山区公路重点路段运行风险评估基础数据采集、加工与专项分析",buyer:"云南省公路科学技术研究院（采购人）",type:"竞争性磋商·成交公告",amt:28.58,amtT:"成交28.58万元",winner:"昆明理工大学资产经营有限公司",sum:"集成道路线形、车辆轨迹、交通事故、交通流等多源数据集并开展风险评价分析。",url:"http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202606/t20260611_26735944.htm"},
+ {org:"gky",cat:"win",ai:"core",date:"2026-06-29",ds:202606,st:"hw",name:"路面平整度和车辙检测模型训练设备、磁盘阵列采购（二次）",buyer:"云南省公路科学技术研究院（采购人）",type:"竞争性谈判·成交公告",amt:15.65,amtT:"成交15.65万元",winner:"五华区勇丰电脑经营部",sum:"采购路面平整度、车辙检测AI模型训练工作站及磁盘阵列，直接服务于路面病害智能检测模型研发；首次流标后二次成交。",url:"http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202606/t20260629_26836145.htm"},
+ {org:"gky",cat:"bid",ai:"core",date:"2026-07-07",ds:202607,st:"rd",name:"基于轻量化PLC的智能隧道控制系统一体化研发",buyer:"云南省公路科学技术研究院（采购人）",type:"竞争性磋商公告",amt:12,amtT:"预算12万元",winner:"未公开（磋商中）",sum:"针对公路隧道数据孤岛、管理分散问题，研发轻量化国产PLC硬件、无编程部署与全生命周期智能运维关键技术并示范。",url:"http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202607/t20260707_26886296.htm"},
+
+ {org:"csg",cat:"bid",ai:"ref",date:"2026-03",ds:202603,st:"xxh",name:"2026-2027年信息化项目第1批服务类框架采购 标11：敏态数字化技术支持服务",buyer:"云南电网有限责任公司",type:"公开招标（框架采购）",amt:2350,amtT:"预算2350万元",winner:"未公开",sum:"面向云南电网各单位的敏态数字化开发与技术支持框架服务，为本批框架中预算最大标包。",url:"https://www.bidding.csg.cn/zbgg/1200425943.jhtml"},
+ {org:"csg",cat:"bid",ai:"ref",date:"2026-03",ds:202603,st:"xxh",name:"2026-2027年信息化项目第1批服务类框架采购 标10：数据中心运营项目",buyer:"云南电网有限责任公司（数智运营中心）",type:"公开招标（框架采购）",amt:1068,amtT:"预算1068万元",winner:"未公开",sum:"公司级数据中心运营服务框架采购，含数据资产运营支撑。",url:"https://www.bidding.csg.cn/zbgg/1200425943.jhtml"},
+ {org:"csg",cat:"bid",ai:"ref",date:"2026-03",ds:202603,st:"xxh",name:"2026-2027年信息化项目第1批服务类框架采购 标8：数据质量提升技术服务",buyer:"云南电网有限责任公司（数智运营中心）",type:"公开招标（框架采购）",amt:811.09,amtT:"预算811.09万元",winner:"未公开",sum:"全网数据质量核查、治理与提升技术服务框架采购。",url:"https://www.bidding.csg.cn/zbgg/1200425943.jhtml"},
+ {org:"csg",cat:"bid",ai:"edge",date:"2025-11-04",ds:202511,st:"rjkf",name:"2025年信息化项目第3批服务类专项采购 标1：现场作业可视化监督系统建设",buyer:"云南电网有限责任公司",type:"公开招标",amt:734.36,amtT:"预算734.36万元",winner:"未公开",sum:"建设覆盖现场作业的可视化智能监督系统；本批共18个标包总预算约8737万元。",url:"https://www.anfangzhaobiao.com/news-469d0b9ffc91d94b498f2b40330ca3bc/"},
+ {org:"csg",cat:"bid",ai:"ref",date:"2025-11-04",ds:202511,st:"rjkf",name:"2025年信息化项目第3批服务类专项采购 标3：电网管理平台（基建域）相关功能改造",buyer:"云南电网有限责任公司",type:"公开招标",amt:696.97,amtT:"预算696.97万元",winner:"未公开",sum:"对电网管理平台基建域开展个性化功能改造开发。",url:"https://www.anfangzhaobiao.com/news-469d0b9ffc91d94b498f2b40330ca3bc/"},
+ {org:"csg",cat:"bid",ai:"ref",date:"2025-11-04",ds:202511,st:"rjkf",name:"2025年信息化项目第3批服务类专项采购 标9：营销系统现货模块高效化架构升级",buyer:"云南电网有限责任公司",type:"公开招标",amt:518.12,amtT:"预算518.12万元",winner:"未公开",sum:"对营销系统电力现货交易模块进行高效化架构升级开发。",url:"https://www.anfangzhaobiao.com/news-469d0b9ffc91d94b498f2b40330ca3bc/"},
+ {org:"csg",cat:"bid",ai:"edge",date:"2025-05（待核实）",ds:202505,st:"xxh",name:"2025年信息化项目第2批服务类专项采购（共37个标包）",buyer:"云南电网有限责任公司（信息中心、市场部、电科院及各供电局）",type:"公开招标",amt:null,amtT:"未公开（37个标包）",winner:"待核实",sum:"含营配融合APP一网通办作业安全管控、低压业扩优化管控、线损异常分析降损等数字应用建设服务；其中AI相关标包（昆明/玉溪AI示范区、营销智能化、AI组件安全改造、AI创新平台分节点）已单列收录。",url:"https://www.dlztbw.cn/news/political/252.html"},
+ {org:"csg",cat:"win",ai:"ref",date:"2025-03",ds:202503,st:"xxh",name:"2025-2026年信息化项目第1批服务类框架采购（18个包）",buyer:"云南电网有限责任公司",type:"中标候选人公示",amt:null,amtT:"未公开（按框架下浮率报价）",winner:"南网数字电网集团、云南远信科技、广州海颐软件、南网人工智能科技等（分包）",sum:"覆盖应用系统维护、营销域／资产域系统维护、配网及主网OMS系统软件平台、南网云云南分节点运营等18个包。",url:"https://yunnan.jianyu360.cn/jybx/20250304_250303165330454.html"},
+ {org:"csg",cat:"bid",ai:"edge",date:"2025-01",ds:202501,st:"rjkf",name:"2025年信息化项目第1批服务类专项采购 标3：电网管理平台（计财域）财务智慧报账建设应用",buyer:"云南电网有限责任公司",type:"公开招标",amt:1418.29,amtT:"预算1418.29万元",winner:"未公开",sum:"在电网管理平台计财域建设财务智慧报账应用，为本批最大标包。",url:"http://www.bidding.csg.cn/zbgg/1200386113.jhtml"},
+ {org:"csg",cat:"bid",ai:"core",date:"2025-01",ds:202501,st:"ad",name:"2025年信息化项目第1批服务类专项采购 标5：党建L1级NLP大模型建设",buyer:"云南电网有限责任公司",type:"公开招标",amt:682.11,amtT:"预算682.11万元",winner:"未公开",sum:"面向党建业务定制L1级NLP大模型的开发建设，服务期18个月。",url:"http://www.bidding.csg.cn/zbgg/1200386113.jhtml"},
+ {org:"csg",cat:"bid",ai:"ref",date:"2025-01",ds:202501,st:"rjkf",name:"2025年信息化项目第1批服务类专项采购 标1：数据运营辅助分析应用建设",buyer:"云南电网有限责任公司",type:"公开招标",amt:328.71,amtT:"预算328.71万元",winner:"未公开",sum:"基于公司云化数据中心开发数据运营辅助分析应用并推广实施。",url:"http://www.bidding.csg.cn/zbgg/1200386113.jhtml"},
+ {org:"csg",cat:"bid",ai:"edge",date:"2025-01",ds:202501,st:"xxh",name:"2025-2026年系统运行部自动化专业基建项目可研、设计服务类框架采购（云边融合智能调度运行平台边缘集群建设）",buyer:"云南电网有限责任公司",type:"公开招标（框架采购）",amt:1021.11,amtT:"预算合计1021.11万元（两包）",winner:"未公开",sum:"云南中调及16个州市供电局云边融合智能调度运行平台省地级边缘集群建设的可研与设计服务。",url:"https://www.bidding.csg.cn/zbgg/1200385332.jhtml"},
+ {org:"csg",cat:"win",ai:"core",date:"2025-04",ds:202504,st:"ad",name:"2025年第一批科技项目专项采购：多智能体协同互动技术研究及智能体平台试制",buyer:"云南电网有限责任公司",type:"中标候选人公示",amt:252,amtT:"第一候选人报价252万元",winner:"深圳市大数据研究院（第一中标候选人）",sum:"多智能体协同互动技术研究并试制智能体平台。",url:"https://yunnan.jianyu360.cn/jybx/20250411_250410175817352.html"},
+ {org:"csg",cat:"win",ai:"edge",date:"2025-04",ds:202504,st:"ad",name:"2025年第一批科技项目专项采购：充电设施计量性能在线监测模型研究及平台试制",buyer:"云南电网有限责任公司",type:"中标候选人公示",amt:373.5,amtT:"第一候选人报价373.5万元",winner:"北京志翔科技股份有限公司（第一中标候选人）",sum:"研究充电设施计量性能在线监测模型并开发监测平台。",url:"https://yunnan.jianyu360.cn/jybx/20250411_250410175817352.html"},
+ {org:"csg",cat:"win",ai:"edge",date:"2025-04",ds:202504,st:"ad",name:"2025年第一批科技项目专项采购：选址选线评估模型研究及智能化应用平台试制",buyer:"云南电网有限责任公司",type:"中标候选人公示",amt:208.98,amtT:"第一候选人报价208.98万元",winner:"广东南方数码科技股份有限公司（第一中标候选人）",sum:"电网选址选线评估模型研究与智能化应用平台开发试制。",url:"https://yunnan.jianyu360.cn/jybx/20250411_250410175817352.html"},
+ {org:"csg",cat:"bid",ai:"ref",date:"2024-09-20",ds:202409,st:"rjkf",name:"2024年第三批信息化项目服务类专项采购 标1：电网管理平台（计财域）网级统推模块推广实施及云南优化应用",buyer:"云南电网有限责任公司",type:"公开招标",amt:775.02,amtT:"预算775.02万元",winner:"未公开",sum:"计财域网级统推模块在云南的推广实施与优化应用开发；本批17个标包总预算约4765万元。",url:"https://www.bidding.csg.cn/zbgg/1200371890.jhtml"},
+ {org:"csg",cat:"bid",ai:"ref",date:"2024-09-20",ds:202409,st:"xxh",name:"2024年第三批信息化项目服务类专项采购 标17：云南能源大数据中心运营技术支持（2024-2025年）",buyer:"云南电网有限责任公司",type:"公开招标",amt:380.40,amtT:"预算380.40万元",winner:"未公开",sum:"云南能源大数据中心运营及数据服务技术支持。",url:"https://www.bidding.csg.cn/zbgg/1200371890.jhtml"},
+ {org:"csg",cat:"bid",ai:"ref",date:"2024-09-20",ds:202409,st:"rjkf",name:"2024年第三批信息化项目服务类专项采购 标2：电网管理平台（计财域）输配电价模拟测算及管理应用",buyer:"云南电网有限责任公司",type:"公开招标",amt:335.01,amtT:"预算335.01万元",winner:"未公开",sum:"输配电价模拟测算与管理应用功能开发。",url:"https://www.bidding.csg.cn/zbgg/1200371890.jhtml"},
+ {org:"csg",cat:"bid",ai:"ref",date:"2024-03-01",ds:202403,st:"rjkf",name:"2024年第一批信息化项目服务类专项采购：云数后勤服务管理平台建设",buyer:"云南电网有限责任公司",type:"公开招标",amt:575.76,amtT:"预算575.76万元",winner:"未公开",sum:"建设云数后勤服务管理平台；本批16个标包总预算约5388万元。",url:"https://www.bidding.csg.cn/zbgg/1200352672.jhtml"},
+ {org:"csg",cat:"bid",ai:"edge",date:"2024-03-01",ds:202403,st:"rjkf",name:"2024年第一批信息化项目服务类专项采购：新型电力系统全景监测及运行指挥平台",buyer:"云南电网有限责任公司",type:"公开招标",amt:520.01,amtT:"预算520.01万元",winner:"未公开",sum:"开发新型电力系统全景监测及运行指挥平台。",url:"https://www.bidding.csg.cn/zbgg/1200352672.jhtml"},
+ {org:"csg",cat:"bid",ai:"ref",date:"2024-03-01",ds:202403,st:"rjkf",name:"2024年第一批信息化项目服务类专项采购：生产指挥平台个性化功能改造",buyer:"云南电网有限责任公司",type:"公开招标",amt:491.31,amtT:"预算491.31万元",winner:"未公开",sum:"生产指挥平台个性化功能改造开发（同批另有生产指挥系统个性化场景改造395.37万元）。",url:"https://www.bidding.csg.cn/zbgg/1200352672.jhtml"},
+ {org:"csg",cat:"bid",ai:"ref",date:"2023-06",ds:202306,st:"rjkf",name:"2023年第二批信息化项目服务类专项采购 标23：电网管理平台（人资域）个性化功能建设",buyer:"云南电网有限责任公司",type:"公开招标",amt:709.70,amtT:"预算709.70万元",winner:"未公开",sum:"电网管理平台人资域个性化功能开发建设，为本批最大标包。",url:"http://www.bidding.csg.cn/zbgg/1200334116.jhtml"},
+ {org:"csg",cat:"bid",ai:"edge",date:"2023-06",ds:202306,st:"xxh",name:"2023年第二批信息化项目服务类专项采购 标28：全域网络安全设备数据接入及深度安全防御分析系统优化",buyer:"云南电网有限责任公司",type:"公开招标",amt:466.74,amtT:"预算466.74万元",winner:"未公开",sum:"全域网络安全设备数据接入与深度安全防御分析系统优化开发。",url:"http://www.bidding.csg.cn/zbgg/1200334116.jhtml"},
+ {org:"csg",cat:"bid",ai:"ref",date:"2023-06",ds:202306,st:"rjkf",name:"2023年第二批信息化项目服务类专项采购 标1：资金全过程分析项目",buyer:"云南电网有限责任公司",type:"公开招标",amt:432.90,amtT:"预算432.90万元",winner:"未公开",sum:"资金全过程分析应用开发（同批另有客户服务平台省级集中对账418.86万元、保供服务与网格管理数字应用优化421.98万元等）。",url:"http://www.bidding.csg.cn/zbgg/1200334116.jhtml"},
+ {org:"csg",cat:"bid",ai:"ref",date:"2022-08",ds:202208,st:"xxh",name:"2022年第二批信息化项目服务类专项采购（7个标包）",buyer:"云南电网有限责任公司",type:"公开招标",amt:null,amtT:"主要标包预算合计约945万元",winner:"未公开",sum:"含网络安全技术服务、统一开发技术管控、数据中心云南分节点运营、财务共享优化等7个信息化服务标包。",url:"https://www.bidding.csg.cn/zbgg/1200315711.jhtml"},
+
+ {org:"csg",cat:"bid",ai:"ref",date:"2015-10-26",ds:201510,st:"xxh",name:"信息中心云南电网安全生产管理系统、一体化GIS系统历史数据清理等技术支持服务",buyer:"云南电网有限责任公司信息中心",type:"公开招标",amt:null,amtT:"未公开",winner:"未公开",sum:"为一体化安全生产管理系统1.0及一体化GIS平台全省上线试运行提供历史数据清理与推广技术支持，要求投标人具备CMMI3级及系统集成资质。",url:"http://yz.ynzbw.com/ynweb/infodetail/?infoid=16bd37c9-5c61-4528-9efc-2f3f292220f8&categoryNum=005004"},
+ {org:"csg",cat:"bid",ai:"ref",date:"2015-10-28",ds:201510,st:"rd",name:"普洱供电局变电站信息集成与三维可视化移交平台二期研究项目",buyer:"云南电网有限责任公司普洱供电局",type:"公开招标",amt:null,amtT:"未公开",winner:"未公开",sum:"开展变电站三维编码规范与二三维关联技术研究，研发10座变电站一次主设备三维模型并在三维可视化移交平台验证。",url:"http://yz.ynzbw.com/ynweb/infodetail/?infoid=73babdc5-6db1-402c-af28-6b7baa8a58c2&categoryNum=005004"},
+ {org:"csg",cat:"bid",ai:"edge",date:"2020-06-11",ds:202006,st:"xxh",name:"2020年第一批信息化项目服务类专项招标采购",buyer:"云南电网有限责任公司及所属各供电局、信息中心",type:"招标变更公告（原公开招标）",amt:null,amtT:"未公开",winner:"未公开",sum:"批次内含信息系统维护、网络安全攻防及数据安全保障体系研究、机巡子系统建设、大数据应用等多个信息化服务标包。",url:"http://www.ebnew.com/businessShow/647837293.html"},
+ {org:"csg",cat:"bid",ai:"edge",date:"2021-01-04",ds:202101,st:"hw",name:"文山麻栗坡、马关2020-2021年移动GIS智能采集终端购置",buyer:"云南电网有限责任公司文山供电局",type:"竞争性谈判",amt:12.5,amtT:"预算12.5万元",winner:"未公开",sum:"采购移动GIS智能数据采集终端，用于配网基础数据智能化采集。",url:"https://www.bidding.csg.cn/fzbgg/1200281013.jhtml"},
+ {org:"csg",cat:"bid",ai:"ref",date:"2021-03-25",ds:202103,st:"xxh",name:"2021年昆明电力交易中心内部即时通讯系统建设",buyer:"昆明电力交易中心有限责任公司（南网／云南电网体系交易机构）",type:"竞争性谈判",amt:null,amtT:"未公开",winner:"未公开",sum:"建设公司内网私有化部署的即时通讯系统（软件开发部署及配套存储硬件）。",url:"https://www.bidding.csg.cn/fzbgg/1200285615.jhtml"},
+ {org:"csg",cat:"bid",ai:"edge",date:"2021-04-02",ds:202104,st:"ad",name:"中长期模拟结算数据计算分析支持系统",buyer:"昆明电力交易中心有限责任公司（南网／云南电网体系交易机构）",type:"公开招标",amt:null,amtT:"未公开",winner:"未公开",sum:"开发面向市场化交易用户的15分钟/1小时频度电量计算与异常辨识分析系统，含数据建模与算法开发，要求CMMI3级及以上认证。",url:"https://www.bidding.csg.cn/zbgg/1200286160.jhtml"},
+ {org:"csg",cat:"bid",ai:"edge",date:"2021-05-19",ds:202105,st:"hw",name:"2021年第一批科技项目集中采购 标4包1：物联网智能感知终端接口组件及通信服务（二次）",buyer:"云南电网有限责任公司（电科院组织实施）",type:"公开招标（二次）",amt:260.5,amtT:"最高限价合计260.5万元",winner:"未公开",sum:"采购物联网智能感知终端接口组件、传感模块及配套通信服务，支撑电网物联网智能感知体系研究。",url:"https://www.bidding.csg.cn/zbgg/1200288894.jhtml"},
+ {org:"csg",cat:"bid",ai:"edge",date:"2021-07-21",ds:202107,st:"hw",name:"垂直起降固定翼无人机系统等2类物资采购（含电缆隧道智能巡检机器人）",buyer:"云南电网有限责任公司",type:"公开招标",amt:null,amtT:"未公开",winner:"未公开",sum:"包1为输电用垂直起降固定翼无人机巡检系统（含双三维激光雷达）；包2为昆明供电局智慧隧道项目电缆隧道智能巡检机器人系统。",url:"http://www.bidding.csg.cn/zbgg/1200292979.jhtml"},
+ {org:"csg",cat:"bid",ai:"edge",date:"2021-07-27",ds:202107,st:"hw",name:"2021-2022年多旋翼无人机等物资框架招标采购",buyer:"云南电网有限责任公司",type:"公开招标（框架采购）",amt:null,amtT:"未公开（框架采购）",winner:"未公开",sum:"机巡装备框架采购，含多型多旋翼无人机、输电线路无人机自主巡检平台、红外相机等7个标包，支撑输配电智能机巡作业。",url:"https://www.bidding.csg.cn/zbgg/1200293328.jhtml"},
+
+ {org:"glj",cat:"win",ai:"ref",date:"2026-06",ds:202606,st:"xxh",name:"综合数据及年报电子地图更新系统运维服务2026年度项目",buyer:"云南省公路信息中心",type:"成交结果公告",amt:299.60,amtT:"成交299.60万元",winner:"交通运输部科学研究院",sum:"公路综合数据及年报电子地图系统升级运维，含农村公路项目库动态更新、路况评定数据核查与数据质量提升等数据服务。",url:"https://www.cntcitc.com.cn/more.html?chanId=13&chanType=3&contentId=919e0474bb1440e792cbe6f2480c85a7"},
+ {org:"glj",cat:"win",ai:"ref",date:"2026-05",ds:202605,st:"xxh",name:"应急通信业务系统运维2026年度项目",buyer:"云南省公路信息中心",type:"成交结果公告",amt:188.80,amtT:"成交188.80万元",winner:"云南言志科技有限公司",sum:"应急通信系统全面维护保障，覆盖无人机、微波设备、音视频系统、LTE基站、卫星电话等15项服务内容，服务期一年。",url:"https://www.cntcitc.com.cn/more.html?chanId=13&chanType=3&contentId=1f189e22f22946a686cbf0a3ff5e6117"},
+ {org:"glj",cat:"bid",ai:"ref",date:"2026-04",ds:202604,st:"xxh",name:"路网监测与应急处置中心基础环境运维2026年度项目",buyer:"云南省公路信息中心",type:"竞争性磋商",amt:85,amtT:"预算85万元",winner:"未公开",sum:"路网监测与应急处置中心机房基础环境维修维护及运行管理服务，含节假日／重大活动技术保障。",url:"https://www.cntcitc.com.cn/more.html?chanId=12&chanType=3&contentId=4861d817e9f64bd6a99a04cec64ae25f"},
+ {org:"glj",cat:"win",ai:"ref",date:"2026-05",ds:202605,st:"xxh",name:"网络安全等级保护测评2026年度项目",buyer:"云南省公路信息中心",type:"成交结果公告",amt:45,amtT:"成交45万元",winner:"云南金质信息技术服务有限公司",sum:"对1个三级桥梁养护管理系统、26个二级信息系统及7个路网监测系统开展等保测评与漏洞修复。",url:"https://www.cntcitc.com.cn/more.html?chanId=13&chanType=3&contentId=1b0de99a91ff4bda923b1c2e48b81702"},
+ {org:"glj",cat:"bid",ai:"ref",date:"2026-04",ds:202604,st:"rjkf",name:"桥梁养护管理系统运维2026年度项目",buyer:"云南省公路信息中心",type:"竞争性磋商",amt:40,amtT:"预算40万元",winner:"未公开",sum:"桥梁养护管理系统功能模块升级（数据库适配、实时数据同步、巡查统计分析等十项功能开发）及数据维护、运维和培训。",url:"https://www.cntcitc.com.cn/more.html?chanId=12&chanType=3&contentId=15a3831556e54f11ae19c0c55e496792"},
+ {org:"glj",cat:"win",ai:"ref",date:"2026-05",ds:202605,st:"rjkf",name:"阻断事件系统升级运维2026年度项目",buyer:"云南省公路信息中心",type:"成交结果公告",amt:30.59,amtT:"成交30.59万元",winner:"昆明三体科技有限公司",sum:"阻断事件系统功能升级开发（水毁信息模块迁移、台账与项目管理功能升级、路网数据集成）及一年期运维。",url:"https://www.cntcitc.com.cn/more.html?chanId=13&chanType=3&contentId=4c0a2f9be51e4bd0a905877aa6890065"},
+ {org:"glj",cat:"bid",ai:"ref",date:"2026-05",ds:202605,st:"rjkf",name:"在线考核系统运维2026年度项目（重新招标）",buyer:"云南省公路信息中心",type:"竞争性磋商",amt:30,amtT:"预算30万元",winner:"未公开",sum:"在线考核系统功能升级（年度计划、考核项、执行考核等模块调整）、16个州市考核软件使用服务与日常运维。",url:"https://www.ebnew.com/businessShow/708309473.html"},
+ {org:"gky",cat:"win",ai:"ref",date:"2025-06-13",ds:202506,st:"hw",name:"边坡监测项目传感器等采购（二次）",buyer:"云南省公路科学技术研究院（采购人）",type:"成交公告",amt:51.60,amtT:"成交51.60万元",winner:"成都云智北斗科技有限公司",sum:"采购GNSS北斗宏观变形监测设备15台，为边坡结构监测信息化体系配套的感知硬件。",url:"https://www.ccgp.gov.cn/cggg/dfgg/cjgg/202506/t20250613_24775972.htm"},
+
+ {org:"glj",cat:"win",ai:"edge",date:"2016-12-08",ds:201612,st:"xxh",name:"云南省公路局“十三五”信息化建设规划项目",buyer:"云南省公路信息中心",type:"成交公告（竞争性磋商）",amt:44.4,amtT:"成交44.4万元",winner:"未公开（存档页隐名）",sum:"编制“十三五”信息化建设总体规划，为后续智慧公路、路网监测等信息化工程提供顶层设计。",url:"https://www.bidcenter.com.cn/news-33261215-4.html"},
+ {org:"glj",cat:"win",ai:"edge",date:"2017-03-23",ds:201703,st:"sw",name:"路网监测与应急处置中心基础平台工程",buyer:"云南省公路信息中心",type:"预中标结果公示",amt:2290,amtT:"约2290万元（预中标）",winner:"未公开（存档页隐名）",sum:"建设省级路网运行监测与应急处置中心基础平台（含机房、视频监控接入、监测调度软硬件），为公路局系统2010年代最大信息化工程。",url:"https://www.bidcenter.com.cn/news-35683636-4.html"},
+ {org:"glj",cat:"win",ai:"ref",date:"2017-05-19",ds:201705,st:"hw",name:"养护信息化APP项目（B标段二次招标）：移动终端及通信设备",buyer:"云南省公路局",type:"中标公告",amt:1149.36,amtT:"中标1149.36万元（预算1180万元）",winner:"存档页隐名（中标地址与中国电信云南分公司一致）",sum:"为全省公路养护信息化APP配套采购3800台移动终端、200台单兵多媒体终端、IP多媒体调度主机及音视频融合通信系统。",url:"https://www.bidcenter.com.cn/news-37530973-4.html"},
+ {org:"glj",cat:"win",ai:"ref",date:"2017-08-29",ds:201708,st:"sv",name:"路网监测与应急处置中心基础平台软件测试项目",buyer:"云南省公路信息中心",type:"成交公告（竞争性磋商）",amt:14,amtT:"成交14万元",winner:"未公开（存档页隐名）",sum:"对路网监测与应急处置中心基础平台软件进行第三方测试验收。",url:"https://www.bidcenter.com.cn/news-41299909-4.html"},
+ {org:"glj",cat:"win",ai:"ref",date:"2017-12-04",ds:201712,st:"rjkf",name:"云南省公路局APP二期工程（单一来源）",buyer:"云南省公路信息中心",type:"成交公告（单一来源）",amt:870,amtT:"约870万元",winner:"原APP承建方（单一来源续建，存档页隐名）",sum:"在养护信息化APP一期基础上进行二期功能扩展定制开发。",url:"https://www.bidcenter.com.cn/news-44895633-4.html"},
+ {org:"glj",cat:"win",ai:"edge",date:"2018-06-26",ds:201806,st:"rd",name:"“十三五”信息化建设规划“智慧公路”工程综合研究体系",buyer:"云南省公路信息中心",type:"成交公告（竞争性谈判）",amt:8.7,amtT:"成交8.7万元",winner:"未公开（存档页隐名）",sum:"围绕“智慧公路”工程开展综合研究体系咨询服务。",url:"https://www.bidcenter.com.cn/news-52823025-4.html"},
+ {org:"glj",cat:"win",ai:"ref",date:"2018-06-25",ds:201806,st:"xxh",name:"路网结构改造工程省级信息管理系统",buyer:"云南省公路信息中心",type:"成交公告（竞争性磋商）",amt:130,amtT:"约130万元",winner:"未公开（存档页隐名）",sum:"建设全省路网结构改造工程省级信息管理系统（另有配套硬件实施标段）。",url:"https://www.bidcenter.com.cn/news-52699353-4.html"},
+ {org:"glj",cat:"win",ai:"ref",date:"2018-11-22",ds:201811,st:"rjkf",name:"移动业务系统功能扩充—新功能开发",buyer:"云南省公路信息中心",type:"成交公告",amt:59.5,amtT:"成交59.5万元",winner:"未公开（存档页隐名）",sum:"对公路局移动业务系统（养护APP体系）进行新功能定制开发。",url:"https://www.bidcenter.com.cn/news-61099403-4.html"},
+ {org:"glj",cat:"win",ai:"edge",date:"2019-06-21",ds:201906,st:"rjkf",name:"公路桥梁运营健康状况监测项目—软件系统开发",buyer:"云南省公路信息中心",type:"中标公告（竞争性磋商）",amt:108,amtT:"约108万元（外场硬件约170万元另段）",winner:"未公开（存档页隐名）",sum:"开发公路桥梁运营健康状况监测软件系统，对桥梁传感监测数据进行采集、分析与预警。",url:"https://www.bidcenter.com.cn/news-72493078-4.html"},
+ {org:"glj",cat:"win",ai:"ref",date:"2020-07-27",ds:202007,st:"rjkf",name:"养护化APP系统升级运维—公路阻断事件报送功能升级（单一来源）",buyer:"云南省公路信息中心",type:"成交结果公告（单一来源）",amt:20,amtT:"成交20万元",winner:"未公开（存档页隐名）",sum:"在养护信息化APP上扩展开发公路阻断事件报送功能。",url:"https://www.bidcenter.com.cn/news-101839812-4.html"},
+ {org:"glj",cat:"bid",ai:"ref",date:"2021-03-19",ds:202103,st:"sv",name:"2021年公路桥梁养护管理系统项目（单一来源公示）",buyer:"云南省公路信息中心",type:"单一来源采购公示",amt:40.9,amtT:"预算40.9万元",winner:"拟定唯一供应商：北京中交华联科技发展有限公司",sum:"对2013年建成的公路桥梁养护管理系统进行软件升级、数据库迁移、移动APP推广及桥梁病害数据动态分析。",url:"https://www.bidcenter.com.cn/newscontent-123654551-1.html"},
+ {org:"glj",cat:"win",ai:"ref",date:"2021-07-01",ds:202107,st:"sv",name:"养护信息化APP通信保障项目",buyer:"云南省公路信息中心",type:"成交结果公告",amt:275.13,amtT:"成交275.13万元",winner:"中国电信股份有限公司云南分公司",sum:"提供3286张通讯卡、600张纯数据卡及集群通信服务18个月，保障全省养护巡查移动终端运行。",url:"https://www.bidcenter.com.cn/newscontent-134332872-4.html"},
+ {org:"gky",cat:"win",ai:"edge",date:"2014-12-24",ds:201412,st:"hw",name:"高原山区公路桥梁、边坡远程无人值守实时监测设备",buyer:"云南省公路科学技术研究院（采购人）",type:"中标结果公告",amt:480,amtT:"约480万元",winner:"未公开（存档页隐名）",sum:"采购桥梁、边坡远程无人值守实时监测设备，实现结构安全状态自动感知与远程监测，为该院较早的智能化监测装备投入。",url:"https://www.bidcenter.com.cn/news-18746419-4.html"},
+ {org:"gky",cat:"win",ai:"ref",date:"2016-11-24",ds:201611,st:"xxh",name:"云南省公路科学技术研究院信息化系统建设项目",buyer:"云南省公路科学技术研究院（采购人）",type:"中标公告（公开招标）",amt:298,amtT:"中标298.00万元（预算300万元）",winner:"未公开（存档页隐名）",sum:"全院信息化系统整体建设（业务系统与基础设施），为该院2010年代最大信息化建设项目。",url:"https://www.bidcenter.com.cn/news-32799905-4.html"},
+ {org:"gky",cat:"win",ai:"edge",date:"2017-01-23",ds:201701,st:"hw",name:"路况数据处理分中心机房建设项目",buyer:"云南省公路科学技术研究院（采购人）",type:"预中标结果公示",amt:158,amtT:"约158万元（预中标）",winner:"未公开（存档页隐名）",sum:"建设全省路况检测数据处理分中心机房，为干线公路路面技术状况检测数据集中处理与分析提供基础环境。",url:"https://www.bidcenter.com.cn/news-34525191-4.html"},
+ {org:"gky",cat:"bid",ai:"ref",date:"2021-01-11",ds:202101,st:"rjkf",name:"公路工程安全生产信息化管理平台软件编制",buyer:"云南省公路科学技术研究院（采购人）",type:"竞争性磋商",amt:85.4,amtT:"预算85.4万元",winner:"未公开（成交公告未检索到免费版本）",sum:"定制开发公路工程安全生产信息化管理平台软件，实现安全生产业务线上化管理。",url:"https://www.bidcenter.com.cn/news-118581279-1.html"},
+ {org:"gky",cat:"win",ai:"edge",date:"2021-07-23",ds:202107,st:"sw",name:"云南省云GIS公路大数据管理平台升级改造项目（单一来源）",buyer:"云南省公路科学技术研究院（采购人）",type:"单一来源公示（成交公告2021-08-13）",amt:219.8,amtT:"成交约219.8万元",winner:"原平台开发商（存档页隐名，名称含“光谷”字样的GIS企业）",sum:"对云GIS公路大数据管理平台进行升级改造，涉及公路空间数据与大数据管理能力扩展。",url:"https://www.bidcenter.com.cn/news-138539470-1.html"}
+];
+
+const CAT = {bid:["招标·采购",  "bid"], win:["中标·成交","win"], stop:["已终止","stop"]};
+const AIL = {core:["核心AI","aicore"], edge:["智能化相关","aiedge"], ref:["非AI·参考","ref"]};
+const state = {org:"all", year:"all", cat:"all", ai:"all", st:"all", q:""};
+
+function yearOf(r){ return String(r.ds).slice(0,4); }
+function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+function makePills(el, items, key){
+  const box = document.getElementById(el);
+  box.style.display = "inline-flex"; box.style.flexWrap = "wrap"; box.style.gap = "6px";
+  items.forEach(([val, label, cnt]) => {
+    const b = document.createElement("button");
+    b.className = "pill" + (state[key]===val ? " on" : "");
+    b.innerHTML = esc(label) + (cnt!=null ? ' <span class="cnt">'+cnt+'</span>' : '');
+    b.onclick = () => { state[key] = val; refreshPills(); render(); };
+    b.dataset.val = val; b.dataset.key = key;
+    box.appendChild(b);
+  });
+}
+function refreshPills(){
+  document.querySelectorAll(".pill").forEach(b=>{
+    if(b.dataset.key) b.classList.toggle("on", state[b.dataset.key]===b.dataset.val);
+  });
+}
+
+function filtered(){
+  return DATA.filter(r =>
+    (state.org==="all" || r.org===state.org) &&
+    (state.year==="all"|| yearOf(r)===state.year) &&
+    (state.cat==="all" || r.cat===state.cat) &&
+    (state.ai==="all"  || r.ai===state.ai) &&
+    (state.st==="all"  || r.st===state.st) &&
+    (!state.q || (r.name+r.buyer+r.sum+(r.winner||"")+ORGS[r.org]).toLowerCase().includes(state.q))
+  ).sort((a,b)=> b.ds - a.ds);
+}
+
+function render(){
+  const rows = filtered();
+  const box = document.getElementById("cards");
+  const sum = rows.reduce((s,r)=> s + (r.amt||0), 0);
+  document.getElementById("resultline").textContent =
+    "显示 " + rows.length + " 条 ／ 共 " + DATA.length + " 条" +
+    (sum>0 ? " · 当前筛选可统计金额合计 " + sum.toFixed(2).replace(/\.00$/,"") + " 万元" : "");
+  if(!rows.length){ box.innerHTML = '<div class="empty">没有符合当前筛选条件的项目</div>'; return; }
+  box.innerHTML = rows.map(r=>{
+    const c = CAT[r.cat], a = AIL[r.ai];
+    return '<article class="card ai-'+r.ai+'">' +
+      '<div class="row1">' +
+        '<span class="chip org">'+esc(ORGS[r.org])+'</span>' +
+        '<span class="chip '+c[1]+'">'+c[0]+'</span>' +
+        (STYPES[r.st] ? '<span class="chip st">'+esc(STYPES[r.st])+'</span>' : '') +
+        '<span class="chip '+a[1]+'">'+a[0]+'</span>' +
+        '<span class="date">'+esc(r.date)+'</span>' +
+      '</div>' +
+      '<h3>'+esc(r.name)+'</h3>' +
+      '<div class="kv">' +
+        '<span>采购／招标方 <b>'+esc(r.buyer)+'</b></span>' +
+        '<span>方式 <b>'+esc(r.type)+'</b></span>' +
+        '<span>金额 <b class="money">'+esc(r.amtT)+'</b></span>' +
+        (r.winner ? '<span>中标／成交 <b>'+esc(r.winner)+'</b></span>' : '') +
+      '</div>' +
+      '<p class="sum">'+esc(r.sum)+'</p>' +
+      '<a class="src" href="'+esc(r.url)+'" target="_blank" rel="noopener">来源公告 ↗</a>' +
+    '</article>';
+  }).join("");
+}
+
+(function init(){
+  const orgCnt = {}; DATA.forEach(r=> orgCnt[r.org]=(orgCnt[r.org]||0)+1);
+  makePills("fOrg", [["all","全部",DATA.length]].concat(Object.keys(ORGS).map(k=>[k,ORGS[k],orgCnt[k]||0])), "org");
+  const years = [...new Set(DATA.map(yearOf))].sort();
+  makePills("fYear", [["all","全部",null]].concat(years.map(y=>[y,y,DATA.filter(r=>yearOf(r)===y).length])), "year");
+  const stCnt = {}; DATA.forEach(r=> stCnt[r.st]=(stCnt[r.st]||0)+1);
+  makePills("fSt", [["all","全部",null]].concat(CONFIG.stypes.map(s=>[s.key,s.label,stCnt[s.key]||0])), "st");
+  makePills("fCat", [["all","全部",null],["bid","招标·采购",null],["win","中标·成交",null],["stop","已终止",null]], "cat");
+  makePills("fAi", [["all","全部",null],["core","核心AI",null],["edge","智能化相关",null],["ref","非AI·参考",null]], "ai");
+  document.getElementById("q").addEventListener("input", e=>{ state.q = e.target.value.trim().toLowerCase(); render(); });
+
+  document.getElementById("statTotal").textContent = DATA.length;
+  const total = DATA.reduce((s,r)=> s+(r.amt||0), 0);
+  document.getElementById("statAmount").textContent = Math.round(total).toLocaleString("zh-CN");
+  render();
+  initConfigPanel();
+})();
+
+// ===== 检索配置面板 =====
+const PAGE_URL = "https://claude.ai/code/artifact/061c4678-ef82-4d1d-a60d-1f13549b9f6b";
+const LS_U = "yntb_pending_units", LS_T = "yntb_pending_types", LS_S = "yntb_pending_stypes";
+function lsGet(k){ try{ return JSON.parse(localStorage.getItem(k)||"[]"); }catch(e){ return []; } }
+function lsSet(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+
+function initConfigPanel(){
+  renderCfg();
+  document.getElementById("addUnitBtn").onclick = () => {
+    const name = document.getElementById("newUnitName").value.trim();
+    const note = document.getElementById("newUnitNote").value.trim();
+    if(!name) return;
+    if(CONFIG.units.some(u=>u.name===name||u.full.includes(name)) || lsGet(LS_U).some(u=>u.name===name)){
+      alert("该单位已在检索范围内或已在待生效列表中"); return;
+    }
+    lsSet(LS_U, lsGet(LS_U).concat([{name, note}]));
+    document.getElementById("newUnitName").value=""; document.getElementById("newUnitNote").value="";
+    renderCfg();
+  };
+  document.getElementById("addStBtn").onclick = () => {
+    const t = document.getElementById("newStName").value.trim();
+    if(!t) return;
+    if(CONFIG.stypes.some(s=>s.label===t||s.label.replace("·","")===t.replace("·","")) || lsGet(LS_S).includes(t)){ alert("该标的类型已存在"); return; }
+    lsSet(LS_S, lsGet(LS_S).concat([t]));
+    document.getElementById("newStName").value="";
+    renderCfg();
+  };
+  document.getElementById("addTypeBtn").onclick = () => {
+    const t = document.getElementById("newTypeName").value.trim();
+    if(!t) return;
+    if(CONFIG.keywords.includes(t) || lsGet(LS_T).includes(t)){ alert("该关键词已存在"); return; }
+    lsSet(LS_T, lsGet(LS_T).concat([t]));
+    document.getElementById("newTypeName").value="";
+    renderCfg();
+  };
+  document.getElementById("clearBtn").onclick = () => { lsSet(LS_U,[]); lsSet(LS_T,[]); lsSet(LS_S,[]); renderCfg(); };
+  document.getElementById("copyBtn").onclick = async () => {
+    const ta = document.getElementById("pendingText");
+    const status = document.getElementById("copyStatus");
+    try{
+      await navigator.clipboard.writeText(ta.value);
+      status.textContent = "已复制，请粘贴发送给 Claude";
+    }catch(e){
+      ta.focus(); ta.select();
+      try{ document.execCommand("copy"); status.textContent = "已复制，请粘贴发送给 Claude"; }
+      catch(e2){ status.textContent = "复制失败，请手动全选文本框内容复制"; }
+    }
+    setTimeout(()=>{ status.textContent=""; }, 6000);
+  };
+}
+
+function renderCfg(){
+  const pu = lsGet(LS_U), pt = lsGet(LS_T), ps = lsGet(LS_S);
+  const orgCnt = {}; DATA.forEach(r=> orgCnt[r.org]=(orgCnt[r.org]||0)+1);
+  const stCnt2 = {}; DATA.forEach(r=> stCnt2[r.st]=(stCnt2[r.st]||0)+1);
+  document.getElementById("unitCount").textContent = "已收录 " + CONFIG.units.length + " 家" + (pu.length? " · 待生效 "+pu.length+" 家":"");
+  document.getElementById("stCount").textContent = "现有 " + CONFIG.stypes.length + " 类" + (ps.length? " · 待生效 "+ps.length+" 类":"");
+  document.getElementById("typeCount").textContent = "已配置 " + CONFIG.keywords.length + " 个" + (pt.length? " · 待生效 "+pt.length+" 个":"");
+  document.getElementById("unitList").innerHTML =
+    CONFIG.units.map(u=>'<span class="cfgitem" title="'+esc(u.full)+'">'+esc(u.name)+' <span class="active">检索中 · '+(orgCnt[u.key]||0)+'条</span></span>').join("") +
+    pu.map((u,i)=>'<span class="cfgitem">'+esc(u.name)+' <span class="pend">待生效</span><button data-i="'+i+'" data-k="u" title="移除">✕</button></span>').join("");
+  document.getElementById("stList").innerHTML =
+    CONFIG.stypes.map(s=>'<span class="cfgitem">'+esc(s.label)+' <span class="active">'+(stCnt2[s.key]||0)+'条</span></span>').join("") +
+    ps.map((t,i)=>'<span class="cfgitem">'+esc(t)+' <span class="pend">待生效</span><button data-i="'+i+'" data-k="s" title="移除">✕</button></span>').join("");
+  document.getElementById("typeList").innerHTML =
+    CONFIG.keywords.map(t=>'<span class="cfgitem">'+esc(t)+'</span>').join("") +
+    pt.map((t,i)=>'<span class="cfgitem">'+esc(t)+' <span class="pend">待生效</span><button data-i="'+i+'" data-k="t" title="移除">✕</button></span>').join("");
+  document.querySelectorAll(".cfgitem button").forEach(b=>{
+    b.onclick = ()=>{
+      const i = +b.dataset.i;
+      const key = b.dataset.k==="u" ? LS_U : (b.dataset.k==="s" ? LS_S : LS_T);
+      const a = lsGet(key); a.splice(i,1); lsSet(key,a);
+      renderCfg();
+    };
+  });
+  const box = document.getElementById("pendingBox");
+  if(pu.length || pt.length || ps.length){
+    box.hidden = false;
+    let msg = "请更新我的「云南AI招投标数据库」网页（" + PAGE_URL + "）：\n";
+    if(pu.length) msg += "一、新增检索单位：" + pu.map(u=>u.name+(u.note?"（"+u.note+"）":"")).join("；") + "。请检索这些单位2010年以来AI及信息化、软件/算法开发相关的公开招投标信息，按页面既有 DATA 格式追加记录（含 st 标的类型字段），并把单位写入页面 CONFIG.units（分配新的 org key），使其此后纳入每周自动检索。\n";
+    if(ps.length) msg += "二、新增标的类型：" + ps.join("、") + "。请写入页面 CONFIG.stypes（分配新 key），检查现有 DATA 记录中属于该类型的项目并把其 st 字段改为新类型，此后新增记录也按此分类。\n";
+    if(pt.length) msg += "三、新增检索关键词：" + pt.join("、") + "。请写入页面 CONFIG.keywords，并用这些关键词对全部检索单位补充检索一轮，新发现的项目按 DATA 格式追加。\n";
+    msg += "完成后用 Artifact 工具以相同 URL 重新发布（favicon 保持 🗂️），并更新页面「最后更新」日期。";
+    document.getElementById("pendingText").value = msg;
+  } else {
+    box.hidden = true;
+  }
+}
+</script>
+
+</html>
