@@ -164,10 +164,10 @@
   .csvbtn{margin-left:auto; flex:0 0 auto}
 
   /* ===== 更新中断警示条 ===== */
-  .stalewarn[hidden]{display:none}
-  .stalewarn{display:flex; align-items:center; gap:10px; margin:0 0 18px; padding:10px 16px;
+  .stalewarn{display:none; align-items:center; gap:10px; margin:0 0 18px; padding:10px 16px;
     border-radius:10px; font-size:13.5px; font-weight:600;
     background:#FAF3DC; color:#7A5A12; border:1px solid #E8D9A8}
+  .stalewarn.show{display:flex}
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]) .stalewarn{background:#3A311C; color:#E3C878; border-color:#5C4E26}
   }
@@ -188,7 +188,7 @@
 </style>
 
 <div class="wrap">
-<div id="staleWarn" class="stalewarn" hidden>⚠️ <span id="staleText"></span></div>
+<div id="staleWarn" class="stalewarn">⚠️ <span id="staleText"></span></div>
 <header class="top">
   <div class="eyebrow">云南 · 人工智能招投标追踪</div>
   <h1>云南重点单位人工智能招投标数据库</h1>
@@ -594,7 +594,7 @@ function checkStale(){
     if(days > 3){
       document.getElementById("staleText").textContent =
         "数据自动更新可能已中断：最后更新于 " + t + "（" + days + "天前）。每日中午12点应自动检索更新，请提醒维护者检查更新任务与电脑开机状态。";
-      document.getElementById("staleWarn").hidden = false;
+      document.getElementById("staleWarn").classList.add("show");
     }
   }catch(e){}
 }
