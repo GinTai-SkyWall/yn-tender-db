@@ -80,8 +80,12 @@
     background:var(--surface); border:1px solid var(--line); border-radius:10px;
     padding:16px 18px; border-left:4px solid var(--line);
   }
-  .card.ai-core{border-left-color:var(--accent)}
-  .card.ai-edge{border-left-color:var(--chip-bid-fg)}
+  .card[data-org="csg"]{border-left-color:var(--oc-csg)}
+  .card[data-org="sz"]{border-left-color:var(--oc-sz)}
+  .card[data-org="dk"]{border-left-color:var(--oc-dk)}
+  .card[data-org="glj"]{border-left-color:var(--oc-glj)}
+  .card[data-org="gky"]{border-left-color:var(--oc-gky)}
+  .card[data-org="jt"]{border-left-color:var(--oc-jt)}
   .card .row1{display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-bottom:6px}
   .chip{font-size:12px; padding:1px 9px; border-radius:999px; white-space:nowrap}
   .chip.org{background:var(--accent-soft); color:var(--accent-ink); font-weight:600}
@@ -538,7 +542,7 @@ function render(){
   if(!rows.length){ box.innerHTML = '<div class="empty">没有符合当前筛选条件的项目</div>'; return; }
   box.innerHTML = rows.map(r=>{
     const c = CAT[r.cat], a = AIL[r.ai];
-    return '<article class="card ai-'+r.ai+'">' +
+    return '<article class="card ai-'+r.ai+'" data-org="'+r.org+'">' +
       '<div class="row1">' +
         '<span class="chip org" data-org="'+r.org+'">'+esc(ORGS[r.org])+'</span>' +
         '<span class="chip '+c[1]+'">'+c[0]+'</span>' +
