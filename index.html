@@ -80,12 +80,16 @@
     background:var(--surface); border:1px solid var(--line); border-radius:10px;
     padding:16px 18px; border-left:4px solid var(--line);
   }
-  .card[data-org="csg"]{border-left-color:var(--oc-csg)}
-  .card[data-org="sz"]{border-left-color:var(--oc-sz)}
-  .card[data-org="dk"]{border-left-color:var(--oc-dk)}
-  .card[data-org="glj"]{border-left-color:var(--oc-glj)}
-  .card[data-org="gky"]{border-left-color:var(--oc-gky)}
-  .card[data-org="jt"]{border-left-color:var(--oc-jt)}
+  .card[data-org]{border-left-color:var(--oc,var(--line)); position:relative}
+  .amtbox{position:absolute; top:14px; right:18px; text-align:right}
+  .amtbox .amt{font-size:20px; font-weight:700; color:var(--amount); font-variant-numeric:tabular-nums; line-height:1.2}
+  .amtbox .amt.na{font-size:13px; font-weight:600; color:var(--muted)}
+  .amtbox .amtd{font-size:12.5px; color:var(--muted); font-variant-numeric:tabular-nums; margin-top:2px}
+  .card h3{padding-right:120px}
+  @media (max-width:640px){
+    .amtbox{position:static; display:flex; gap:10px; align-items:baseline; text-align:left; margin:2px 0 4px}
+    .card h3{padding-right:0}
+  }
   .card .row1{display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-bottom:6px}
   .chip{font-size:12px; padding:1px 9px; border-radius:999px; white-space:nowrap}
   .chip.org{background:var(--accent-soft); color:var(--accent-ink); font-weight:600}
@@ -98,10 +102,11 @@
   .chip.st{border:1px dashed var(--line); color:var(--muted); background:transparent}
   .card .date{margin-left:auto; font-size:13px; color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap}
   .card h3{margin:2px 0 6px; font-size:16.5px; line-height:1.45; font-weight:600}
-  .kv{display:flex; flex-wrap:wrap; gap:4px 22px; font-size:13.5px; margin-bottom:6px}
-  .kv span{color:var(--muted)}
-  .kv b{font-weight:600; color:var(--ink)}
-  .kv .money{color:var(--amount); font-variant-numeric:tabular-nums; font-weight:700}
+  .kv{display:grid; grid-template-columns:max-content 1fr max-content 1fr; gap:3px 10px; font-size:13.5px; margin-bottom:6px; align-items:baseline}
+  .kl{color:var(--muted); white-space:nowrap; text-align:right}
+  .kd{color:var(--ink); font-weight:600; min-width:0}
+  .kd.money{color:var(--amount); font-variant-numeric:tabular-nums; font-weight:700}
+  @media (max-width:760px){ .kv{grid-template-columns:max-content 1fr} }
   .card p.sum{margin:4px 0 8px; color:var(--ink); font-size:14px; max-width:62em}
   .card a.src{font-size:13px; color:var(--accent-ink); text-decoration:none; border-bottom:1px solid var(--accent-soft); word-break:break-all}
   .card a.src:hover{border-bottom-color:var(--accent)}
@@ -130,14 +135,20 @@
     :root:not([data-theme="light"]){--oc-csg:#7FB5DA; --oc-sz:#AC9ED4; --oc-dk:#6CC3C0; --oc-glj:#D0AC6C; --oc-gky:#63A98F; --oc-jt:#8DA9C4}
   }
   :root[data-theme="dark"]{--oc-csg:#7FB5DA; --oc-sz:#AC9ED4; --oc-dk:#6CC3C0; --oc-glj:#D0AC6C; --oc-gky:#63A98F; --oc-jt:#8DA9C4}
+  [data-org="csg"]{--oc:var(--oc-csg)}
+  [data-org="sz"]{--oc:var(--oc-sz)}
+  [data-org="dk"]{--oc:var(--oc-dk)}
+  [data-org="glj"]{--oc:var(--oc-glj)}
+  [data-org="gky"]{--oc:var(--oc-gky)}
+  [data-org="jt"]{--oc:var(--oc-jt)}
   .chip.org{display:inline-flex; align-items:center; gap:6px; background:transparent; border:1px solid var(--line); color:var(--ink)}
   .chip.org::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--oc,var(--accent)); flex:0 0 auto}
-  .chip.org[data-org="csg"]{--oc:var(--oc-csg)}
-  .chip.org[data-org="sz"]{--oc:var(--oc-sz)}
-  .chip.org[data-org="dk"]{--oc:var(--oc-dk)}
-  .chip.org[data-org="glj"]{--oc:var(--oc-glj)}
-  .chip.org[data-org="gky"]{--oc:var(--oc-gky)}
-  .chip.org[data-org="jt"]{--oc:var(--oc-jt)}
+  .orglegend{display:flex; flex-wrap:wrap; gap:6px 16px; margin:10px 0 8px}
+  .oleg{display:inline-flex; align-items:center; gap:7px; font-size:13.5px; color:var(--ink); cursor:pointer;
+    padding:2px 8px; border-radius:999px; border:1px solid transparent}
+  .oleg::before{content:""; width:8px; height:8px; border-radius:50%; background:var(--oc,var(--accent)); flex:0 0 auto}
+  .oleg:hover{border-color:var(--line); background:var(--surface)}
+  .oleg.on{border-color:var(--oc,var(--accent)); background:var(--surface); font-weight:600}
 
   /* ===== 头部渐变细线 ===== */
   header.top{border-bottom:none; position:relative; padding-bottom:22px}
@@ -153,8 +164,17 @@
   .fitem{display:flex; align-items:center; gap:10px; font-size:13.5px; cursor:pointer; padding:4px 6px; border-radius:6px}
   .fitem:hover{background:var(--bg)}
   .fitem .cd{flex:0 0 auto; min-width:88px; text-align:center; font-size:12px; padding:1px 8px; border-radius:999px; background:var(--chip-stop-bg); color:var(--chip-stop-fg); font-variant-numeric:tabular-nums; font-weight:600}
+  .fitem .cd.mid{background:#F5EAD2; color:#7A5A12}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .fitem .cd.mid{background:#4A3E20; color:#E3C878}
+  }
+  :root[data-theme="dark"] .fitem .cd.mid{background:#4A3E20; color:#E3C878}
   .fitem .cd.soon{background:var(--chip-bid-bg); color:var(--chip-bid-fg)}
   .fitem .cd.fresh{background:var(--chip-win-bg); color:var(--chip-win-fg)}
+  .fgroup .fitem + .fitem{border-top:1px solid var(--line)}
+  .fgroup .fitem{border-radius:0}
+  .fgroup .fitem:first-of-type{border-radius:6px 6px 0 0}
+  .fgroup .fitem:last-of-type{border-radius:0 0 6px 6px}
   .fitem .ft{color:var(--ink); flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
   .fitem .fm{color:var(--muted); font-size:12.5px; flex:0 0 auto; white-space:nowrap}
   @media (max-width:640px){
@@ -196,7 +216,8 @@
 <header class="top">
   <div class="eyebrow">云南 · 人工智能招投标追踪</div>
   <h1>云南重点单位人工智能招投标数据库</h1>
-  <p class="lede">追踪南方电网云南分公司（云南电网）、南方电网数字电网集团（云南）有限公司、云南省低空产业投资有限公司、云南省公路局、云南省公路科学技术研究院、云南交投集团（限智能化／机电类）六家单位2010年以来与人工智能、大模型相关，以及信息化建设、软件开发定制、算法开发定制、隧道照明节能与机电养护、ETC稽查方向的公开招标、采购与中标信息。</p>
+  <div class="orglegend" id="orgLegend"></div>
+  <p class="lede">覆盖 2010 年以来六家单位与人工智能／信息化／软件与算法开发／隧道照明节能／ETC稽查方向的公开招标、采购与中标信息（点击上方单位可快捷筛选，完整收录口径见页底说明）。</p>
   <div class="metaline">
     <span>收录项目 <b class="num" id="statTotal">–</b> 个</span>
     <span>可统计金额合计约 <b class="num" id="statAmount">–</b> 万元</span>
@@ -491,12 +512,13 @@ const state = {org:"all", year:"all", cat:"all", ai:"all", st:"all", plan:"all",
 function yearOf(r){ return String(r.ds).slice(0,4); }
 function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 
+function pillOn(key, val){ return state[key]===val && !(val==="all"); }
 function makePills(el, items, key){
   const box = document.getElementById(el);
   box.style.display = "inline-flex"; box.style.flexWrap = "wrap"; box.style.gap = "6px";
   items.forEach(([val, label, cnt]) => {
     const b = document.createElement("button");
-    b.className = "pill" + (state[key]===val ? " on" : "");
+    b.className = "pill" + (pillOn(key,val) ? " on" : "");
     b.innerHTML = esc(label) + (cnt!=null ? ' <span class="cnt">'+cnt+'</span>' : '');
     b.onclick = () => { state[key] = val; refreshPills(); render(); };
     b.dataset.val = val; b.dataset.key = key;
@@ -505,8 +527,15 @@ function makePills(el, items, key){
 }
 function refreshPills(){
   document.querySelectorAll(".pill").forEach(b=>{
-    if(b.dataset.key) b.classList.toggle("on", state[b.dataset.key]===b.dataset.val);
+    if(b.dataset.key) b.classList.toggle("on", pillOn(b.dataset.key, b.dataset.val));
   });
+  document.querySelectorAll(".oleg").forEach(el=>{
+    el.classList.toggle("on", state.org===el.dataset.org);
+  });
+}
+function fmtAmt(a){
+  if(a==null) return null;
+  return a>=10000 ? ((a/10000).toFixed(2).replace(/\.?0+$/,"")+"亿") : ((Math.round(a*100)/100)+"万");
 }
 
 function isPlan(r){ return (r.type+r.name).includes("招标计划"); }
@@ -542,20 +571,24 @@ function render(){
   if(!rows.length){ box.innerHTML = '<div class="empty">没有符合当前筛选条件的项目</div>'; return; }
   box.innerHTML = rows.map(r=>{
     const c = CAT[r.cat], a = AIL[r.ai];
+    const fa = fmtAmt(r.amt);
     return '<article class="card ai-'+r.ai+'" data-org="'+r.org+'">' +
+      '<div class="amtbox">' +
+        (fa ? '<div class="amt">'+fa+'</div>' : '<div class="amt na">金额未公示</div>') +
+        '<div class="amtd">'+esc(r.date)+'</div>' +
+      '</div>' +
       '<div class="row1">' +
         '<span class="chip org" data-org="'+r.org+'">'+esc(ORGS[r.org])+'</span>' +
         '<span class="chip '+c[1]+'">'+c[0]+'</span>' +
         (STYPES[r.st] ? '<span class="chip st">'+esc(STYPES[r.st])+'</span>' : '') +
         '<span class="chip '+a[1]+'">'+a[0]+'</span>' +
-        '<span class="date">'+esc(r.date)+'</span>' +
       '</div>' +
       '<h3>'+esc(r.name)+'</h3>' +
       '<div class="kv">' +
-        '<span>采购／招标方 <b>'+esc(r.buyer)+'</b></span>' +
-        '<span>方式 <b>'+esc(r.type)+'</b></span>' +
-        '<span>金额 <b class="money">'+esc(r.amtT)+'</b></span>' +
-        (r.winner ? '<span>中标／成交 <b>'+esc(r.winner)+'</b></span>' : '') +
+        '<span class="kl">采购／招标方</span><span class="kd">'+esc(r.buyer)+'</span>' +
+        '<span class="kl">方式</span><span class="kd">'+esc(r.type)+'</span>' +
+        '<span class="kl">金额</span><span class="kd money">'+esc(r.amtT)+'</span>' +
+        (r.winner ? '<span class="kl">中标／成交</span><span class="kd">'+esc(r.winner)+'</span>' : '') +
       '</div>' +
       '<p class="sum">'+esc(r.sum)+'</p>' +
       '<a class="src" href="'+esc(r.url)+'" target="_blank" rel="noopener">来源公告 ↗</a>' +
@@ -565,6 +598,14 @@ function render(){
 
 (function init(){
   const orgCnt = {}; DATA.forEach(r=> orgCnt[r.org]=(orgCnt[r.org]||0)+1);
+  document.getElementById("orgLegend").innerHTML = CONFIG.units.map(u=>
+    '<span class="oleg" data-org="'+u.key+'" title="'+esc(u.full)+'（点击筛选）">'+esc(u.name)+'</span>').join("");
+  document.querySelectorAll(".oleg").forEach(el=>{
+    el.onclick = ()=>{
+      state.org = (state.org===el.dataset.org) ? "all" : el.dataset.org;
+      refreshPills(); render();
+    };
+  });
   makePills("fOrg", [["all","全部",DATA.length]].concat(Object.keys(ORGS).map(k=>[k,ORGS[k],orgCnt[k]||0])), "org");
   const preCnt = DATA.filter(r=>r.ds<202200).length;
   const years = [...new Set(DATA.map(yearOf))].filter(y=>+y>=2022).sort();
@@ -632,7 +673,8 @@ function buildFocus(){
     let cd;
     if(x.kind==="up"){
       const t = x.days<=0 ? "发标在即" : x.days+"天后发标";
-      cd = '<span class="cd'+(x.days>7?" soon":"")+'">'+t+'</span>';
+      const tier = x.days<=7 ? "" : (x.days<=15 ? " mid" : " soon");
+      cd = '<span class="cd'+tier+'">'+t+'</span>';
     } else {
       cd = '<span class="cd fresh">'+(x.ago===0?"今日新增":x.ago+"天前新增")+'</span>';
     }
@@ -641,9 +683,10 @@ function buildFocus(){
       '<span class="fm">'+esc(r.amtT)+' · '+esc(ORGS[r.org])+'</span></div>';
   };
   let html = "";
-  if(ups.length) html += '<div class="fgroup"><h3>🔔 即将发标</h3>'+ups.map(item).join("")+'</div>';
-  if(frs.length) html += '<div class="fgroup"><h3>🆕 近14天新公告</h3>'+frs.map(item).join("")+'</div>';
+  if(ups.length) html += '<div class="fgroup"><h3>🔔 即将发标 · '+ups.length+'</h3>'+ups.map(item).join("")+'</div>';
+  if(frs.length) html += '<div class="fgroup"><h3>🆕 近14天新公告 · '+frs.length+'</h3>'+frs.map(item).join("")+'</div>';
   document.getElementById("focusList").innerHTML = html;
+  document.querySelector("#focusBox h2").textContent = "📌 近期关注 · " + (ups.length + frs.length);
   document.getElementById("focusBox").hidden = false;
   document.querySelectorAll(".fitem").forEach(el=>{
     el.onclick = ()=>{ window.open(el.dataset.url, "_blank", "noopener"); };
