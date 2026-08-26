@@ -164,6 +164,7 @@
   .csvbtn{margin-left:auto; flex:0 0 auto}
 
   /* ===== 更新中断警示条 ===== */
+  .stalewarn[hidden]{display:none}
   .stalewarn{display:flex; align-items:center; gap:10px; margin:0 0 18px; padding:10px 16px;
     border-radius:10px; font-size:13.5px; font-weight:600;
     background:#FAF3DC; color:#7A5A12; border:1px solid #E8D9A8}
@@ -565,7 +566,7 @@ function render(){
   const years = [...new Set(DATA.map(yearOf))].filter(y=>+y>=2022).sort();
   makePills("fYear", [["all","全部",null]].concat(preCnt?[["pre","2021前",preCnt]]:[]).concat(years.map(y=>[y,y,DATA.filter(r=>yearOf(r)===y).length])), "year");
   const stCnt = {}; DATA.forEach(r=> stCnt[r.st]=(stCnt[r.st]||0)+1);
-  makePills("fSt", [["all","全部",null]].concat(CONFIG.stypes.map(s=>[s.key,s.label,stCnt[s.key]||0])), "st");
+  makePills("fSt", [["all","全部",null]].concat(CONFIG.stypes.filter(s=>stCnt[s.key]).map(s=>[s.key,s.label,stCnt[s.key]])), "st");
   makePills("fCat", [["all","全部",null],["bid","招标·采购",null],["win","中标·成交",null],["stop","已终止",null]], "cat");
   makePills("fPlan", [["all","全部",null],["plan","即将招标",DATA.filter(isPlan).length]], "plan");
   makePills("fAi", [["all","全部",null],["core","核心AI",null],["edge","智能化相关",null],["ref","非AI·参考",null]], "ai");
