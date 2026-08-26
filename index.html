@@ -120,8 +120,54 @@
   .addbtn{background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600}
   .cfgta{width:100%; border:1px solid var(--line); background:var(--bg); color:var(--ink);
     border-radius:8px; padding:10px 12px; font-size:13px; font-family:inherit; resize:vertical; box-sizing:border-box}
+  /* ===== 单位识别色（低饱和·科技感） ===== */
+  :root{--oc-csg:#4E8FBF; --oc-sz:#8B7BB8; --oc-dk:#3FA0A0; --oc-glj:#B08948; --oc-gky:#2F6B5A; --oc-jt:#5C7A99}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){--oc-csg:#7FB5DA; --oc-sz:#AC9ED4; --oc-dk:#6CC3C0; --oc-glj:#D0AC6C; --oc-gky:#63A98F; --oc-jt:#8DA9C4}
+  }
+  :root[data-theme="dark"]{--oc-csg:#7FB5DA; --oc-sz:#AC9ED4; --oc-dk:#6CC3C0; --oc-glj:#D0AC6C; --oc-gky:#63A98F; --oc-jt:#8DA9C4}
+  .chip.org{display:inline-flex; align-items:center; gap:6px; background:transparent; border:1px solid var(--line); color:var(--ink)}
+  .chip.org::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--oc,var(--accent)); flex:0 0 auto}
+  .chip.org[data-org="csg"]{--oc:var(--oc-csg)}
+  .chip.org[data-org="sz"]{--oc:var(--oc-sz)}
+  .chip.org[data-org="dk"]{--oc:var(--oc-dk)}
+  .chip.org[data-org="glj"]{--oc:var(--oc-glj)}
+  .chip.org[data-org="gky"]{--oc:var(--oc-gky)}
+  .chip.org[data-org="jt"]{--oc:var(--oc-jt)}
+
+  /* ===== 头部渐变细线 ===== */
+  header.top{border-bottom:none; position:relative; padding-bottom:22px}
+  header.top::after{content:""; position:absolute; left:0; right:0; bottom:0; height:2px;
+    background:linear-gradient(90deg, var(--accent) 0%, var(--chip-bid-fg) 45%, transparent 95%)}
+
+  /* ===== 近期关注 ===== */
+  .focus{background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--accent);
+    border-radius:10px; padding:14px 18px; margin:18px 0 2px}
+  .focus h2{margin:0 0 8px; font-size:13px; letter-spacing:.14em; color:var(--accent-ink); font-weight:700}
+  .fitem{display:flex; align-items:baseline; gap:10px; font-size:13.5px; cursor:pointer; padding:4px 6px; border-radius:6px; flex-wrap:wrap}
+  .fitem:hover{background:var(--bg)}
+  .fitem .cd{flex:0 0 auto; font-size:12px; padding:1px 8px; border-radius:999px; background:var(--chip-stop-bg); color:var(--chip-stop-fg); font-variant-numeric:tabular-nums; font-weight:600}
+  .fitem .cd.soon{background:var(--chip-bid-bg); color:var(--chip-bid-fg)}
+  .fitem .cd.fresh{background:var(--chip-win-bg); color:var(--chip-win-fg)}
+  .fitem .ft{color:var(--ink)}
+  .fitem .fm{color:var(--muted); font-size:12.5px; flex:0 0 auto}
+
+  /* ===== 卡片悬停与导出 ===== */
+  .card:hover{border-color:var(--accent); transform:translateY(-1px); box-shadow:0 4px 16px rgba(20,30,40,.07)}
+  :root[data-theme="dark"] .card:hover{box-shadow:0 4px 16px rgba(0,0,0,.35)}
+  .csvbtn{margin-left:auto; flex:0 0 auto}
+
+  /* ===== 移动端筛选横向滑动 ===== */
+  @media (max-width:640px){
+    .frow{flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:2px}
+    .frow > *{flex:0 0 auto}
+    .frow .searchbox{min-width:180px}
+  }
   @media (prefers-reduced-motion: no-preference){
-    .card{transition:border-color .15s}
+    .card{transition:border-color .15s, transform .15s, box-shadow .15s}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .card:hover{transform:none}
   }
 </style>
 
@@ -139,13 +185,21 @@
   </div>
 </header>
 
+<section class="focus" id="focusBox" hidden>
+  <h2>📌 近期关注</h2>
+  <div id="focusList"></div>
+</section>
+
 <div class="toolbar">
   <div class="frow"><span class="flabel">单位</span><span id="fOrg"></span></div>
   <div class="frow"><span class="flabel">年份</span><span id="fYear"></span></div>
   <div class="frow"><span class="flabel">标的类型</span><span id="fSt"></span></div>
   <div class="frow"><span class="flabel">公告</span><span id="fCat"></span>
+    <span class="flabel" style="margin-left:14px">阶段</span><span id="fPlan"></span>
     <span class="flabel" style="margin-left:14px">AI关联</span><span id="fAi"></span></div>
-  <div class="frow"><input class="searchbox" id="q" type="search" placeholder="搜索项目名称、内容、中标单位…" aria-label="搜索"></div>
+  <div class="frow"><input class="searchbox" id="q" type="search" placeholder="搜索项目名称、内容、中标单位…" aria-label="搜索">
+    <span class="flabel">排序</span><span id="fSort"></span>
+    <button class="pill csvbtn" id="csvBtn" hidden>⬇ 导出CSV</button></div>
 </div>
 <div class="resultline" id="resultline"></div>
 <div class="cards" id="cards"></div>
@@ -412,7 +466,7 @@ const DATA = [
 
 const CAT = {bid:["招标·采购",  "bid"], win:["中标·成交","win"], stop:["已终止","stop"]};
 const AIL = {core:["核心AI","aicore"], edge:["智能化相关","aiedge"], ref:["非AI·参考","ref"]};
-const state = {org:"all", year:"all", cat:"all", ai:"all", st:"all", q:""};
+const state = {org:"all", year:"all", cat:"all", ai:"all", st:"all", plan:"all", sort:"new", q:""};
 
 function yearOf(r){ return String(r.ds).slice(0,4); }
 function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
@@ -435,30 +489,42 @@ function refreshPills(){
   });
 }
 
+function isPlan(r){ return (r.type+r.name).includes("招标计划"); }
 function filtered(){
   return DATA.filter(r =>
     (state.org==="all" || r.org===state.org) &&
-    (state.year==="all"|| yearOf(r)===state.year) &&
+    (state.year==="all"|| (state.year==="pre" ? r.ds<202200 : yearOf(r)===state.year)) &&
     (state.cat==="all" || r.cat===state.cat) &&
     (state.ai==="all"  || r.ai===state.ai) &&
     (state.st==="all"  || r.st===state.st) &&
+    (state.plan==="all"|| isPlan(r)) &&
     (!state.q || (r.name+r.buyer+r.sum+(r.winner||"")+ORGS[r.org]).toLowerCase().includes(state.q))
-  ).sort((a,b)=> b.ds - a.ds);
+  ).sort((a,b)=> state.sort==="amt" ? (((b.amt||-1)-(a.amt||-1)) || (b.ds-a.ds)) : (b.ds-a.ds));
 }
 
 function render(){
   const rows = filtered();
   const box = document.getElementById("cards");
   const sum = rows.reduce((s,r)=> s + (r.amt||0), 0);
+  const fParts = [];
+  if(state.org!=="all") fParts.push(ORGS[state.org]);
+  if(state.year!=="all") fParts.push(state.year==="pre" ? "2021前" : state.year+"年");
+  if(state.st!=="all") fParts.push(STYPES[state.st]);
+  if(state.cat!=="all") fParts.push(CAT[state.cat][0]);
+  if(state.plan!=="all") fParts.push("即将招标");
+  if(state.ai!=="all") fParts.push(AIL[state.ai][0]);
+  if(state.q) fParts.push('"'+state.q+'"');
   document.getElementById("resultline").textContent =
     "显示 " + rows.length + " 条 ／ 共 " + DATA.length + " 条" +
-    (sum>0 ? " · 当前筛选可统计金额合计 " + sum.toFixed(2).replace(/\.00$/,"") + " 万元" : "");
+    (sum>0 ? " · 可统计金额合计 " + sum.toFixed(2).replace(/\.00$/,"") + " 万元" : "") +
+    (fParts.length ? " ｜ 筛选：" + fParts.join(" × ") : "") +
+    (state.sort==="amt" ? " ｜ 按金额排序" : "");
   if(!rows.length){ box.innerHTML = '<div class="empty">没有符合当前筛选条件的项目</div>'; return; }
   box.innerHTML = rows.map(r=>{
     const c = CAT[r.cat], a = AIL[r.ai];
     return '<article class="card ai-'+r.ai+'">' +
       '<div class="row1">' +
-        '<span class="chip org">'+esc(ORGS[r.org])+'</span>' +
+        '<span class="chip org" data-org="'+r.org+'">'+esc(ORGS[r.org])+'</span>' +
         '<span class="chip '+c[1]+'">'+c[0]+'</span>' +
         (STYPES[r.st] ? '<span class="chip st">'+esc(STYPES[r.st])+'</span>' : '') +
         '<span class="chip '+a[1]+'">'+a[0]+'</span>' +
@@ -480,20 +546,87 @@ function render(){
 (function init(){
   const orgCnt = {}; DATA.forEach(r=> orgCnt[r.org]=(orgCnt[r.org]||0)+1);
   makePills("fOrg", [["all","全部",DATA.length]].concat(Object.keys(ORGS).map(k=>[k,ORGS[k],orgCnt[k]||0])), "org");
-  const years = [...new Set(DATA.map(yearOf))].sort();
-  makePills("fYear", [["all","全部",null]].concat(years.map(y=>[y,y,DATA.filter(r=>yearOf(r)===y).length])), "year");
+  const preCnt = DATA.filter(r=>r.ds<202200).length;
+  const years = [...new Set(DATA.map(yearOf))].filter(y=>+y>=2022).sort();
+  makePills("fYear", [["all","全部",null]].concat(preCnt?[["pre","2021前",preCnt]]:[]).concat(years.map(y=>[y,y,DATA.filter(r=>yearOf(r)===y).length])), "year");
   const stCnt = {}; DATA.forEach(r=> stCnt[r.st]=(stCnt[r.st]||0)+1);
   makePills("fSt", [["all","全部",null]].concat(CONFIG.stypes.map(s=>[s.key,s.label,stCnt[s.key]||0])), "st");
   makePills("fCat", [["all","全部",null],["bid","招标·采购",null],["win","中标·成交",null],["stop","已终止",null]], "cat");
+  makePills("fPlan", [["all","全部",null],["plan","即将招标",DATA.filter(isPlan).length]], "plan");
   makePills("fAi", [["all","全部",null],["core","核心AI",null],["edge","智能化相关",null],["ref","非AI·参考",null]], "ai");
+  makePills("fSort", [["new","最新",null],["amt","金额↓",null]], "sort");
   document.getElementById("q").addEventListener("input", e=>{ state.q = e.target.value.trim().toLowerCase(); render(); });
 
   document.getElementById("statTotal").textContent = DATA.length;
   const total = DATA.reduce((s,r)=> s+(r.amt||0), 0);
   document.getElementById("statAmount").textContent = Math.round(total).toLocaleString("zh-CN");
   render();
+  buildFocus();
+  initCsv();
   initConfigPanel();
 })();
+
+// ===== 近期关注 =====
+function buildFocus(){
+  const now = new Date();
+  const day = 24*3600*1000;
+  const items = [];
+  DATA.forEach(r=>{
+    const m = (r.type + " " + r.sum).match(/预计(\d{4})-(\d{2})-(\d{2})/);
+    if(m){
+      const d = new Date(+m[1], +m[2]-1, +m[3]);
+      const days = Math.ceil((d - now) / day);
+      if(days >= -3 && days <= 60){ items.push({r, kind:"up", days, when:d.getTime()}); }
+    }
+  });
+  DATA.forEach(r=>{
+    const m = r.date.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if(m){
+      const d = new Date(+m[1], +m[2]-1, +m[3]);
+      const ago = Math.floor((now - d) / day);
+      if(ago >= 0 && ago <= 14 && !items.some(x=>x.r===r)){ items.push({r, kind:"fresh", ago, when:d.getTime()}); }
+    }
+  });
+  if(!items.length) return;
+  const ups = items.filter(x=>x.kind==="up").sort((a,b)=>a.when-b.when);
+  const frs = items.filter(x=>x.kind==="fresh").sort((a,b)=>b.when-a.when).slice(0,6);
+  const html = ups.concat(frs).map(x=>{
+    const r = x.r;
+    let cd;
+    if(x.kind==="up"){
+      const t = x.days<=0 ? "近日发标" : "还有"+x.days+"天发标";
+      cd = '<span class="cd'+(x.days>7?" soon":"")+'">'+t+'</span>';
+    } else {
+      cd = '<span class="cd fresh">'+(x.ago===0?"今日":x.ago+"天前")+'新</span>';
+    }
+    return '<div class="fitem" data-url="'+esc(r.url)+'" title="点击打开原文公告">'+cd+
+      '<span class="ft">'+esc(r.name)+'</span>'+
+      '<span class="fm">'+esc(r.amtT)+' · '+esc(ORGS[r.org])+'</span></div>';
+  }).join("");
+  document.getElementById("focusList").innerHTML = html;
+  document.getElementById("focusBox").hidden = false;
+  document.querySelectorAll(".fitem").forEach(el=>{
+    el.onclick = ()=>{ window.open(el.dataset.url, "_blank", "noopener"); };
+  });
+}
+
+// ===== CSV导出（Artifact查看器禁止下载，仅在GitHub Pages/本地显示按钮） =====
+function initCsv(){
+  if(typeof window.claude !== "undefined") return;
+  const btn = document.getElementById("csvBtn");
+  btn.hidden = false;
+  btn.onclick = ()=>{
+    const head = ["单位","公告类型","AI关联","标的类型","日期","项目名称","采购/招标方","方式","金额","中标/成交方","简述","来源URL"];
+    const rows = DATA.map(r=>[ORGS[r.org], CAT[r.cat][0], AIL[r.ai][0], STYPES[r.st]||r.st, r.date, r.name, r.buyer, r.type, r.amtT, r.winner||"", r.sum, r.url]);
+    const csv = "﻿" + [head].concat(rows).map(row=>row.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(",")).join("\r\n");
+    const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "云南AI招投标数据库.csv";
+    a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 5000);
+  };
+}
 
 // ===== 检索配置面板 =====
 const PAGE_URL = "https://claude.ai/code/artifact/061c4678-ef82-4d1d-a60d-1f13549b9f6b";
