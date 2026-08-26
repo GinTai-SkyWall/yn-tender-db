@@ -157,6 +157,15 @@
   :root[data-theme="dark"] .card:hover{box-shadow:0 4px 16px rgba(0,0,0,.35)}
   .csvbtn{margin-left:auto; flex:0 0 auto}
 
+  /* ===== 更新中断警示条 ===== */
+  .stalewarn{display:flex; align-items:center; gap:10px; margin:0 0 18px; padding:10px 16px;
+    border-radius:10px; font-size:13.5px; font-weight:600;
+    background:#FAF3DC; color:#7A5A12; border:1px solid #E8D9A8}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .stalewarn{background:#3A311C; color:#E3C878; border-color:#5C4E26}
+  }
+  :root[data-theme="dark"] .stalewarn{background:#3A311C; color:#E3C878; border-color:#5C4E26}
+
   /* ===== 移动端筛选横向滑动 ===== */
   @media (max-width:640px){
     .frow{flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:2px}
@@ -172,6 +181,7 @@
 </style>
 
 <div class="wrap">
+<div id="staleWarn" class="stalewarn" hidden>⚠️ <span id="staleText"></span></div>
 <header class="top">
   <div class="eyebrow">云南 · 人工智能招投标追踪</div>
   <h1>云南重点单位人工智能招投标数据库</h1>
@@ -180,7 +190,7 @@
     <span>收录项目 <b class="num" id="statTotal">–</b> 个</span>
     <span>可统计金额合计约 <b class="num" id="statAmount">–</b> 万元</span>
     <span>数据区间 <b>2014年12月 – 2026年8月</b></span>
-    <span>最后更新 <b>2026-08-26</b> · 每天中午自动检索更新</span>
+    <span>最后更新 <b id="lastUpd">2026-08-26</b> · 每天中午自动检索更新</span>
     <span>上次自动检索 <b>2026-08-24</b>（本地自动更新：南网供应链平台、中国政府采购网逐单位核验）</span>
   </div>
 </header>
@@ -563,8 +573,25 @@ function render(){
   render();
   buildFocus();
   initCsv();
+  checkStale();
   initConfigPanel();
 })();
+
+// ===== 自动更新中断自检 =====
+function checkStale(){
+  try{
+    const t = document.getElementById("lastUpd").textContent.trim();
+    const m = t.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if(!m) return;
+    const last = new Date(+m[1], +m[2]-1, +m[3]);
+    const days = Math.floor((Date.now() - last.getTime()) / 86400000);
+    if(days > 3){
+      document.getElementById("staleText").textContent =
+        "数据自动更新可能已中断：最后更新于 " + t + "（" + days + "天前）。每日中午12点应自动检索更新，请提醒维护者检查更新任务与电脑开机状态。";
+      document.getElementById("staleWarn").hidden = false;
+    }
+  }catch(e){}
+}
 
 // ===== 近期关注 =====
 function buildFocus(){
