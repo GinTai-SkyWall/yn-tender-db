@@ -130,17 +130,18 @@
   .cfgta{width:100%; border:1px solid var(--line); background:var(--bg); color:var(--ink);
     border-radius:8px; padding:10px 12px; font-size:13px; font-family:inherit; resize:vertical; box-sizing:border-box}
   /* ===== 单位识别色（低饱和·科技感） ===== */
-  :root{--oc-csg:#4E8FBF; --oc-sz:#8B7BB8; --oc-dk:#3FA0A0; --oc-glj:#B08948; --oc-gky:#2F6B5A; --oc-jt:#5C7A99}
+  :root{--oc-csg:#4E8FBF; --oc-sz:#8B7BB8; --oc-dk:#3FA0A0; --oc-glj:#B08948; --oc-gky:#2F6B5A; --oc-jt:#5C7A99; --oc-qs:#8A8F98}
   @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){--oc-csg:#7FB5DA; --oc-sz:#AC9ED4; --oc-dk:#6CC3C0; --oc-glj:#D0AC6C; --oc-gky:#63A98F; --oc-jt:#8DA9C4}
+    :root:not([data-theme="light"]){--oc-csg:#7FB5DA; --oc-sz:#AC9ED4; --oc-dk:#6CC3C0; --oc-glj:#D0AC6C; --oc-gky:#63A98F; --oc-jt:#8DA9C4; --oc-qs:#A8AEB8}
   }
-  :root[data-theme="dark"]{--oc-csg:#7FB5DA; --oc-sz:#AC9ED4; --oc-dk:#6CC3C0; --oc-glj:#D0AC6C; --oc-gky:#63A98F; --oc-jt:#8DA9C4}
+  :root[data-theme="dark"]{--oc-csg:#7FB5DA; --oc-sz:#AC9ED4; --oc-dk:#6CC3C0; --oc-glj:#D0AC6C; --oc-gky:#63A98F; --oc-jt:#8DA9C4; --oc-qs:#A8AEB8}
   [data-org="csg"]{--oc:var(--oc-csg)}
   [data-org="sz"]{--oc:var(--oc-sz)}
   [data-org="dk"]{--oc:var(--oc-dk)}
   [data-org="glj"]{--oc:var(--oc-glj)}
   [data-org="gky"]{--oc:var(--oc-gky)}
   [data-org="jt"]{--oc:var(--oc-jt)}
+  [data-org="qs"]{--oc:var(--oc-qs)}
   .chip.org{display:inline-flex; align-items:center; gap:6px; background:transparent; border:1px solid var(--line); color:var(--ink)}
   .chip.org::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--oc,var(--accent)); flex:0 0 auto}
   .orglegend{display:flex; flex-wrap:wrap; gap:6px 16px; margin:10px 0 8px}
@@ -295,6 +296,8 @@
   <p>该公司2024年9月25日注册成立（南网数字集团51%控股、云南电科院集团49%参股，承接原云南电网信息中心相关职能，前身为2023年设立的南网数字集团云南分公司），故2010-2023年无该主体公告。其定位是南网数字集团在滇的信息化运维与网络安全服务实施主体：作为中标方集中在云南电网／云南电科院的信息系统维护、OMS软件平台、网络安全框架；作为采购人以软硬件维保、服务器备件、DOMM认证等支撑性采购为主，未发现其独立发布的AI／大模型／GPU专项采购公告（云南电网体系的AI采购由云南电网有限责任公司出面招标）。南网供应链平台历史公告页会过期下架，中标金额多被脱敏，部分字段标"未公开"。</p>
   <h4>云南交投集团（限软件／算法／智能化）</h4>
   <p>2026年8月25日加入跟踪，仅收录软件、模型、算法、AI应用、智慧化平台、照明节能专项、ETC稽查服务、智能监测类采购；纯土建及机电施工／监理／养护总包类工程标不收录（如2025年12月约23.5亿的运营高速隧道机电养护"3+2"框架、约8.2亿的安全韧性机电工程等，均属施工类，仅作市场背景参考未入库）。其依法必招项目发布于云南省公共资源交易网（本库经数据接口覆盖）；集团自有数智化招采平台上的零星采购（稽查服务外包、照明节能专项等）不被搜索引擎收录，覆盖有缺口。下属项目公司的股权隶属基于公开信息推断，个别标注"待核实"。"招标计划"类条目为预告性质，金额为合同估算价。</p>
+  <h4>全省·其他（聚合类目）</h4>
+  <p>2026年8月起新增：六家重点单位之外，云南省内其他采购人发布的、与本库业务方向高度契合的招标采购——限AI／大模型／智能识别、智能巡检／路面病害检测、隧道照明节能／智慧照明、ETC稽查、桥隧边坡智能监测、反诈／声纹／智能语音类，金额明确且不低于30万元（核心AI类不限额）。该类目不做单位名检索，由云南省公共资源交易网接口全省扫描与AI搜索通道归集，覆盖度受来源索引能力限制，非全省该类采购的完整清单。</p>
   <h4>云南省低空产业投资有限公司</h4>
   <p>该公司2025年9月10日注册成立（云南交投集团牵头，联合云南机场集团、云南交发公司，注册资本6亿元），早期公开可查记录均为其作为投标人／中标人的项目。2026年8月已确认其自身采购发布于云南交投系电子招采平台（网上智能开标于云南交投数智化招采服务中心，代理为云南云岭高速公路工程咨询有限公司），该平台不被搜索引擎收录，公告以采招网（yn.bidcenter.com.cn）业主页转载为主要可核实来源，部分金额字段被转载平台脱敏。弥勒项目信息来自官方媒体报道，原始公告金额未公开。</p>
   <h4>云南省公路局</h4>
@@ -323,7 +326,8 @@ const CONFIG = {
     {key:"glj", name:"省公路局", full:"云南省公路局（含云南省公路信息中心等直属单位，来源 ccgp.gov.cn）", status:"active"},
     {key:"gky", name:"公路科研院", full:"云南省公路科学技术研究院（省公路局下属事业单位，来源 ccgp.gov.cn）", status:"active"},
     {key:"sz", name:"南网数字（云南）", full:"南方电网数字电网集团（云南）有限公司（南网数字集团云南子公司，既作为采购人也常以中标人身份出现，主要来源 bidding.csg.cn）", status:"active"},
-    {key:"jt", name:"云南交投", full:"云南省交通投资建设集团有限公司及下属运营单位、项目公司（仅收录软件、模型、算法、AI应用、智慧化平台、照明节能专项、ETC稽查服务、智能监测类采购；排除土建及机电施工/监理/养护总包类工程标；采购走云南交投数智化招采平台与省公共资源交易网）", status:"active"}
+    {key:"jt", name:"云南交投", full:"云南省交通投资建设集团有限公司及下属运营单位、项目公司（仅收录软件、模型、算法、AI应用、智慧化平台、照明节能专项、ETC稽查服务、智能监测类采购；排除土建及机电施工/监理/养护总包类工程标；采购走云南交投数智化招采平台与省公共资源交易网）", status:"active"},
+    {key:"qs", name:"全省·其他", full:"云南省内除六家重点单位以外的其他采购人——聚合类目，仅收录与业务高度契合的标的：AI/大模型/智能识别、智能巡检/路面病害检测、隧道照明节能/智慧照明、ETC稽查、桥隧边坡智能监测、反诈/声纹/智能语音；金额明确且≥30万元，或核心AI类不限额（此类目不按单位名检索，由全省扫描通道归集）", status:"active"}
   ],
   stypes: [
     {key:"sw", label:"软件·平台"},
@@ -488,8 +492,8 @@ const DATA = [
  {org:"jt",cat:"win",ai:"core",date:"2024-05-22",ds:202405,st:"rjkf",name:"云南公路联网收费公司基于大语言模型的公路联网收费客服智能应用研究项目",buyer:"云南公路联网收费管理有限公司（云南交投集团权属联网收费运营单位）",type:"中标结果公告",amt:128.25,amtT:"中标128.25万元（含税）",winner:"亚信科技（南京）有限公司",sum:"基于大语言模型的公路联网收费智能客服模型研究训练与平台开发建设，服务期至2025年6月，含课题结题验收与知识产权成果提交，系交投体系较早的大模型应用采购。",url:"https://zhengxin-pub.cdn.bcebos.com/tender/0ed6b5264901831ef474bb9f724cdfd9/%E4%BA%91%E5%8D%97%E5%85%AC%E8%B7%AF%E8%81%94%E7%BD%91%E6%94%B6%E8%B4%B9%E7%AE%A1%E7%90%86%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%9F%BA%E4%BA%8E%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%85%AC%E8%B7%AF%E8%81%94%E7%BD%91%E6%94%B6%E8%B4%B9%E5%AE%A2%E6%9C%8D%E6%99%BA%E8%83%BD%E5%BA%94%E7%94%A8%E7%A0%94%E7%A9%B6%E9%A1%B9%E7%9B%AE%E9%80%89%E8%81%98%E5%A4%96%E5%8D%8F%E5%8D%95%E4%BD%8D%E4%B8%AD%E6%A0%87%E7%BB%93%E6%9E%9C%E5%85%AC%E5%91%8A.pdf"},
  {org:"jt",cat:"bid",ai:"core",date:"2024-12-27",ds:202412,st:"sw",name:"云南交投集团人工智能基础设施提升与交通大模型建设工程",buyer:"云南省交通投资建设集团有限公司",type:"招标公告（经施工监理标披露主体工程）",amt:32861,amtT:"工程估算约32861万元",winner:"未公开",sum:"大模型硬件算力资源、基础软件设施、大模型基础训练及数据集开发、场景应用与成果展示建设及配套工程，工期12个月——即2025年7月与华为联合发布的'绿美通道·交通大模型'及交投智算中心的工程载体。",url:"https://m.163.com/dy/article/JKEV1T8R0511D6RL.html"},
  {org:"jt",cat:"win",ai:"edge",date:"2025-09-15",ds:202509,st:"hw",name:"昌宁至保山高速枯柯河大桥结构健康系统建设及维护项目",buyer:"云南昌保高速公路建设开发有限公司（云南交投集团系统项目公司）",type:"中标候选人公示",amt:214.2,amtT:"第一候选人报价214.20万元（拦标价230万元）",winner:"北京公科固桥技术有限公司（第一中标候选人）",sum:"桥梁结构健康监测系统的传感采集、数据传输与健康评估系统建设及维护。",url:"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=55a8791b-427e-40e9-93cc-77c5b2085596&colCode=1&from=jiaoYi"},
- {org:"jt",cat:"bid",ai:"edge",date:"2026-07-31",ds:202607,st:"hw",name:"G4216华坪至丽江高速（三川至拉市段）长大桥隧结构监测系统及边坡监测工程（招标计划）",buyer:"云南华丽高速公路投资开发有限公司（云南交投参与投资的项目公司，隶属待核实）",type:"招标计划（2026-08-25已发招标文件预公示）",amt:2227.53,amtT:"合同估算2227.53万元",winner:"未招标（计划阶段）",sum:"桥梁、隧道、边坡结构监测系统建设与运维、数据管理及健康度评估等智能监测应用，预计2026-09-02发布招标公告。",url:"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=4543e440-faab-4444-b20f-64daa4c427f6&colCode=1&from=jiaoYi"},
- {org:"jt",cat:"bid",ai:"edge",date:"2026-08-14",ds:202608,st:"hw",name:"G4216华坪至丽江高速（华坪至三川段）长大桥隧结构监测系统及边坡监测工程（招标计划）",buyer:"云南华丽高速公路投资开发有限公司（云南交投参与投资的项目公司，隶属待核实）",type:"招标计划",amt:2925.54,amtT:"合同估算2925.54万元",winner:"未招标（计划阶段）",sum:"桥梁、隧道、边坡结构监测系统实施、试运行、运维、数据管理及智能应用（数据分析、阈值设定、健康度评估），预计2026-09-17发布招标公告。",url:"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=4780b3ae-a85b-490c-8c61-38a7247b9b3d&colCode=1&from=jiaoYi"},
+ {org:"qs",cat:"bid",ai:"edge",date:"2026-07-31",ds:202607,st:"hw",name:"G4216华坪至丽江高速（三川至拉市段）长大桥隧结构监测系统及边坡监测工程（招标计划）",buyer:"云南华丽高速公路投资开发有限公司（中国铁建系PPP项目公司，云南交投仅参股9%）",type:"招标计划（2026-08-25已发招标文件预公示）",amt:2227.53,amtT:"合同估算2227.53万元",winner:"未招标（计划阶段）",sum:"桥梁、隧道、边坡结构监测系统建设与运维、数据管理及健康度评估等智能监测应用，预计2026-09-02发布招标公告。",url:"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=4543e440-faab-4444-b20f-64daa4c427f6&colCode=1&from=jiaoYi"},
+ {org:"qs",cat:"bid",ai:"edge",date:"2026-08-14",ds:202608,st:"hw",name:"G4216华坪至丽江高速（华坪至三川段）长大桥隧结构监测系统及边坡监测工程（招标计划）",buyer:"云南华丽高速公路投资开发有限公司（中国铁建系PPP项目公司，云南交投仅参股9%）",type:"招标计划",amt:2925.54,amtT:"合同估算2925.54万元",winner:"未招标（计划阶段）",sum:"桥梁、隧道、边坡结构监测系统实施、试运行、运维、数据管理及智能应用（数据分析、阈值设定、健康度评估），预计2026-09-17发布招标公告。",url:"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=4780b3ae-a85b-490c-8c61-38a7247b9b3d&colCode=1&from=jiaoYi"},
  {org:"glj",cat:"bid",ai:"edge",date:"2026-08-20",ds:202608,st:"xxh",name:"云南省普通国道公路建设指挥部智慧管控调度系统（招标计划）",buyer:"云南省普通国道公路建设指挥部（公路局系统，归口以公告为准）",type:"招标计划",amt:266,amtT:"合同估算266万元",winner:"未招标（计划阶段）",sum:"国道智慧管控调度平台建设、国指指挥中心升级改造、各分指建设及融合通信云调度系统建设，预计2026-09-21发布招标公告。",url:"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=f7dbb7b7-a03b-44f0-b857-910b43e25c17&colCode=1&from=jiaoYi"},
 
  {org:"csg",cat:"bid",ai:"core",date:"2026-08-20",ds:202608,st:"hw",name:"昆明电力交易中心2026年第2批货物专项采购 包1：大模型国产化基础算力平台建设（一期）",buyer:"昆明电力交易中心有限责任公司（南网／云南电网体系交易机构）",type:"公开招标",amt:350,amtT:"预算350万元",winner:"未公开（投标截止2026-09-11）",sum:"采购1台高性能国产化GPU服务器（显存容量不低于1024GB），以私有化部署方式构建公司内部大模型基础算力资源，含部署、调试及维保服务；系昆明电力交易中心自建大模型算力底座的一期工程。",url:"https://www.bidding.csg.cn/zbgg/1200439702.jhtml"},
@@ -502,7 +506,18 @@ const DATA = [
  {org:"csg",cat:"bid",ai:"edge",date:"2026-08-20",ds:202608,st:"sw",name:"2026年第12批货物类整合专项采购 标10：OS2地级主站基础功能及平台（系统母线自愈、配网系统三区智能成票、配电终端远程运维模块数据交互功能购置）",buyer:"云南电网有限责任公司（需求单位：昭通供电局）",type:"公开招标",amt:135,amtT:"预估135万元",winner:"未公开（投标截止2026-09-15）",sum:"购置OS2地级主站的系统母线自愈、配网系统三区智能成票、配电终端远程运维模块数据交互等功能，含配网操作票智能生成能力。项目编号CG0500022002378796。",url:"https://www.bidding.csg.cn/zbgg/1200440077.jhtml"},
  {org:"csg",cat:"bid",ai:"ref",date:"2026-08-20",ds:202608,st:"rjkf",name:"昆明电力交易中心2026年第3批货物专项采购 包2：2026年数据库实时运行监控系统建设",buyer:"昆明电力交易中心有限责任公司（南网／云南电网体系交易机构）",type:"询比采购公告",amt:36,amtT:"预算36万元",winner:"未公开（响应截止2026-08-28）",sum:"建设数据库实时运行监控系统，实现数据库运行状态实时采集与告警；同批包1为信创云平台DNS服务器采购59.86万元（基础硬件未单列收录）。采购编号CG0500062002310609。",url:"https://www.bidding.csg.cn/fzbgg/1200439830.jhtml"},
 
- {org:"glj",cat:"win",ai:"edge",date:"2026-05-27",ds:202605,st:"rjkf",name:"长大桥梁结构健康监测平台对接服务2026年度项目",buyer:"云南省公路信息中心（代理：中招国际招标有限公司）",type:"竞争性磋商·成交结果公告（磋商公告2026-05-13）",amt:26.80,amtT:"成交26.80万元",winner:"云南省公路科学技术研究院",sum:"将已建成的9座普通国省道公路桥梁（国道8座、省道1座）单桥监测系统数据与云南省公路局桥梁结构健康监测平台对接，按交通运输部要求开发完善数据接口，实现部—省—桥三级联网与合规数据上传；由省公路科研院（本库gky单位）中标，系公路局系统内单位承接。项目编号YNZC2026-C3-02343-ZZGJ-0282。",url:"http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202605/t20260527_26642658.htm"}
+ {org:"glj",cat:"win",ai:"edge",date:"2026-05-27",ds:202605,st:"rjkf",name:"长大桥梁结构健康监测平台对接服务2026年度项目",buyer:"云南省公路信息中心（代理：中招国际招标有限公司）",type:"竞争性磋商·成交结果公告（磋商公告2026-05-13）",amt:26.80,amtT:"成交26.80万元",winner:"云南省公路科学技术研究院",sum:"将已建成的9座普通国省道公路桥梁（国道8座、省道1座）单桥监测系统数据与云南省公路局桥梁结构健康监测平台对接，按交通运输部要求开发完善数据接口，实现部—省—桥三级联网与合规数据上传；由省公路科研院（本库gky单位）中标，系公路局系统内单位承接。项目编号YNZC2026-C3-02343-ZZGJ-0282。",url:"http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202605/t20260527_26642658.htm"},
+
+ {org:"qs",cat:"win",ai:"edge",date:"2025-09",ds:202509,st:"hw",name:"云南省人工影响天气水资源保障工程：固定作业点智能化监控识别终端",buyer:"云南省气象局",type:"中标结果公告",amt:1487.07,amtT:"中标1487.07万元（拦标价1536.4万元）",winner:"北京知天智为气象科技有限公司",sum:"为人影固定作业点采购部署智能化监控识别终端设备（含安装调试），实现作业点安全监控的智能识别。",url:"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=4a8cd1df-b0cc-4063-89ae-d2747d079ce2&colCode=1&from=jiaoYi"},
+ {org:"qs",cat:"win",ai:"core",date:"2026-02-09",ds:202602,st:"rjkf",name:"云南省加密气象观测网建设项目：云南人工智能临近预报系统建设（二次）",buyer:"云南省气象局",type:"中标结果公告",amt:197,amtT:"中标197万元",winner:"国家气象中心",sum:"以AI模型实现强对流天气临近预报，工期一年；首次招标2026-01-05失败后二次成功。",url:"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=5bbb105b-1535-4319-842d-c2e6261846db&colCode=1&from=jiaoYi"},
+ {org:"qs",cat:"win",ai:"core",date:"2026-02",ds:202602,st:"sv",name:"云南省加密气象观测网建设项目：智算算力租赁（3年）",buyer:"云南省气象局",type:"中标结果公告（招标公告2026-01-06）",amt:598.00,amtT:"中标598.00万元（拦标价600万元）",winner:"中国移动通信集团云南有限公司",sum:"租赁高性能人工智能算力资源并搭建算力统一纳管调度平台，支撑云南区域气象AI模型训练推理与多场景业务智能化应用。",url:"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=8b62d101-a4b5-4d39-a13a-3f090df2fe2b&colCode=1&from=jiaoYi"},
+ {org:"qs",cat:"win",ai:"edge",date:"2026-02",ds:202602,st:"sv",name:"云南省加密气象观测网建设项目：超算资源租赁（8年）",buyer:"云南省气象局",type:"中标结果公告",amt:4559.49,amtT:"中标4559.49万元（拦标价4560万元）",winner:"中国移动通信集团云南有限公司",sum:"租赁超算资源支撑气象数据高效处理与数值预报业务，与智算算力共同构成气象AI应用的算力底座。",url:"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=47fa0e59-8ed4-45f9-bc73-ddd550aac889&colCode=1&from=jiaoYi"},
+ {org:"qs",cat:"win",ai:"edge",date:"2026-05",ds:202605,st:"xxh",name:"云南师范大学智慧校园安防系统建设项目（二期）",buyer:"云南师范大学",type:"中标／合同订立公示（招标公告2026-01-29）",amt:963.89,amtT:"合同价963.89万元（估算975.65万元）",winner:"安徽电信规划设计有限责任公司",sum:"新增智能算力服务器并升级视频解析引擎，构建智慧感知、识别、分析、决策、干预应用体系，含智搜等智能模块、2061台高性能摄像机补盲及云存储扩容至6912TB。",url:"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=6aa4c812-334a-4251-b057-fe9a0cf58254&colCode=1&from=jiaoYi"},
+ {org:"qs",cat:"win",ai:"edge",date:"2026-06",ds:202606,st:"sw",name:"云南省滇中引水工程地质风险管控平台（香炉山段）建设",buyer:"云南省滇中引水工程有限公司",type:"中标候选人公示",amt:2880.16,amtT:"第一候选人报价2880.16万元（拦标价2973万元）",winner:"长江三峡勘测研究院有限公司（武汉）（第一中标候选人）",sum:"建设香炉山隧洞段地质风险管控平台（建设期270天＋运维5年），对标引江补汉数字孪生地质风险管控平台，涵盖地质灾害监测预警、智能化巡检与风险研判。",url:"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=18fc3b86-e005-4b71-a016-0d64d914dbdc&colCode=1&from=jiaoYi"},
+ {org:"qs",cat:"bid",ai:"core",date:"2026-08",ds:202608,st:"xxh",name:"云南省森林草原防火综合监测系统升级B标段（滇东南、滇西南区域）",buyer:"云南省林业双中心（省林草局直属单位）",type:"招标公告（2026-09-10开标）",amt:2104.84,amtT:"合同估算价2104.84万元",winner:"未开标",sum:"搭建林草视频监控底座、构建火情视频监测智能告警系统并升级业务应用，含AI算力服务器26台、通用算力服务器29台及存储扩容，属视频智能识别＋算力平台核心方向。",url:"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=9219ed6d-6ea7-4089-ba45-1c12041d97f0&colCode=1&from=jiaoYi"},
+ {org:"qs",cat:"bid",ai:"edge",date:"2026-08",ds:202608,st:"xxh",name:"磨憨铁矿石智慧查验项目（二次）",buyer:"云南铁路发展有限公司（监督：中国铁路昆明局集团）",type:"招标公告（首次2026-07-23招标失败，二次2026-09-10开标）",amt:850,amtT:"合同估算价850万元",winner:"未开标",sum:"磨憨铁路口岸铁矿石智慧查验系统的勘察、设计、设备采购安装调试总承包；公告未详列AI技术清单，智慧查验类系统通常含智能识别查验能力，契合度以招标文件为准。",url:"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=644251b2-702f-48ca-ad1f-525eede537b2&colCode=1&from=jiaoYi"},
+ {org:"qs",cat:"bid",ai:"core",date:"2026-08",ds:202608,st:"rjkf",name:"云南省数智防汛“1262”预报预警系统：AI数字预警系统建设",buyer:"云南省气象局",type:"招标公告（2026-09-08开标）",amt:660,amtT:"标段合同估算价660万元",winner:"未开标",sum:"建设“预报专家＋数字预报员”智能体：基于通用大模型的预报服务产品智能制作、数字预报员Agent群组、多源数据融合与自然语言交互等8大模块开发，支撑12/6/2小时强降水临灾预警叫应。",url:"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=30d315fd-0c1c-415c-8479-35b3b207e310&colCode=1&from=jiaoYi"},
+ {org:"qs",cat:"bid",ai:"edge",date:"2026-08",ds:202608,st:"sv",name:"G4216华丽高速（三川至拉市段）公路技术状况检测评定",buyer:"云南华丽高速公路投资开发有限公司（中国铁建系PPP项目公司）",type:"招标公告（2026-09-09开标）",amt:136.89,amtT:"合同估算价136.89万元",winner:"未开标",sum:"K818+924～K882+892段路基、路面、桥梁、隧道（含隧道机电）技术状况检测评定并出具科学决策报告，自动化快速检测＋病害识别为该类项目主流技术路线。",url:"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=6b503fc4-b90b-418d-aea6-bef35ab968c5&colCode=1&from=jiaoYi"}
 ];
 
 const CAT = {bid:["招标·采购",  "bid"], win:["中标·成交","win"], stop:["已终止","stop"]};
@@ -650,11 +665,13 @@ function buildFocus(){
   const day = 24*3600*1000;
   const items = [];
   DATA.forEach(r=>{
-    const m = (r.type + " " + r.sum).match(/预计(\d{4})-(\d{2})-(\d{2})/);
+    const txt = r.type + " " + r.sum;
+    let m = txt.match(/预计(\d{4})-(\d{2})-(\d{2})/), verb = "发标";
+    if(!m){ m = txt.match(/(\d{4})-(\d{2})-(\d{2})开标/); verb = "开标"; }
     if(m){
       const d = new Date(+m[1], +m[2]-1, +m[3]);
       const days = Math.ceil((d - now) / day);
-      if(days >= -3 && days <= 60){ items.push({r, kind:"up", days, when:d.getTime()}); }
+      if(days >= -3 && days <= 60){ items.push({r, kind:"up", days, verb, when:d.getTime()}); }
     }
   });
   DATA.forEach(r=>{
@@ -672,7 +689,8 @@ function buildFocus(){
     const r = x.r;
     let cd;
     if(x.kind==="up"){
-      const t = x.days<=0 ? "发标在即" : x.days+"天后发标";
+      const v = x.verb || "发标";
+      const t = x.days<=0 ? (v+"在即") : (x.days+"天后"+v);
       const tier = x.days<=7 ? "" : (x.days<=15 ? " mid" : " soon");
       cd = '<span class="cd'+tier+'">'+t+'</span>';
     } else {
