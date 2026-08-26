@@ -57,23 +57,23 @@
   .metaline b{color:var(--ink); font-weight:600}
   .metaline .num{font-variant-numeric:tabular-nums; color:var(--accent-ink); font-weight:700}
 
-  .toolbar{display:flex; flex-direction:column; gap:10px; margin:18px 0 6px}
-  .frow{display:flex; flex-wrap:wrap; align-items:center; gap:6px}
-  .flabel{font-size:12px; color:var(--muted); letter-spacing:.08em; min-width:3.5em}
+  .toolbar{display:flex; flex-direction:column; gap:10px; margin:14px 0 0;
+    background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:14px 16px}
+  .frow{display:flex; flex-wrap:wrap; align-items:center; gap:6px; min-height:28px}
+  .flabel{font-size:12px; color:var(--muted); letter-spacing:.08em; min-width:4em; flex:0 0 auto}
   .pill{
     border:1px solid var(--line); background:var(--surface); color:var(--ink);
     border-radius:999px; padding:3px 12px; font-size:13px; cursor:pointer; font-family:inherit;
   }
   .pill:hover{border-color:var(--accent)}
-  .pill.on{background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600}
-  :root[data-theme="dark"] .pill.on, .dark-on{color:#0F1512}
+  .pill.on{background:var(--accent-soft); border-color:var(--accent); color:var(--accent-ink); font-weight:600}
   .pill .cnt{opacity:.7; font-size:12px; font-variant-numeric:tabular-nums}
   .searchbox{
     flex:1; min-width:200px; border:1px solid var(--line); background:var(--surface); color:var(--ink);
     border-radius:8px; padding:6px 12px; font-size:14px; font-family:inherit;
   }
   .searchbox:focus{outline:2px solid var(--accent); outline-offset:1px; border-color:var(--accent)}
-  .resultline{font-size:13px; color:var(--muted); margin:10px 2px; font-variant-numeric:tabular-nums}
+  .resultline{font-size:13px; color:var(--muted); margin:12px 2px 14px; font-variant-numeric:tabular-nums}
 
   .cards{display:flex; flex-direction:column; gap:12px}
   .card{
@@ -144,13 +144,19 @@
   .focus{background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--accent);
     border-radius:10px; padding:14px 18px; margin:18px 0 2px}
   .focus h2{margin:0 0 8px; font-size:13px; letter-spacing:.14em; color:var(--accent-ink); font-weight:700}
-  .fitem{display:flex; align-items:baseline; gap:10px; font-size:13.5px; cursor:pointer; padding:4px 6px; border-radius:6px; flex-wrap:wrap}
+  .fgroup{margin-bottom:4px}
+  .fgroup h3{margin:8px 0 4px; font-size:12px; letter-spacing:.1em; color:var(--muted); font-weight:600}
+  .fitem{display:flex; align-items:center; gap:10px; font-size:13.5px; cursor:pointer; padding:4px 6px; border-radius:6px}
   .fitem:hover{background:var(--bg)}
-  .fitem .cd{flex:0 0 auto; font-size:12px; padding:1px 8px; border-radius:999px; background:var(--chip-stop-bg); color:var(--chip-stop-fg); font-variant-numeric:tabular-nums; font-weight:600}
+  .fitem .cd{flex:0 0 auto; min-width:88px; text-align:center; font-size:12px; padding:1px 8px; border-radius:999px; background:var(--chip-stop-bg); color:var(--chip-stop-fg); font-variant-numeric:tabular-nums; font-weight:600}
   .fitem .cd.soon{background:var(--chip-bid-bg); color:var(--chip-bid-fg)}
   .fitem .cd.fresh{background:var(--chip-win-bg); color:var(--chip-win-fg)}
-  .fitem .ft{color:var(--ink)}
-  .fitem .fm{color:var(--muted); font-size:12.5px; flex:0 0 auto}
+  .fitem .ft{color:var(--ink); flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .fitem .fm{color:var(--muted); font-size:12.5px; flex:0 0 auto; white-space:nowrap}
+  @media (max-width:640px){
+    .fitem{flex-wrap:wrap}
+    .fitem .ft{white-space:normal; flex-basis:100%; order:3}
+  }
 
   /* ===== 卡片悬停与导出 ===== */
   .card:hover{border-color:var(--accent); transform:translateY(-1px); box-shadow:0 4px 16px rgba(20,30,40,.07)}
@@ -191,7 +197,6 @@
     <span>可统计金额合计约 <b class="num" id="statAmount">–</b> 万元</span>
     <span>数据区间 <b>2014年12月 – 2026年8月</b></span>
     <span>最后更新 <b id="lastUpd">2026-08-26</b> · 每天中午自动检索更新</span>
-    <span>上次自动检索 <b>2026-08-24</b>（本地自动更新：南网供应链平台、中国政府采购网逐单位核验）</span>
   </div>
 </header>
 
@@ -287,12 +292,12 @@
 // ===== 检索配置（每周例程按此配置执行检索；新增单位/类型请用页面下方“检索配置”面板） =====
 const CONFIG = {
   units: [
-    {key:"csg", name:"南方电网云南分公司", full:"云南电网有限责任公司及下属各供电局（南方电网体系，主要来源 bidding.csg.cn）", status:"active"},
-    {key:"dk",  name:"云南省低空产业投资", full:"云南省低空产业投资有限公司（云南交投系，2025年9月成立，多以中标人身份出现）", status:"active"},
-    {key:"glj", name:"云南省公路局", full:"云南省公路局（含云南省公路信息中心等直属单位，来源 ccgp.gov.cn）", status:"active"},
-    {key:"gky", name:"云南省公路科学技术研究院", full:"云南省公路科学技术研究院（省公路局下属事业单位，来源 ccgp.gov.cn）", status:"active"},
-    {key:"sz", name:"南网数字集团（云南）", full:"南方电网数字电网集团（云南）有限公司（南网数字集团云南子公司，既作为采购人也常以中标人身份出现，主要来源 bidding.csg.cn）", status:"active"},
-    {key:"jt", name:"云南交投集团（限软件/算法/智能化）", full:"云南省交通投资建设集团有限公司及下属运营单位、项目公司（仅收录软件、模型、算法、AI应用、智慧化平台、照明节能专项、ETC稽查服务、智能监测类采购；排除土建及机电施工/监理/养护总包类工程标；采购走云南交投数智化招采平台与省公共资源交易网）", status:"active"}
+    {key:"csg", name:"云南电网", full:"云南电网有限责任公司及下属各供电局（南方电网体系，主要来源 bidding.csg.cn）", status:"active"},
+    {key:"dk",  name:"低空产投", full:"云南省低空产业投资有限公司（云南交投系，2025年9月成立，多以中标人身份出现）", status:"active"},
+    {key:"glj", name:"省公路局", full:"云南省公路局（含云南省公路信息中心等直属单位，来源 ccgp.gov.cn）", status:"active"},
+    {key:"gky", name:"公路科研院", full:"云南省公路科学技术研究院（省公路局下属事业单位，来源 ccgp.gov.cn）", status:"active"},
+    {key:"sz", name:"南网数字（云南）", full:"南方电网数字电网集团（云南）有限公司（南网数字集团云南子公司，既作为采购人也常以中标人身份出现，主要来源 bidding.csg.cn）", status:"active"},
+    {key:"jt", name:"云南交投", full:"云南省交通投资建设集团有限公司及下属运营单位、项目公司（仅收录软件、模型、算法、AI应用、智慧化平台、照明节能专项、ETC稽查服务、智能监测类采购；排除土建及机电施工/监理/养护总包类工程标；采购走云南交投数智化招采平台与省公共资源交易网）", status:"active"}
   ],
   stypes: [
     {key:"sw", label:"软件·平台"},
@@ -617,19 +622,22 @@ function buildFocus(){
   if(!items.length) return;
   const ups = items.filter(x=>x.kind==="up").sort((a,b)=>a.when-b.when);
   const frs = items.filter(x=>x.kind==="fresh").sort((a,b)=>b.when-a.when).slice(0,6);
-  const html = ups.concat(frs).map(x=>{
+  const item = x=>{
     const r = x.r;
     let cd;
     if(x.kind==="up"){
-      const t = x.days<=0 ? "近日发标" : "还有"+x.days+"天发标";
+      const t = x.days<=0 ? "发标在即" : x.days+"天后发标";
       cd = '<span class="cd'+(x.days>7?" soon":"")+'">'+t+'</span>';
     } else {
-      cd = '<span class="cd fresh">'+(x.ago===0?"今日":x.ago+"天前")+'新</span>';
+      cd = '<span class="cd fresh">'+(x.ago===0?"今日新增":x.ago+"天前新增")+'</span>';
     }
-    return '<div class="fitem" data-url="'+esc(r.url)+'" title="点击打开原文公告">'+cd+
+    return '<div class="fitem" data-url="'+esc(r.url)+'" title="'+esc(r.name)+'（点击打开原文公告）">'+cd+
       '<span class="ft">'+esc(r.name)+'</span>'+
       '<span class="fm">'+esc(r.amtT)+' · '+esc(ORGS[r.org])+'</span></div>';
-  }).join("");
+  };
+  let html = "";
+  if(ups.length) html += '<div class="fgroup"><h3>🔔 即将发标</h3>'+ups.map(item).join("")+'</div>';
+  if(frs.length) html += '<div class="fgroup"><h3>🆕 近14天新公告</h3>'+frs.map(item).join("")+'</div>';
   document.getElementById("focusList").innerHTML = html;
   document.getElementById("focusBox").hidden = false;
   document.querySelectorAll(".fitem").forEach(el=>{
