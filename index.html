@@ -188,6 +188,26 @@
   :root[data-theme="dark"] .card:hover{box-shadow:0 4px 16px rgba(0,0,0,.35)}
   .csvbtn{margin-left:auto; flex:0 0 auto}
 
+  /* ===== 工具栏·下拉收纳版 ===== */
+  .orgrow, .selrow{border-top:1px solid var(--line); padding-top:10px}
+  #fOrg .pill{display:inline-flex; align-items:center; gap:6px}
+  #fOrg .pill[data-org]::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--oc,var(--line)); flex:0 0 auto}
+  .selpill{display:inline-flex; align-items:center; gap:2px; border:1px solid var(--line); background:var(--surface);
+    border-radius:999px; padding:2px 6px 2px 12px; font-size:13px; color:var(--muted); cursor:pointer}
+  .selpill:hover{border-color:var(--accent)}
+  .selpill select{border:none; background:transparent; color:var(--ink); font-family:inherit; font-size:13px;
+    padding:2px; max-width:11em; cursor:pointer; outline:none}
+  .selpill select option{background:var(--surface); color:var(--ink)}
+  .selpill.on{background:var(--accent-soft); border-color:var(--accent); color:var(--accent-ink)}
+  .selpill.on select{color:var(--accent-ink); font-weight:600}
+  .chiprow{display:none}
+  .chiprow.show{display:flex; flex-wrap:wrap; gap:6px; border-top:1px solid var(--line); padding-top:10px}
+  .fchip{display:inline-flex; align-items:center; gap:5px; font-size:12.5px; padding:2px 10px; border-radius:999px;
+    background:var(--accent-soft); color:var(--accent-ink); cursor:pointer; border:none; font-family:inherit}
+  .fchip:hover{opacity:.75}
+  .fclear{font-size:12.5px; color:var(--muted); background:none; border:none; cursor:pointer; font-family:inherit; padding:2px 6px}
+  .fclear:hover{color:var(--chip-stop-fg)}
+
   /* ===== 更新中断警示条 ===== */
   .stalewarn{display:none; align-items:center; gap:10px; margin:0 0 18px; padding:10px 16px;
     border-radius:10px; font-size:13.5px; font-weight:600;
@@ -233,15 +253,14 @@
 </section>
 
 <div class="toolbar">
-  <div class="frow"><span class="flabel">单位</span><span id="fOrg"></span></div>
-  <div class="frow"><span class="flabel">年份</span><span id="fYear"></span></div>
-  <div class="frow"><span class="flabel">标的类型</span><span id="fSt"></span></div>
-  <div class="frow"><span class="flabel">公告</span><span id="fCat"></span>
-    <span class="flabel" style="margin-left:14px">阶段</span><span id="fPlan"></span>
-    <span class="flabel" style="margin-left:14px">AI关联</span><span id="fAi"></span></div>
   <div class="frow"><input class="searchbox" id="q" type="search" placeholder="搜索项目名称、内容、中标单位…" aria-label="搜索">
-    <span class="flabel">排序</span><span id="fSort"></span>
+    <span id="fSort" style="display:inline-flex;gap:6px"></span>
     <button class="pill csvbtn" id="csvBtn" hidden>⬇ 导出CSV</button></div>
+  <div class="frow orgrow" id="fOrg"></div>
+  <div class="frow selrow">
+    <span id="fYear"></span><span id="fSt"></span><span id="fCat"></span><span id="fPlan"></span><span id="fAi"></span>
+  </div>
+  <div class="frow chiprow" id="activeChips"></div>
 </div>
 <div class="resultline" id="resultline"></div>
 <div class="cards" id="cards"></div>
@@ -557,6 +576,7 @@ function makePills(el, items, key){
     b.innerHTML = esc(label) + (cnt!=null ? ' <span class="cnt">'+cnt+'</span>' : '');
     b.onclick = () => { state[key] = val; refreshPills(); render(); };
     b.dataset.val = val; b.dataset.key = key;
+    if(key==="org" && val!=="all") b.dataset.org = val;
     box.appendChild(b);
   });
 }
@@ -567,6 +587,50 @@ function refreshPills(){
   document.querySelectorAll(".oleg").forEach(el=>{
     el.classList.toggle("on", state.org===el.dataset.org);
   });
+  document.querySelectorAll(".selpill select").forEach(s=>{
+    if(s.value !== state[s.dataset.key]) s.value = state[s.dataset.key];
+    s.parentElement.classList.toggle("on", state[s.dataset.key] !== "all");
+  });
+  buildChips();
+}
+function makeSelect(elId, labelText, items, key){
+  const host = document.getElementById(elId);
+  const wrap = document.createElement("label");
+  wrap.className = "selpill";
+  const lab = document.createElement("span");
+  lab.textContent = labelText;
+  const sel = document.createElement("select");
+  sel.dataset.key = key;
+  sel.setAttribute("aria-label", labelText);
+  items.forEach(([val, txt, cnt]) => {
+    const o = document.createElement("option");
+    o.value = val;
+    o.textContent = txt + (cnt!=null ? "（"+cnt+"）" : "");
+    sel.appendChild(o);
+  });
+  sel.value = state[key];
+  sel.onchange = () => { state[key] = sel.value; refreshPills(); render(); };
+  wrap.appendChild(lab); wrap.appendChild(sel);
+  host.appendChild(wrap);
+}
+function chipLabel(key){
+  if(key==="year") return state.year==="pre" ? "2021前" : state.year+"年";
+  if(key==="st") return STYPES[state.st]||state.st;
+  if(key==="cat") return CAT[state.cat][0];
+  if(key==="plan") return "即将招标";
+  if(key==="ai") return AIL[state.ai][0];
+  return "";
+}
+function buildChips(){
+  const box = document.getElementById("activeChips");
+  if(!box) return;
+  const keys = ["year","st","cat","plan","ai"].filter(k=>state[k]!=="all");
+  if(!keys.length){ box.classList.remove("show"); box.innerHTML=""; return; }
+  box.innerHTML = keys.map(k=>'<button class="fchip" data-k="'+k+'" title="点击移除该筛选">'+esc(chipLabel(k))+' ✕</button>').join("") +
+    '<button class="fclear">清除全部筛选</button>';
+  box.classList.add("show");
+  box.querySelectorAll(".fchip").forEach(b=>{ b.onclick=()=>{ state[b.dataset.k]="all"; refreshPills(); render(); }; });
+  box.querySelector(".fclear").onclick = ()=>{ ["year","st","cat","plan","ai"].forEach(k=>state[k]="all"); refreshPills(); render(); };
 }
 function fmtAmt(a){
   if(a==null) return null;
@@ -644,12 +708,12 @@ function render(){
   makePills("fOrg", [["all","全部",DATA.length]].concat(Object.keys(ORGS).map(k=>[k,ORGS[k],orgCnt[k]||0])), "org");
   const preCnt = DATA.filter(r=>r.ds<202200).length;
   const years = [...new Set(DATA.map(yearOf))].filter(y=>+y>=2022).sort();
-  makePills("fYear", [["all","全部",null]].concat(preCnt?[["pre","2021前",preCnt]]:[]).concat(years.map(y=>[y,y,DATA.filter(r=>yearOf(r)===y).length])), "year");
+  makeSelect("fYear", "年份", [["all","全部",null]].concat(preCnt?[["pre","2021前",preCnt]]:[]).concat(years.map(y=>[y,y,DATA.filter(r=>yearOf(r)===y).length])), "year");
   const stCnt = {}; DATA.forEach(r=> stCnt[r.st]=(stCnt[r.st]||0)+1);
-  makePills("fSt", [["all","全部",null]].concat(CONFIG.stypes.filter(s=>stCnt[s.key]).map(s=>[s.key,s.label,stCnt[s.key]])), "st");
-  makePills("fCat", [["all","全部",null],["bid","招标·采购",null],["win","中标·成交",null],["stop","已终止",null]], "cat");
-  makePills("fPlan", [["all","全部",null],["plan","即将招标",DATA.filter(isPlan).length]], "plan");
-  makePills("fAi", [["all","全部",null],["core","核心AI",null],["edge","智能化相关",null],["ref","非AI·参考",null]], "ai");
+  makeSelect("fSt", "标的类型", [["all","全部",null]].concat(CONFIG.stypes.filter(s=>stCnt[s.key]).map(s=>[s.key,s.label,stCnt[s.key]])), "st");
+  makeSelect("fCat", "公告", [["all","全部",null],["bid","招标·采购",null],["win","中标·成交",null],["stop","已终止",null]], "cat");
+  makeSelect("fPlan", "阶段", [["all","全部",null],["plan","即将招标",DATA.filter(isPlan).length]], "plan");
+  makeSelect("fAi", "AI关联", [["all","全部",null],["core","核心AI",null],["edge","智能化相关",null],["ref","非AI·参考",null]], "ai");
   makePills("fSort", [["new","最新",null],["amt","金额↓",null]], "sort");
   document.getElementById("q").addEventListener("input", e=>{ state.q = e.target.value.trim().toLowerCase(); render(); });
 
