@@ -5,49 +5,54 @@
 <title>云南AI招投标数据库</title>
 <style>
   :root{
-    --bg:#F5F6F4; --surface:#FFFFFF; --ink:#22282F; --muted:#6B7480;
-    --line:#E3E6E1; --accent:#2F6B5A; --accent-soft:#E4EFE9; --accent-ink:#24523F;
-    --chip-bid-bg:#E7EDF8; --chip-bid-fg:#3A5E9C;
-    --chip-win-bg:#E4EFE9; --chip-win-fg:#2F6B5A;
-    --chip-stop-bg:#F7E7E5; --chip-stop-fg:#A8453E;
-    --chip-ref-bg:#EEEFEC; --chip-ref-fg:#6B7480;
-    --amount:#7A5518;
+    --bg:#F3F6FA; --surface:#FFFFFF; --ink:#141F2C; --muted:#5C6B7E;
+    --line:#DBE3EE; --accent:#0E7FC0; --accent-soft:#E2F1FB; --accent-ink:#0A6299;
+    --chip-bid-bg:#E6EEFA; --chip-bid-fg:#2F5E9C;
+    --chip-win-bg:#E0F3EB; --chip-win-fg:#17795A;
+    --chip-stop-bg:#FAE7E7; --chip-stop-fg:#B04A44;
+    --chip-ref-bg:#ECF0F5; --chip-ref-fg:#677484;
+    --amount:#96660F; --grid:rgba(20,60,120,.035); --glow:rgba(14,127,192,.14);
+    --mono:"Cascadia Code","JetBrains Mono","SF Mono",Consolas,"Courier New",monospace;
   }
   @media (prefers-color-scheme: dark){
     :root{
-      --bg:#14181C; --surface:#1C2228; --ink:#E6E9EC; --muted:#99A2AC;
-      --line:#2A323A; --accent:#63A98F; --accent-soft:#20362E; --accent-ink:#8FC5AF;
-      --chip-bid-bg:#243349; --chip-bid-fg:#93B2E3;
-      --chip-win-bg:#20362E; --chip-win-fg:#8FC5AF;
-      --chip-stop-bg:#3D2523; --chip-stop-fg:#DE9A93;
-      --chip-ref-bg:#262C32; --chip-ref-fg:#99A2AC;
-      --amount:#D3AB63;
+      --bg:#0A0F16; --surface:#101825; --ink:#DEE7F2; --muted:#8593A6;
+      --line:#1E2A3C; --accent:#5CC8FF; --accent-soft:#0E2334; --accent-ink:#8ED9FF;
+      --chip-bid-bg:#14263E; --chip-bid-fg:#7FB3E8;
+      --chip-win-bg:#0E2C25; --chip-win-fg:#4ED8A8;
+      --chip-stop-bg:#361F23; --chip-stop-fg:#E8919B;
+      --chip-ref-bg:#182130; --chip-ref-fg:#8593A6;
+      --amount:#F0B458; --grid:rgba(92,160,255,.045); --glow:rgba(92,200,255,.16);
     }
   }
   :root[data-theme="light"]{
-    --bg:#F5F6F4; --surface:#FFFFFF; --ink:#22282F; --muted:#6B7480;
-    --line:#E3E6E1; --accent:#2F6B5A; --accent-soft:#E4EFE9; --accent-ink:#24523F;
-    --chip-bid-bg:#E7EDF8; --chip-bid-fg:#3A5E9C;
-    --chip-win-bg:#E4EFE9; --chip-win-fg:#2F6B5A;
-    --chip-stop-bg:#F7E7E5; --chip-stop-fg:#A8453E;
-    --chip-ref-bg:#EEEFEC; --chip-ref-fg:#6B7480;
-    --amount:#7A5518;
+    --bg:#F3F6FA; --surface:#FFFFFF; --ink:#141F2C; --muted:#5C6B7E;
+    --line:#DBE3EE; --accent:#0E7FC0; --accent-soft:#E2F1FB; --accent-ink:#0A6299;
+    --chip-bid-bg:#E6EEFA; --chip-bid-fg:#2F5E9C;
+    --chip-win-bg:#E0F3EB; --chip-win-fg:#17795A;
+    --chip-stop-bg:#FAE7E7; --chip-stop-fg:#B04A44;
+    --chip-ref-bg:#ECF0F5; --chip-ref-fg:#677484;
+    --amount:#96660F; --grid:rgba(20,60,120,.035); --glow:rgba(14,127,192,.14);
   }
   :root[data-theme="dark"]{
-    --bg:#14181C; --surface:#1C2228; --ink:#E6E9EC; --muted:#99A2AC;
-    --line:#2A323A; --accent:#63A98F; --accent-soft:#20362E; --accent-ink:#8FC5AF;
-    --chip-bid-bg:#243349; --chip-bid-fg:#93B2E3;
-    --chip-win-bg:#20362E; --chip-win-fg:#8FC5AF;
-    --chip-stop-bg:#3D2523; --chip-stop-fg:#DE9A93;
-    --chip-ref-bg:#262C32; --chip-ref-fg:#99A2AC;
-    --amount:#D3AB63;
+    --bg:#0A0F16; --surface:#101825; --ink:#DEE7F2; --muted:#8593A6;
+    --line:#1E2A3C; --accent:#5CC8FF; --accent-soft:#0E2334; --accent-ink:#8ED9FF;
+    --chip-bid-bg:#14263E; --chip-bid-fg:#7FB3E8;
+    --chip-win-bg:#0E2C25; --chip-win-fg:#4ED8A8;
+    --chip-stop-bg:#361F23; --chip-stop-fg:#E8919B;
+    --chip-ref-bg:#182130; --chip-ref-fg:#8593A6;
+    --amount:#F0B458; --grid:rgba(92,160,255,.045); --glow:rgba(92,200,255,.16);
   }
   *{box-sizing:border-box}
   body{
-    margin:0; background:var(--bg); color:var(--ink);
+    margin:0; background-color:var(--bg); color:var(--ink);
+    background-image:linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:36px 36px;
     font-family:"Source Han Sans SC","Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     line-height:1.65; font-size:15px;
   }
+  ::selection{background:var(--accent-soft); color:var(--accent-ink)}
   .wrap{max-width:1060px; margin:0 auto; padding:32px 20px 64px}
   header.top{border-bottom:2px solid var(--ink); padding-bottom:20px; margin-bottom:20px}
   .eyebrow{font-size:12px; letter-spacing:.18em; color:var(--accent); font-weight:600; text-transform:uppercase; margin-bottom:6px}
@@ -55,7 +60,7 @@
   .lede{color:var(--muted); max-width:46em; margin:0}
   .metaline{display:flex; flex-wrap:wrap; gap:8px 20px; margin-top:14px; font-size:13px; color:var(--muted)}
   .metaline b{color:var(--ink); font-weight:600}
-  .metaline .num{font-variant-numeric:tabular-nums; color:var(--accent-ink); font-weight:700}
+  .metaline .num{font-variant-numeric:tabular-nums; color:var(--accent-ink); font-weight:700; font-family:var(--mono)}
 
   .toolbar{display:flex; flex-direction:column; gap:10px; margin:14px 0 0;
     background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:14px 16px}
@@ -66,13 +71,13 @@
     border-radius:999px; padding:3px 12px; font-size:13px; cursor:pointer; font-family:inherit;
   }
   .pill:hover{border-color:var(--accent)}
-  .pill.on{background:var(--accent-soft); border-color:var(--accent); color:var(--accent-ink); font-weight:600}
+  .pill.on{background:var(--accent-soft); border-color:var(--accent); color:var(--accent-ink); font-weight:600; box-shadow:0 0 10px var(--glow)}
   .pill .cnt{opacity:.7; font-size:12px; font-variant-numeric:tabular-nums}
   .searchbox{
     flex:1; min-width:200px; border:1px solid var(--line); background:var(--surface); color:var(--ink);
     border-radius:8px; padding:6px 12px; font-size:14px; font-family:inherit;
   }
-  .searchbox:focus{outline:2px solid var(--accent); outline-offset:1px; border-color:var(--accent)}
+  .searchbox:focus{outline:2px solid var(--accent); outline-offset:1px; border-color:var(--accent); box-shadow:0 0 14px var(--glow)}
   .resultline{font-size:13px; color:var(--muted); margin:12px 2px 14px; font-variant-numeric:tabular-nums}
 
   .cards{display:flex; flex-direction:column; gap:12px}
@@ -82,7 +87,7 @@
   }
   .card[data-org]{border-left-color:var(--oc,var(--line)); position:relative}
   .amtbox{position:absolute; top:14px; right:18px; text-align:right}
-  .amtbox .amt{font-size:20px; font-weight:700; color:var(--amount); font-variant-numeric:tabular-nums; line-height:1.2}
+  .amtbox .amt{font-size:20px; font-weight:700; color:var(--amount); font-variant-numeric:tabular-nums; line-height:1.2; font-family:var(--mono); letter-spacing:-.02em}
   .amtbox .amt.na{font-size:13px; font-weight:600; color:var(--muted)}
   .amtbox .amtd{font-size:12.5px; color:var(--muted); font-variant-numeric:tabular-nums; margin-top:2px}
   .card h3{padding-right:120px}
@@ -105,7 +110,7 @@
   .kv{display:grid; grid-template-columns:max-content 1fr max-content 1fr; gap:3px 10px; font-size:13.5px; margin-bottom:6px; align-items:baseline}
   .kl{color:var(--muted); white-space:nowrap; text-align:right}
   .kd{color:var(--ink); font-weight:600; min-width:0}
-  .kd.money{color:var(--amount); font-variant-numeric:tabular-nums; font-weight:700}
+  .kd.money{color:var(--amount); font-variant-numeric:tabular-nums; font-weight:700; font-family:var(--mono); font-size:13px}
   @media (max-width:760px){ .kv{grid-template-columns:max-content 1fr} }
   .card p.sum{margin:4px 0 8px; color:var(--ink); font-size:14px; max-width:62em}
   .card a.src{font-size:13px; color:var(--accent-ink); text-decoration:none; border-bottom:1px solid var(--accent-soft); word-break:break-all}
@@ -126,15 +131,15 @@
   .cfgitem button:hover{color:var(--chip-stop-fg)}
   .cfgform{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:4px 0 14px}
   .cfgform .searchbox{flex:1; min-width:160px}
-  .addbtn{background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600}
+  .addbtn{background:var(--accent); border-color:var(--accent); color:var(--surface); font-weight:600}
   .cfgta{width:100%; border:1px solid var(--line); background:var(--bg); color:var(--ink);
     border-radius:8px; padding:10px 12px; font-size:13px; font-family:inherit; resize:vertical; box-sizing:border-box}
   /* ===== 单位识别色（低饱和·科技感） ===== */
-  :root{--oc-csg:#4E8FBF; --oc-sz:#8B7BB8; --oc-dk:#3FA0A0; --oc-glj:#B08948; --oc-gky:#2F6B5A; --oc-jt:#5C7A99; --oc-qs:#8A8F98}
+  :root{--oc-csg:#3A78B5; --oc-sz:#7A63B8; --oc-dk:#1F9E94; --oc-glj:#A87F3E; --oc-gky:#1F8A60; --oc-jt:#52708F; --oc-qs:#7C8794}
   @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){--oc-csg:#7FB5DA; --oc-sz:#AC9ED4; --oc-dk:#6CC3C0; --oc-glj:#D0AC6C; --oc-gky:#63A98F; --oc-jt:#8DA9C4; --oc-qs:#A8AEB8}
+    :root:not([data-theme="light"]){--oc-csg:#6FB9F0; --oc-sz:#B49CE8; --oc-dk:#58D2C8; --oc-glj:#E0B36A; --oc-gky:#57C99A; --oc-jt:#90A8C8; --oc-qs:#93A0B0}
   }
-  :root[data-theme="dark"]{--oc-csg:#7FB5DA; --oc-sz:#AC9ED4; --oc-dk:#6CC3C0; --oc-glj:#D0AC6C; --oc-gky:#63A98F; --oc-jt:#8DA9C4; --oc-qs:#A8AEB8}
+  :root[data-theme="dark"]{--oc-csg:#6FB9F0; --oc-sz:#B49CE8; --oc-dk:#58D2C8; --oc-glj:#E0B36A; --oc-gky:#57C99A; --oc-jt:#90A8C8; --oc-qs:#93A0B0}
   [data-org="csg"]{--oc:var(--oc-csg)}
   [data-org="sz"]{--oc:var(--oc-sz)}
   [data-org="dk"]{--oc:var(--oc-dk)}
@@ -154,22 +159,25 @@
   /* ===== 头部渐变细线 ===== */
   header.top{border-bottom:none; position:relative; padding-bottom:22px}
   header.top::after{content:""; position:absolute; left:0; right:0; bottom:0; height:2px;
-    background:linear-gradient(90deg, var(--accent) 0%, var(--chip-bid-fg) 45%, transparent 95%)}
+    background:linear-gradient(90deg, var(--accent) 0%, var(--chip-win-fg) 55%, transparent 95%);
+    box-shadow:0 0 12px var(--glow)}
 
   /* ===== 近期关注 ===== */
   .focus{background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--accent);
-    border-radius:10px; padding:14px 18px; margin:18px 0 2px}
+    border-radius:10px; padding:14px 18px; margin:18px 0 2px; position:relative; z-index:0; overflow:hidden}
+  .focus::before{content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+    background:linear-gradient(135deg, var(--accent-soft) 0%, transparent 45%); opacity:.5}
   .focus h2{margin:0 0 8px; font-size:13px; letter-spacing:.14em; color:var(--accent-ink); font-weight:700}
   .fgroup{margin-bottom:4px}
   .fgroup h3{margin:8px 0 4px; font-size:12px; letter-spacing:.1em; color:var(--muted); font-weight:600}
   .fitem{display:flex; align-items:center; gap:10px; font-size:13.5px; cursor:pointer; padding:4px 6px; border-radius:6px}
   .fitem:hover{background:var(--bg)}
   .fitem .cd{flex:0 0 auto; min-width:88px; text-align:center; font-size:12px; padding:1px 8px; border-radius:999px; background:var(--chip-stop-bg); color:var(--chip-stop-fg); font-variant-numeric:tabular-nums; font-weight:600}
-  .fitem .cd.mid{background:#F5EAD2; color:#7A5A12}
+  .fitem .cd.mid{background:#F7EBD2; color:#8A5E0E}
   @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]) .fitem .cd.mid{background:#4A3E20; color:#E3C878}
+    :root:not([data-theme="light"]) .fitem .cd.mid{background:#33280F; color:#F0C878}
   }
-  :root[data-theme="dark"] .fitem .cd.mid{background:#4A3E20; color:#E3C878}
+  :root[data-theme="dark"] .fitem .cd.mid{background:#33280F; color:#F0C878}
   .fitem .cd.soon{background:var(--chip-bid-bg); color:var(--chip-bid-fg)}
   .fitem .cd.fresh{background:var(--chip-win-bg); color:var(--chip-win-fg)}
   .fgroup .fitem + .fitem{border-top:1px solid var(--line)}
@@ -184,8 +192,12 @@
   }
 
   /* ===== 卡片悬停与导出 ===== */
-  .card:hover{border-color:var(--accent); transform:translateY(-1px); box-shadow:0 4px 16px rgba(20,30,40,.07)}
-  :root[data-theme="dark"] .card:hover{box-shadow:0 4px 16px rgba(0,0,0,.35)}
+  .card:hover{border-color:var(--accent); transform:translateY(-1px);
+    box-shadow:0 4px 16px rgba(10,20,40,.08), 0 0 0 1px var(--glow), 0 0 18px var(--glow)}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .card:hover{box-shadow:0 4px 20px rgba(0,0,0,.5), 0 0 0 1px var(--glow), 0 0 20px var(--glow)}
+  }
+  :root[data-theme="dark"] .card:hover{box-shadow:0 4px 20px rgba(0,0,0,.5), 0 0 0 1px var(--glow), 0 0 20px var(--glow)}
   .csvbtn{margin-left:auto; flex:0 0 auto}
 
   /* ===== 工具栏·下拉收纳版 ===== */
@@ -198,7 +210,7 @@
   .selpill select{border:none; background:transparent; color:var(--ink); font-family:inherit; font-size:13px;
     padding:2px; max-width:11em; cursor:pointer; outline:none}
   .selpill select option{background:var(--surface); color:var(--ink)}
-  .selpill.on{background:var(--accent-soft); border-color:var(--accent); color:var(--accent-ink)}
+  .selpill.on{background:var(--accent-soft); border-color:var(--accent); color:var(--accent-ink); box-shadow:0 0 10px var(--glow)}
   .selpill.on select{color:var(--accent-ink); font-weight:600}
   .chiprow{display:none}
   .chiprow.show{display:flex; flex-wrap:wrap; gap:6px; border-top:1px solid var(--line); padding-top:10px}
@@ -211,12 +223,12 @@
   /* ===== 更新中断警示条 ===== */
   .stalewarn{display:none; align-items:center; gap:10px; margin:0 0 18px; padding:10px 16px;
     border-radius:10px; font-size:13.5px; font-weight:600;
-    background:#FAF3DC; color:#7A5A12; border:1px solid #E8D9A8}
+    background:#FAF1D8; color:#8A5E0E; border:1px solid #E8D5A0}
   .stalewarn.show{display:flex}
   @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]) .stalewarn{background:#3A311C; color:#E3C878; border-color:#5C4E26}
+    :root:not([data-theme="light"]) .stalewarn{background:#33280F; color:#F0C878; border-color:#5C4A1E}
   }
-  :root[data-theme="dark"] .stalewarn{background:#3A311C; color:#E3C878; border-color:#5C4E26}
+  :root[data-theme="dark"] .stalewarn{background:#33280F; color:#F0C878; border-color:#5C4A1E}
 
   /* ===== 移动端筛选横向滑动 ===== */
   @media (max-width:640px){
@@ -235,7 +247,7 @@
 <div class="wrap">
 <div id="staleWarn" class="stalewarn">⚠️ <span id="staleText"></span></div>
 <header class="top">
-  <div class="eyebrow">云南 · 人工智能招投标追踪</div>
+  <div class="eyebrow">Yunnan · AI Tender Intelligence · 人工智能招投标追踪</div>
   <h1>云南重点单位人工智能招投标数据库</h1>
   <div class="orglegend" id="orgLegend"></div>
   <p class="lede">覆盖 2010 年以来六家单位与人工智能／信息化／软件与算法开发／隧道照明节能／ETC稽查方向的公开招标、采购与中标信息（点击上方单位可快捷筛选，完整收录口径见页底说明）。</p>
