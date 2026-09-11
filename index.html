@@ -255,7 +255,8 @@
     <span>收录项目 <b class="num" id="statTotal">–</b> 个</span>
     <span>可统计金额合计约 <b class="num" id="statAmount">–</b> 万元</span>
     <span>数据区间 <b>2014年12月 – 2026年9月</b></span>
-    <span>最后更新 <b id="lastUpd">2026-09-10</b> · 每天中午自动检索更新</span>
+    <span>最后检索 <b id="lastCheck">2026-09-11 16:44</b> · 每天中午12点自动</span>
+    <span>最后新增数据 <b id="lastUpd">2026-09-10</b></span>
   </div>
 </header>
 
@@ -753,14 +754,15 @@ function render(){
 // ===== 自动更新中断自检 =====
 function checkStale(){
   try{
-    const t = document.getElementById("lastUpd").textContent.trim();
-    const m = t.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    const el = document.getElementById("lastCheck");
+    const t = (el ? el.textContent : "").trim();
+    const m = t.match(/^(\d{4})-(\d{2})-(\d{2})/);
     if(!m) return;
     const last = new Date(+m[1], +m[2]-1, +m[3]);
     const days = Math.floor((Date.now() - last.getTime()) / 86400000);
     if(days > 3){
       document.getElementById("staleText").textContent =
-        "数据自动更新可能已中断：最后更新于 " + t + "（" + days + "天前）。每日中午12点应自动检索更新，请提醒维护者检查更新任务与电脑开机状态。";
+        "自动检索可能已中断：最后一次检索为 " + t + "（" + days + "天前）。每日中午12点应自动检索，请提醒维护者检查更新任务与电脑开机状态。";
       document.getElementById("staleWarn").classList.add("show");
     }
   }catch(e){}
@@ -918,7 +920,7 @@ function renderCfg(){
     if(pu.length) msg += "一、新增检索单位：" + pu.map(u=>u.name+(u.note?"（"+u.note+"）":"")).join("；") + "。请检索这些单位2010年以来AI及信息化、软件/算法开发相关的公开招投标信息，按页面既有 DATA 格式追加记录（含 st 标的类型字段），并把单位写入页面 CONFIG.units（分配新的 org key），使其此后纳入每周自动检索。\n";
     if(ps.length) msg += "二、新增标的类型：" + ps.join("、") + "。请写入页面 CONFIG.stypes（分配新 key），检查现有 DATA 记录中属于该类型的项目并把其 st 字段改为新类型，此后新增记录也按此分类。\n";
     if(pt.length) msg += "三、新增检索关键词：" + pt.join("、") + "。请写入页面 CONFIG.keywords，并用这些关键词对全部检索单位补充检索一轮，新发现的项目按 DATA 格式追加。\n";
-    msg += "完成后用 Artifact 工具以相同 URL 重新发布（favicon 保持 🗂️），并更新页面「最后更新」日期。";
+    msg += "完成后用 Artifact 工具以相同 URL 重新发布（favicon 保持 🗂️），并更新页面「最后检索」「最后新增数据」日期。";
     document.getElementById("pendingText").value = msg;
   } else {
     box.hidden = true;
