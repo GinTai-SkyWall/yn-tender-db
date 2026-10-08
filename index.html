@@ -1,284 +1,401 @@
 <!doctype html>
 <html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>云南AI招投标数据库</title>
+<script>
+try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}
+</script>
 <style>
+
   :root{
-    --bg:#F3F6FA; --surface:#FFFFFF; --ink:#141F2C; --muted:#5C6B7E;
-    --line:#DBE3EE; --accent:#0E7FC0; --accent-soft:#E2F1FB; --accent-ink:#0A6299;
-    --chip-bid-bg:#E6EEFA; --chip-bid-fg:#2F5E9C;
-    --chip-win-bg:#E0F3EB; --chip-win-fg:#17795A;
-    --chip-stop-bg:#FAE7E7; --chip-stop-fg:#B04A44;
-    --chip-ref-bg:#ECF0F5; --chip-ref-fg:#677484;
-    --amount:#96660F; --grid:rgba(20,60,120,.035); --glow:rgba(14,127,192,.14);
-    --mono:"Cascadia Code","JetBrains Mono","SF Mono",Consolas,"Source Han Sans SC","Noto Sans SC","Microsoft YaHei",monospace;
-  }
-  @media (prefers-color-scheme: dark){
-    :root{
-      --bg:#0A0F16; --surface:#101825; --ink:#DEE7F2; --muted:#8593A6;
-      --line:#1E2A3C; --accent:#5CC8FF; --accent-soft:#0E2334; --accent-ink:#8ED9FF;
-      --chip-bid-bg:#14263E; --chip-bid-fg:#7FB3E8;
-      --chip-win-bg:#0E2C25; --chip-win-fg:#4ED8A8;
-      --chip-stop-bg:#361F23; --chip-stop-fg:#E8919B;
-      --chip-ref-bg:#182130; --chip-ref-fg:#8593A6;
-      --amount:#F0B458; --grid:rgba(92,160,255,.045); --glow:rgba(92,200,255,.16);
-    }
-  }
-  :root[data-theme="light"]{
-    --bg:#F3F6FA; --surface:#FFFFFF; --ink:#141F2C; --muted:#5C6B7E;
-    --line:#DBE3EE; --accent:#0E7FC0; --accent-soft:#E2F1FB; --accent-ink:#0A6299;
-    --chip-bid-bg:#E6EEFA; --chip-bid-fg:#2F5E9C;
-    --chip-win-bg:#E0F3EB; --chip-win-fg:#17795A;
-    --chip-stop-bg:#FAE7E7; --chip-stop-fg:#B04A44;
-    --chip-ref-bg:#ECF0F5; --chip-ref-fg:#677484;
-    --amount:#96660F; --grid:rgba(20,60,120,.035); --glow:rgba(14,127,192,.14);
+    color-scheme:light;
+    --bg:#F4F6F8; --surface:#FFFFFF; --ink:#20262E; --muted:#606C78;
+    --line:#DEE4E9; --accent:#087F8C; --accent-soft:#E8F5F5; --accent-ink:#066875;
+    --chip-bid-bg:#EAF1FC; --chip-bid-fg:#295FA3;
+    --chip-win-bg:#E7F5EC; --chip-win-fg:#247547;
+    --chip-stop-bg:#FCECEC; --chip-stop-fg:#B43E42;
+    --chip-ref-bg:#EEF1F4; --chip-ref-fg:#626C78;
+    --warn-bg:#FFF5DF; --warn-fg:#8B621D; --warn-line:#E9D7AC;
+    --hover:#F8FAFB; --amount:#20262E;
+    --mono:"Cascadia Code",Consolas,monospace;
   }
   :root[data-theme="dark"]{
-    --bg:#0A0F16; --surface:#101825; --ink:#DEE7F2; --muted:#8593A6;
-    --line:#1E2A3C; --accent:#5CC8FF; --accent-soft:#0E2334; --accent-ink:#8ED9FF;
-    --chip-bid-bg:#14263E; --chip-bid-fg:#7FB3E8;
-    --chip-win-bg:#0E2C25; --chip-win-fg:#4ED8A8;
-    --chip-stop-bg:#361F23; --chip-stop-fg:#E8919B;
-    --chip-ref-bg:#182130; --chip-ref-fg:#8593A6;
-    --amount:#F0B458; --grid:rgba(92,160,255,.045); --glow:rgba(92,200,255,.16);
+    color-scheme:dark;
+    --bg:#181A1D; --surface:#222529; --ink:#EBEEF0; --muted:#A7AFB7;
+    --line:#393E44; --accent:#68C7CF; --accent-soft:#263C3E; --accent-ink:#89D7DE;
+    --chip-bid-bg:#26384B; --chip-bid-fg:#A2C8F6;
+    --chip-win-bg:#253D30; --chip-win-fg:#9BDBB0;
+    --chip-stop-bg:#472D31; --chip-stop-fg:#F5ADB2;
+    --chip-ref-bg:#32363B; --chip-ref-fg:#B3BCC5;
+    --warn-bg:#423824; --warn-fg:#EED090; --warn-line:#685538;
+    --hover:#2A2E33; --amount:#EBEEF0;
   }
-  *{box-sizing:border-box}
-  body{
-    margin:0; background-color:var(--bg); color:var(--ink);
-    background-image:linear-gradient(var(--grid) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-    background-size:36px 36px;
-    font-family:"Source Han Sans SC","Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-    line-height:1.65; font-size:15px;
-  }
-  ::selection{background:var(--accent-soft); color:var(--accent-ink)}
-  .wrap{max-width:1060px; margin:0 auto; padding:32px 20px 64px}
-  header.top{border-bottom:2px solid var(--ink); padding-bottom:20px; margin-bottom:20px}
-  .eyebrow{font-size:12px; letter-spacing:0; color:var(--accent); font-weight:600; text-transform:uppercase; margin-bottom:6px}
-  h1{margin:0 0 8px; font-size:30px; line-height:1.25; text-wrap:balance; letter-spacing:.01em}
-  .lede{color:var(--muted); max-width:46em; margin:0}
-  .metaline{display:flex; flex-wrap:wrap; gap:8px 20px; margin-top:14px; font-size:13px; color:var(--muted)}
-  .metaline b{color:var(--ink); font-weight:600}
-  .metaline .num{font-variant-numeric:tabular-nums; color:var(--accent-ink); font-weight:700; font-family:var(--mono)}
-
-  .toolbar{display:flex; flex-direction:column; gap:10px; margin:14px 0 0;
-    background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:14px 16px}
-  .frow{display:flex; flex-wrap:wrap; align-items:center; gap:6px; min-height:28px}
-  .flabel{font-size:12px; color:var(--muted); letter-spacing:.08em; min-width:4em; flex:0 0 auto}
-  .pill{
-    border:1px solid var(--line); background:var(--surface); color:var(--ink);
-    border-radius:999px; padding:3px 12px; font-size:13px; cursor:pointer; font-family:inherit;
-  }
-  .pill:hover{border-color:var(--accent)}
-  .pill.on{background:var(--accent-soft); border-color:var(--accent); color:var(--accent-ink); font-weight:600; box-shadow:0 0 10px var(--glow)}
-  .pill .cnt{opacity:.7; font-size:12px; font-variant-numeric:tabular-nums}
-  .searchbox{
-    flex:1; min-width:200px; border:1px solid var(--line); background:var(--surface); color:var(--ink);
-    border-radius:8px; padding:6px 12px; font-size:14px; font-family:inherit;
-  }
-  .searchbox:focus{outline:2px solid var(--accent); outline-offset:1px; border-color:var(--accent); box-shadow:0 0 14px var(--glow)}
-  .resultline{font-size:13px; color:var(--muted); margin:12px 2px 14px; font-variant-numeric:tabular-nums}
-
-  .cards{display:flex; flex-direction:column; gap:12px}
-  .card{
-    background:var(--surface); border:1px solid var(--line); border-radius:10px;
-    padding:16px 18px; border-left:4px solid var(--line);
-  }
-  .card[data-org]{border-left-color:var(--oc,var(--line)); position:relative}
-  .amtbox{position:absolute; top:14px; right:18px; text-align:right}
-  .amtbox .amt{font-size:20px; font-weight:700; color:var(--amount); font-variant-numeric:tabular-nums; line-height:1.2; font-family:var(--mono); letter-spacing:-.02em}
-  .amtbox .amt.na{font-size:13px; font-weight:600; color:var(--muted)}
-  .amtbox .amtd{font-size:12.5px; color:var(--muted); font-variant-numeric:tabular-nums; margin-top:2px}
-  .card h3{padding-right:120px}
-  @media (max-width:640px){
-    .amtbox{position:static; display:flex; gap:10px; align-items:baseline; text-align:left; margin:2px 0 4px}
-    .card h3{padding-right:0}
-  }
-  .card .row1{display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-bottom:6px}
-  .chip{font-size:12px; padding:1px 9px; border-radius:999px; white-space:nowrap}
-  .chip.org{background:var(--accent-soft); color:var(--accent-ink); font-weight:600}
-  .chip.bid{background:var(--chip-bid-bg); color:var(--chip-bid-fg)}
-  .chip.win{background:var(--chip-win-bg); color:var(--chip-win-fg)}
-  .chip.stop{background:var(--chip-stop-bg); color:var(--chip-stop-fg)}
-  .chip.ref{background:var(--chip-ref-bg); color:var(--chip-ref-fg)}
-  .chip.aicore{border:1px solid var(--accent); color:var(--accent-ink); background:transparent}
-  .chip.aiedge{border:1px solid var(--line); color:var(--muted); background:transparent}
-  .chip.st{border:1px dashed var(--line); color:var(--muted); background:transparent}
-  .card .date{margin-left:auto; font-size:13px; color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap}
-  .card h3{margin:2px 0 6px; font-size:16.5px; line-height:1.45; font-weight:600}
-  .kv{display:grid; grid-template-columns:max-content 1fr max-content 1fr; gap:3px 10px; font-size:13.5px; margin-bottom:6px; align-items:baseline}
-  .kl{color:var(--muted); white-space:nowrap; text-align:right}
-  .kd{color:var(--ink); font-weight:600; min-width:0}
-  .kd.money{color:var(--amount); font-variant-numeric:tabular-nums; font-weight:700}
-  @media (max-width:760px){ .kv{grid-template-columns:max-content 1fr} }
-  .card p.sum{margin:4px 0 8px; color:var(--ink); font-size:14px; max-width:62em}
-  .card a.src{font-size:13px; color:var(--accent-ink); text-decoration:none; border-bottom:1px solid var(--accent-soft); word-break:break-all}
-  .card a.src:hover{border-bottom-color:var(--accent)}
-  .empty{padding:40px; text-align:center; color:var(--muted); background:var(--surface); border:1px dashed var(--line); border-radius:10px}
-
-  details.notes{margin-top:32px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:4px 18px}
-  details.notes summary{cursor:pointer; font-weight:600; padding:12px 0; list-style-position:inside}
-  details.notes h4{margin:14px 0 4px; font-size:14px; color:var(--accent-ink)}
-  details.notes p, details.notes li{font-size:13.5px; color:var(--muted); max-width:70em}
-  footer{margin-top:36px; padding-top:16px; border-top:1px solid var(--line); font-size:12.5px; color:var(--muted); display:flex; flex-wrap:wrap; gap:6px 24px}
-  .cfglist{display:flex; flex-wrap:wrap; gap:6px; margin:6px 0 10px}
-  .cfgitem{display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); background:var(--bg);
-    border-radius:8px; padding:4px 10px; font-size:13px}
-  .cfgitem .pend{font-size:11px; padding:0 7px; border-radius:999px; background:var(--chip-stop-bg); color:var(--chip-stop-fg)}
-  .cfgitem .active{font-size:11px; padding:0 7px; border-radius:999px; background:var(--chip-win-bg); color:var(--chip-win-fg)}
-  .cfgitem button{border:none; background:none; color:var(--muted); cursor:pointer; font-size:13px; padding:0 2px}
-  .cfgitem button:hover{color:var(--chip-stop-fg)}
-  .cfgform{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:4px 0 14px}
-  .cfgform .searchbox{flex:1; min-width:160px}
-  .addbtn{background:var(--accent); border-color:var(--accent); color:var(--surface); font-weight:600}
-  .cfgta{width:100%; border:1px solid var(--line); background:var(--bg); color:var(--ink);
-    border-radius:8px; padding:10px 12px; font-size:13px; font-family:inherit; resize:vertical; box-sizing:border-box}
-  /* ===== 单位识别色（低饱和·科技感） ===== */
-  :root{--oc-csg:#3A78B5; --oc-sz:#7A63B8; --oc-dk:#1F9E94; --oc-glj:#A87F3E; --oc-gky:#1F8A60; --oc-jt:#52708F; --oc-qs:#7C8794}
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){--oc-csg:#6FB9F0; --oc-sz:#B49CE8; --oc-dk:#58D2C8; --oc-glj:#E0B36A; --oc-gky:#57C99A; --oc-jt:#90A8C8; --oc-qs:#93A0B0}
-  }
-  :root[data-theme="dark"]{--oc-csg:#6FB9F0; --oc-sz:#B49CE8; --oc-dk:#58D2C8; --oc-glj:#E0B36A; --oc-gky:#57C99A; --oc-jt:#90A8C8; --oc-qs:#93A0B0}
-  [data-org="csg"]{--oc:var(--oc-csg)}
-  [data-org="sz"]{--oc:var(--oc-sz)}
-  [data-org="dk"]{--oc:var(--oc-dk)}
-  [data-org="glj"]{--oc:var(--oc-glj)}
-  [data-org="gky"]{--oc:var(--oc-gky)}
-  [data-org="jt"]{--oc:var(--oc-jt)}
-  [data-org="qs"]{--oc:var(--oc-qs)}
-  .chip.org{display:inline-flex; align-items:center; gap:6px; background:transparent; border:1px solid var(--line); color:var(--ink)}
-  .chip.org::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--oc,var(--accent)); flex:0 0 auto}
-  .orglegend{display:flex; flex-wrap:wrap; gap:6px 16px; margin:10px 0 8px}
-  .oleg{display:inline-flex; align-items:center; gap:7px; font-size:13.5px; color:var(--ink); cursor:pointer;
-    padding:2px 8px; border-radius:999px; border:1px solid transparent}
-  .oleg::before{content:""; width:8px; height:8px; border-radius:50%; background:var(--oc,var(--accent)); flex:0 0 auto}
-  .oleg:hover{border-color:var(--line); background:var(--surface)}
-  .oleg.on{border-color:var(--oc,var(--accent)); background:var(--surface); font-weight:600}
-
-  /* ===== 头部渐变细线 ===== */
-  header.top{border-bottom:none; position:relative; padding-bottom:22px}
-  header.top::after{content:""; position:absolute; left:0; right:0; bottom:0; height:2px;
-    background:linear-gradient(90deg, var(--accent) 0%, var(--chip-win-fg) 55%, transparent 95%);
-    box-shadow:0 0 12px var(--glow)}
-
-  /* ===== 近期关注 ===== */
-  .focus{background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--accent);
-    border-radius:10px; padding:14px 18px; margin:18px 0 2px; position:relative; z-index:0; overflow:hidden}
-  .focus::before{content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
-    background:linear-gradient(135deg, var(--accent-soft) 0%, transparent 45%); opacity:.5}
-  .focus h2{margin:0 0 8px; font-size:13px; letter-spacing:.14em; color:var(--accent-ink); font-weight:700}
-  .fgroup{margin-bottom:4px}
-  .fgroup h3{margin:8px 0 4px; font-size:12px; letter-spacing:.1em; color:var(--muted); font-weight:600}
-  .fitem{display:flex; align-items:center; gap:10px; font-size:13.5px; cursor:pointer; padding:4px 6px; border-radius:6px}
-  .fitem:hover{background:var(--bg)}
-  .fitem .cd{flex:0 0 auto; min-width:88px; text-align:center; font-size:12px; padding:1px 8px; border-radius:999px; background:var(--chip-stop-bg); color:var(--chip-stop-fg); font-variant-numeric:tabular-nums; font-weight:600}
-  .fitem .cd.mid{background:#F7EBD2; color:#8A5E0E}
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]) .fitem .cd.mid{background:#33280F; color:#F0C878}
-  }
-  :root[data-theme="dark"] .fitem .cd.mid{background:#33280F; color:#F0C878}
-  .fitem .cd.soon{background:var(--chip-bid-bg); color:var(--chip-bid-fg)}
-  .fitem .cd.fresh{background:var(--chip-win-bg); color:var(--chip-win-fg)}
-  .fgroup .fitem + .fitem{border-top:1px solid var(--line)}
-  .fgroup .fitem{border-radius:0}
-  .fgroup .fitem:first-of-type{border-radius:6px 6px 0 0}
-  .fgroup .fitem:last-of-type{border-radius:0 0 6px 6px}
-  .fitem .ft{color:var(--ink); flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-  .fitem .fm{color:var(--muted); font-size:12.5px; flex:0 0 auto; white-space:nowrap}
-  @media (max-width:640px){
-    .fitem{flex-wrap:wrap}
-    .fitem .ft{white-space:normal; flex-basis:100%; order:3}
-  }
-
-  /* ===== 卡片悬停与导出 ===== */
-  .card:hover{border-color:var(--accent); transform:translateY(-1px);
-    box-shadow:0 4px 16px rgba(10,20,40,.08), 0 0 0 1px var(--glow), 0 0 18px var(--glow)}
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]) .card:hover{box-shadow:0 4px 20px rgba(0,0,0,.5), 0 0 0 1px var(--glow), 0 0 20px var(--glow)}
-  }
-  :root[data-theme="dark"] .card:hover{box-shadow:0 4px 20px rgba(0,0,0,.5), 0 0 0 1px var(--glow), 0 0 20px var(--glow)}
-  .csvbtn{margin-left:auto; flex:0 0 auto}
-
-  /* ===== 工具栏·下拉收纳版 ===== */
-  .orgrow, .selrow{border-top:1px solid var(--line); padding-top:10px}
-  #fOrg .pill{display:inline-flex; align-items:center; gap:6px}
-  #fOrg .pill[data-org]::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--oc,var(--line)); flex:0 0 auto}
-  .selpill{display:inline-flex; align-items:center; gap:2px; border:1px solid var(--line); background:var(--surface);
-    border-radius:999px; padding:2px 6px 2px 12px; font-size:13px; color:var(--muted); cursor:pointer}
-  .selpill:hover{border-color:var(--accent)}
-  .selpill select{border:none; background:transparent; color:var(--ink); font-family:inherit; font-size:13px;
-    padding:2px; max-width:11em; cursor:pointer; outline:none}
-  .selpill select option{background:var(--surface); color:var(--ink)}
-  .selpill.on{background:var(--accent-soft); border-color:var(--accent); color:var(--accent-ink); box-shadow:0 0 10px var(--glow)}
-  .selpill.on select{color:var(--accent-ink); font-weight:600}
+  *{box-sizing:border-box;letter-spacing:0}
+  [hidden]{display:none!important}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Han Sans SC","Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;font-size:14px;line-height:1.6}
+  button,input,select,textarea{font:inherit}
+  button,a,input,select,summary{-webkit-tap-highlight-color:transparent}
+  button{cursor:pointer}
+  a{color:var(--accent-ink)}
+  ::selection{background:var(--accent-soft);color:var(--accent-ink)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .wrap{max-width:1320px;margin:0 auto;padding:26px 32px 40px}
+  .icon{width:18px;height:18px;flex:none;vertical-align:middle;stroke-width:1.8}
+  .top{padding-bottom:20px}
+  .brandline{display:flex;justify-content:space-between;align-items:center;gap:16px}
+  .brand{display:flex;align-items:center;gap:12px;min-width:0}
+  .brandmark{display:grid;place-items:center;width:42px;height:42px;flex:none;background:var(--accent);color:var(--surface);border-radius:8px}
+  .brandmark .icon{width:23px;height:23px}
+  .eyebrow{font-size:11px;font-weight:500;color:var(--muted);margin-bottom:2px}
+  h1{font-size:26px;line-height:1.3;margin:0;font-weight:700}
+  .overview{display:flex;align-items:flex-end;gap:30px;margin-top:20px}
+  .metric{display:flex;flex-direction:column;gap:2px;flex:none}
+  .metric-label{font-size:12px;color:var(--muted)}
+  .metric-value{font-size:25px;font-weight:650;line-height:1.25;font-variant-numeric:tabular-nums}
+  .metric-value small{font-size:12px;font-weight:400;margin-left:5px;color:var(--muted)}
+  .metric-secondary{padding-left:28px;border-left:1px solid var(--line)}
+  .syncinfo{margin-left:auto;text-align:right;font-size:12px;color:var(--muted);line-height:1.9}
+  .syncinfo b{font-weight:500;color:var(--ink)}
+  .syncinfo .icon{width:13px;height:13px;margin-right:5px}
+  .pill,.iconbtn,.command{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+  .pill{padding:6px 10px;min-height:34px;white-space:nowrap;font-size:13px}
+  .pill:hover,.iconbtn:hover,.command:hover{background:var(--hover);border-color:var(--muted)}
+  .pill.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+  .pill .cnt{color:var(--muted);font-size:11px;min-width:1.5em;font-variant-numeric:tabular-nums}
+  .iconbtn{width:38px;height:38px;flex:none;position:relative}
+  .iconbtn[data-tooltip]::after{content:attr(data-tooltip);display:none;position:absolute;right:0;top:calc(100% + 7px);padding:5px 9px;border-radius:4px;background:var(--ink);color:var(--surface);font-size:12px;white-space:nowrap;z-index:20;pointer-events:none}
+  .iconbtn:hover::after,.iconbtn:focus-visible::after{display:block}
+  .toolbar{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0 12px}
+  .searchrow{display:flex;gap:10px;align-items:center}
+  .searchfield{position:relative;flex:1;min-width:0}
+  .searchfield>.icon{position:absolute;top:12px;left:12px;color:var(--muted);pointer-events:none}
+  .searchbox{width:100%;min-width:0;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;padding:8px 12px;font-size:14px}
+  .searchfield .searchbox{height:42px;padding-left:39px}
+  .searchbox::placeholder{color:var(--muted)}
+  .searchbox:focus{outline:2px solid var(--accent);outline-offset:1px}
+  .sortgroup{display:inline-flex;align-items:center;gap:0!important;flex:none;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+  .sortgroup .pill{border:0;border-radius:0;min-height:38px;padding:6px 12px}
+  .sortgroup .pill+.pill{border-left:1px solid var(--line)}
+  .sortgroup .pill.on{background:var(--accent-soft)}
+  .orgrow{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:12px}
+  .orgrow .pill{border-color:transparent;background:transparent;padding:5px 9px;min-height:32px}
+  .orgrow .pill.on{background:var(--accent-soft);color:var(--accent-ink)}
+  .orgrow .pill:hover{background:var(--hover)}
+  .filterrow,.advancedrow{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:12px}
+  .selpill{display:inline-flex;align-items:center;gap:10px;color:var(--muted);border:1px solid var(--line);padding:5px 10px;border-radius:6px;font-size:12px;min-height:36px}
+  .selpill select{font-size:13px;border:0;background:var(--surface);color:var(--ink);max-width:13em;cursor:pointer;padding:0;min-width:0}
+  .selpill select:focus-visible{outline-offset:1px}
+  .selpill.on{border-color:var(--accent);background:var(--accent-soft)}
+  .selpill.on select{background:var(--accent-soft);color:var(--accent-ink)}
+  .morebtn{margin-left:auto}
+  .morebtn[aria-expanded="true"]{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+  .filter-count{background:var(--accent);color:var(--surface);border-radius:3px;font-size:11px;padding:0 4px}
   .chiprow{display:none}
-  .chiprow.show{display:flex; flex-wrap:wrap; gap:6px; border-top:1px solid var(--line); padding-top:10px}
-  .fchip{display:inline-flex; align-items:center; gap:5px; font-size:12.5px; padding:2px 10px; border-radius:999px;
-    background:var(--accent-soft); color:var(--accent-ink); cursor:pointer; border:none; font-family:inherit}
-  .fchip:hover{opacity:.75}
-  .fclear{font-size:12.5px; color:var(--muted); background:none; border:none; cursor:pointer; font-family:inherit; padding:2px 6px}
-  .fclear:hover{color:var(--chip-stop-fg)}
-
-  /* ===== 更新中断警示条 ===== */
-  .stalewarn{display:none; align-items:center; gap:10px; margin:0 0 18px; padding:10px 16px;
-    border-radius:10px; font-size:13.5px; font-weight:600;
-    background:#FAF1D8; color:#8A5E0E; border:1px solid #E8D5A0}
+  .chiprow.show{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .fchip{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:3px 8px;border-radius:4px;background:var(--accent-soft);color:var(--accent-ink);border:0}
+  .fchip .icon{width:12px;height:12px}
+  .fclear{border:0;background:none;color:var(--muted);font-size:12px;padding:3px 6px}
+  .fclear:hover{color:var(--accent-ink)}
+  .focus{border-bottom:1px solid var(--line);margin:14px 0 0;background:transparent}
+  .focus>summary{display:flex;align-items:center;gap:10px;cursor:pointer;padding:7px 0 11px;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  .focus h2{margin:0;font-size:13px;font-weight:650}
+  .focus>summary>.icon{margin-left:auto;width:15px;height:15px;color:var(--muted);transition:transform .15s}
+  .focus[open]>summary>.icon{transform:rotate(180deg)}
+  .focus-meta{color:var(--muted);font-size:12px}
+  .fgroup{padding-bottom:6px}
+  .fgroup h3{font-size:11px;font-weight:500;color:var(--muted);margin:0 0 3px}
+  .fitem{display:grid;grid-template-columns:90px minmax(0,1fr) 128px;gap:12px;align-items:start;padding:7px 0;text-decoration:none;font-size:13px}
+  .fitem+.fitem{border-top:1px solid var(--line)}
+  .fitem:hover .ft{color:var(--accent-ink)}
+  .cd{font-size:11px;padding:2px 6px;border-radius:4px;background:var(--warn-bg);color:var(--warn-fg);white-space:nowrap;text-align:center}
+  .cd.fresh{background:var(--chip-win-bg);color:var(--chip-win-fg)}
+  .ft{color:var(--ink);min-width:0;overflow-wrap:anywhere}
+  .fm{color:var(--muted);font-size:11px;text-align:right;overflow-wrap:anywhere}
+  .resultbar{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:18px 0 10px}
+  .resultbar h2{margin:0;font-size:16px}
+  .resultline{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;text-align:right}
+  .list-head,.project-row{display:grid;grid-template-columns:minmax(280px,1fr) 118px 104px 110px 102px 22px;gap:16px;align-items:center}
+  .list-head{padding:10px 16px;background:var(--bg);font-size:11px;color:var(--muted);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .list-head .amount-label,.list-head .date-label{text-align:right}
+  .cards{background:var(--surface)}
+  .project{border-bottom:1px solid var(--line)}
+  .project-row{padding:15px 16px;list-style:none;cursor:pointer}
+  .project-row:hover{background:var(--hover)}
+  .project[open]>.project-row{background:var(--hover)}
+  .project h3{font-size:14px;line-height:1.55;font-weight:600;margin:0 0 5px;overflow-wrap:anywhere}
+  .project-tags{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:11px}
+  .project-tags .st{font-size:11px}
+  .chip{display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;font-size:11px;line-height:1.5}
+  .chip.bid{background:var(--chip-bid-bg);color:var(--chip-bid-fg)}
+  .chip.win{background:var(--chip-win-bg);color:var(--chip-win-fg)}
+  .chip.stop{background:var(--chip-stop-bg);color:var(--chip-stop-fg)}
+  .chip.ref{color:var(--muted);padding:0}
+  .chip.aicore{color:var(--accent-ink);background:var(--accent-soft);font-weight:600}
+  .chip.aiedge{color:var(--muted);padding:0}
+  .chip.pending{background:var(--warn-bg);color:var(--warn-fg)}
+  .row-unit{font-size:12px;overflow-wrap:anywhere}
+  .row-amount{text-align:right;font-size:15px;font-weight:650;font-variant-numeric:tabular-nums}
+  .row-amount small{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:2px}
+  .row-amount.na{font-size:12px;color:var(--muted);font-weight:400}
+  .row-date{text-align:right;color:var(--muted);font-size:11px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+  .row-toggle{color:var(--muted);display:grid;place-items:center}
+  .row-toggle .icon{width:15px;height:15px;transition:transform .15s}
+  .project[open] .row-toggle .icon{transform:rotate(180deg)}
+  .project-detail{padding:2px 22px 20px 32px;border-left:2px solid var(--accent);margin:0 16px 16px}
+  .kv{display:grid;grid-template-columns:90px minmax(0,1fr);gap:7px 12px;font-size:12px;margin:12px 0}
+  .kl{color:var(--muted)}
+  .kd{color:var(--ink);min-width:0;overflow-wrap:anywhere}
+  .kd.money{font-weight:600}
+  .sum{font-size:13px;line-height:1.85;margin:15px 0;color:var(--ink);overflow-wrap:anywhere}
+  .src{display:inline-flex;align-items:center;gap:5px;font-size:12px;text-decoration:none}
+  .src:hover{text-decoration:underline}
+  .src .icon{width:14px;height:14px}
+  .empty{padding:48px 16px;text-align:center;color:var(--muted)}
+  .empty button{margin-top:12px}
+  .notes{margin-top:18px;border-top:1px solid var(--line);padding:0;background:transparent}
+  .notes summary{font-size:13px;font-weight:600;padding:14px 0;cursor:pointer}
+  .notes h4{font-size:13px;margin:16px 0 8px}
+  .notes p,.notes li{font-size:12px;color:var(--muted);max-width:80em}
+  .cfglist,.cfgform{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px;align-items:center}
+  .cfgitem{display:inline-flex;align-items:center;gap:7px;padding:5px 9px;border:1px solid var(--line);border-radius:4px;font-size:12px}
+  .cfgitem .active{font-size:10px;color:var(--chip-win-fg)}
+  .cfgitem .pend{font-size:10px;color:var(--warn-fg);background:var(--warn-bg);padding:1px 4px}
+  .cfgitem button{border:0;background:none;color:var(--muted)}
+  .cfgform .searchbox{flex:1;min-width:170px}
+  .addbtn{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+  .addbtn:hover{background:var(--accent-ink);color:var(--surface);border-color:var(--accent-ink)}
+  .cfgta{width:100%;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;padding:12px;font-size:12px;resize:vertical}
+  footer{display:flex;flex-wrap:wrap;gap:5px 20px;margin-top:26px;border-top:1px solid var(--line);padding-top:16px;font-size:11px;color:var(--muted)}
+  .stalewarn{display:none;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--warn-line);background:var(--warn-bg);color:var(--warn-fg);font-size:12px;border-radius:6px;margin-bottom:18px}
   .stalewarn.show{display:flex}
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]) .stalewarn{background:#33280F; color:#F0C878; border-color:#5C4A1E}
+  @media(min-width:1100px){.toolbar{position:sticky;top:0;z-index:5}}
+  @media(max-width:1050px){
+    .wrap{padding:22px 22px 36px}
+    .overview{gap:22px}
+    .metric-secondary{padding-left:22px}
+    .syncinfo{font-size:11px}
+    .list-head,.project-row{grid-template-columns:minmax(220px,1fr) 96px 88px 88px 84px 16px;gap:12px}
   }
-  :root[data-theme="dark"] .stalewarn{background:#33280F; color:#F0C878; border-color:#5C4A1E}
+  @media(max-width:800px){
+    .wrap{padding:20px 16px 30px}
+    h1{font-size:23px}
+    .brandmark{width:36px;height:36px}
+    .overview{flex-wrap:wrap;gap:14px 24px;margin-top:18px}
+    .metric-value{font-size:23px}
+    .syncinfo{width:100%;margin:0;text-align:left;display:flex;flex-wrap:wrap;gap:2px 16px}
+    .sortgroup .pill{padding:6px 9px}
+    .orgrow{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:thin;padding-bottom:3px}
+    .orgrow .pill{flex:none}
+    .filterrow{gap:8px}
+    .selpill{gap:6px;padding:5px 8px}
+    .selpill select{max-width:10em;font-size:12px}
+    .morebtn{margin-left:0}
+    .list-head{display:none}
+    .cards{display:flex;flex-direction:column;gap:10px;background:transparent}
+    .project{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+    .project-row{grid-template-columns:minmax(0,1fr) auto;gap:9px 12px;padding:15px;position:relative;align-items:baseline}
+    .project-name{grid-column:1/-1;padding-right:20px}
+    .project h3{font-size:14px}
+    .row-unit{grid-column:1;grid-row:2;font-size:12px}
+    .row-status{grid-column:2;grid-row:2;text-align:right}
+    .row-amount{grid-column:1;grid-row:3;text-align:left;display:flex;align-items:baseline;gap:6px;font-size:16px}
+    .row-amount small{display:inline;font-size:10px}
+    .row-date{grid-column:2;grid-row:3;max-width:140px}
+    .row-toggle{position:absolute;right:13px;top:17px}
+    .project-detail{margin:0 14px 14px;padding:0 0 8px 12px}
+    .kv{grid-template-columns:70px minmax(0,1fr);font-size:12px}
+    .resultbar{align-items:baseline}
+    .resultline{max-width:70%;font-size:11px}
+    .fitem{grid-template-columns:80px minmax(0,1fr);gap:5px 10px}
+    .fm{grid-column:2;text-align:left}
+  }
+  @media(max-width:480px){
+    .wrap{padding:16px 12px 28px}
+    .brand{gap:9px}
+    h1{font-size:21px}
+    .eyebrow{font-size:10px}
+    .brandmark{width:34px;height:34px}
+    .brandline{gap:8px}
+    .themebtn{width:34px;height:34px}
+    .searchrow{flex-wrap:wrap;gap:8px}
+    .searchfield{flex-basis:calc(100% - 46px);order:0}
+    .csvbtn{order:1}
+    .sortgroup{order:2;margin-left:auto}
+    .filterrow .morebtn{margin-left:auto}
+    .filterrow{gap:8px 6px}
+    .metric-value{font-size:22px}
+    .metric-secondary{padding-left:20px}
+    .syncinfo{display:block;font-size:11px}
+    .filterrow>span:first-child{flex:0 0 auto}
+    .selpill select{max-width:8em}
+    .focus-meta{font-size:10px}
+    .cfgform .searchbox{flex-basis:100%}
+  }
+  @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 
-  /* ===== 移动端筛选横向滑动 ===== */
-  @media (max-width:640px){
-    .frow{flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:2px}
-    .frow > *{flex:0 0 auto}
-    .frow .searchbox{min-width:180px}
-  }
-  @media (prefers-reduced-motion: no-preference){
-    .card{transition:border-color .15s, transform .15s, box-shadow .15s}
-  }
-  @media (prefers-reduced-motion: reduce){
-    .card:hover{transform:none}
-  }
 </style>
-
 <div class="wrap">
-<div id="staleWarn" class="stalewarn">⚠️ <span id="staleText"></span></div>
+<div id="staleWarn" class="stalewarn"><svg aria-hidden="true" focusable="false" class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  width="18"
+  height="18"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <circle cx="12" cy="12" r="10" />
+  <path d="M12 6v6l4 2" />
+</svg> <span id="staleText"></span></div>
 <header class="top">
-  <div class="eyebrow notranslate" lang="zh-CN" translate="no">云南 · 人工智能招投标情报</div>
-  <h1>云南重点单位人工智能招投标数据库</h1>
-  <div class="orglegend" id="orgLegend"></div>
-  <p class="lede">覆盖 2010 年以来六家单位与人工智能／信息化／软件与算法开发／隧道照明节能／ETC稽查方向的公开招标、采购与中标信息（点击上方单位可快捷筛选，完整收录口径见页底说明）。</p>
-  <div class="metaline">
-    <span>收录项目 <b class="num" id="statTotal">–</b> 个</span>
-    <span>可统计金额合计约 <b class="num" id="statAmount">–</b> 万元</span>
-    <span>数据区间 <b>2014年12月 – 2026年9月</b></span>
-    <span>最后检索 <b id="lastCheck">2026-10-08 11:06（部分通道受限）</b> · 每天中午12点自动</span>
-    <span>最后新增数据 <b id="lastUpd">2026-10-08</b></span>
+  <div class="brandline">
+    <div class="brand">
+      <div class="brandmark"><svg aria-hidden="true" focusable="false" class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  width="18"
+  height="18"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" />
+  <path d="M14 2v5a1 1 0 0 0 1 1h5" />
+  <circle cx="11.5" cy="14.5" r="2.5" />
+  <path d="M13.3 16.3 15 18" />
+</svg></div>
+      <div><div class="eyebrow notranslate" lang="zh-CN" translate="no">云南 · 人工智能招投标情报</div>
+      <h1 class="notranslate" translate="no">云南AI招投标数据库</h1></div>
+    </div>
+    <button class="iconbtn themebtn" id="themeBtn" aria-label="切换到深色模式" data-tooltip="切换到深色模式"><svg aria-hidden="true" focusable="false" class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  width="18"
+  height="18"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" />
+</svg></button>
+  </div>
+  <div class="overview">
+    <div class="metric"><span class="metric-label">收录项目</span><div class="metric-value"><b id="statTotal">–</b><small>个</small></div></div>
+    <div class="metric metric-secondary"><span class="metric-label">可统计金额合计</span><div class="metric-value"><b id="statAmount">–</b><small>万元</small></div></div>
+    <div class="syncinfo">
+      <div><svg aria-hidden="true" focusable="false" class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  width="18"
+  height="18"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <circle cx="12" cy="12" r="10" />
+  <path d="M12 6v6l4 2" />
+</svg>最后检索 <b id="lastCheck">2026-10-08 11:06（部分通道受限）</b></div>
+      <div>最后新增数据 <b id="lastUpd">2026-10-08</b> · 每日12点更新</div>
+      <div>数据区间 <span id="dataRange">2014年12月 – 2026年9月</span></div>
+    </div>
   </div>
 </header>
 
-<section class="focus" id="focusBox" hidden>
-  <h2>📌 近期关注</h2>
-  <div id="focusList"></div>
-</section>
-
-<div class="toolbar">
-  <div class="frow"><input class="searchbox" id="q" type="search" placeholder="搜索项目名称、内容、中标单位…" aria-label="搜索">
-    <span id="fSort" style="display:inline-flex;gap:6px"></span>
-    <button class="pill csvbtn" id="csvBtn" hidden>⬇ 导出CSV</button></div>
-  <div class="frow orgrow" id="fOrg"></div>
-  <div class="frow selrow">
-    <span id="fYear"></span><span id="fSt"></span><span id="fCat"></span><span id="fPlan"></span><span id="fAi"></span>
+<div class="toolbar" role="search" aria-label="项目检索">
+  <div class="searchrow">
+    <label class="searchfield"><svg aria-hidden="true" focusable="false" class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  width="18"
+  height="18"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m21 21-4.34-4.34" />
+  <circle cx="11" cy="11" r="8" />
+</svg><input class="searchbox" id="q" type="search" placeholder="搜索项目、采购人、中标单位…" aria-label="搜索项目"></label>
+    <span class="sortgroup" id="fSort" role="group" aria-label="排序"></span>
+    <button class="iconbtn csvbtn" id="csvBtn" hidden aria-label="导出当前结果CSV" data-tooltip="导出当前结果 CSV"><svg aria-hidden="true" focusable="false" class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  width="18"
+  height="18"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M12 15V3" />
+  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+  <path d="m7 10 5 5 5-5" />
+</svg></button>
   </div>
-  <div class="frow chiprow" id="activeChips"></div>
+  <div class="orgrow" id="fOrg" role="group" aria-label="单位筛选"></div>
+  <div class="filterrow">
+    <span id="fYear"></span><span id="fSt"></span><span id="fCat"></span>
+    <button class="pill morebtn" id="moreFiltersBtn" aria-expanded="false" aria-controls="moreFilters"><svg aria-hidden="true" focusable="false" class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  width="18"
+  height="18"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M10 5H3" />
+  <path d="M12 19H3" />
+  <path d="M14 3v4" />
+  <path d="M16 17v4" />
+  <path d="M21 12h-9" />
+  <path d="M21 19h-5" />
+  <path d="M21 5h-7" />
+  <path d="M8 10v4" />
+  <path d="M8 12H3" />
+</svg>更多筛选<span id="moreFilterCount" class="filter-count" hidden></span></button>
+  </div>
+  <div class="advancedrow" id="moreFilters" hidden><span id="fPlan"></span><span id="fAi"></span></div>
+  <div class="chiprow" id="activeChips"></div>
 </div>
-<div class="resultline" id="resultline"></div>
+
+<details class="focus" id="focusBox" hidden>
+  <summary><h2 id="focusTitle">近期关注</h2><span class="focus-meta">近14天公告 · 即将发标</span><svg aria-hidden="true" focusable="false" class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  width="18"
+  height="18"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m6 9 6 6 6-6" />
+</svg></summary>
+  <div id="focusList"></div>
+</details>
+<div class="resultbar"><h2>项目库</h2><div class="resultline" id="resultline" role="status" aria-live="polite"></div></div>
+<div class="list-head" aria-hidden="true"><span>项目名称 / 标的类型</span><span>单位</span><span>公告状态</span><span class="amount-label">金额</span><span class="date-label">公告日期</span><span></span></div>
 <div class="cards" id="cards"></div>
 
 <details class="notes" id="cfgPanel">
-  <summary>⚙ 检索配置 — 新增检索单位／招投标类型</summary>
-  <p>本页数据由后台检索代理维护：<b>每天中午12点</b>自动按下方配置重新检索全部单位与类型。网页本身受浏览器安全策略限制无法直接联网检索，因此新增条目后请点「复制更新指令」，将指令<b>发送给 Claude</b>（任意对话窗口均可），几分钟内即可完成检索并更新本页；新增的单位/类型也会写入本页配置，此后自动纳入每次检索。</p>
+  <summary>检索配置</summary>
+  <p>配置来源：本地数据库。新增项保存为当前浏览器的待生效配置，由维护端写入数据库后生效。</p>
 
   <h4>检索单位（<span id="unitCount"></span>）</h4>
   <div class="cfglist" id="unitList"></div>
@@ -289,15 +406,15 @@
   </div>
 
   <h4>标的类型（<span id="stCount"></span>）</h4>
-  <p style="margin-top:0">按项目采购内容分类，用于上方「标的类型」筛选栏，如软件、硬件、服务、科研；可自定义新增（例如：算力租赁、数据服务、无人机装备）。新增后已收录项目会重新归类，后续新项目也按新分类标注。</p>
+  <p style="margin-top:0">按项目采购内容分类，包含软件、算法、平台、服务和科研等标的；收录范围以各单位配置为准。</p>
   <div class="cfglist" id="stList"></div>
   <div class="cfgform">
-    <input class="searchbox" id="newStName" type="text" placeholder="新的标的类型，如：算力租赁 / 数据服务 / 无人机装备">
+    <input class="searchbox" id="newStName" type="text" placeholder="新的标的类型，如：算力租赁 / 数据服务">
     <button class="pill addbtn" id="addStBtn">＋ 添加标的类型</button>
   </div>
 
   <h4>检索关键词（<span id="typeCount"></span>）</h4>
-  <p style="margin-top:0">每周自动检索时与单位名称组合使用的技术关键词。</p>
+  <p style="margin-top:0">每日自动检索时与单位名称组合使用的技术关键词。</p>
   <div class="cfglist" id="typeList"></div>
   <div class="cfgform">
     <input class="searchbox" id="newTypeName" type="text" placeholder="新增检索关键词，如：无人机 / 数据标注 / 智能体">
@@ -305,10 +422,10 @@
   </div>
 
   <div id="pendingBox" hidden>
-    <h4>待生效的新增项 — 复制下方指令发送给 Claude 即可生效</h4>
+    <h4>待生效配置</h4>
     <textarea class="cfgta" id="pendingText" readonly rows="5"></textarea>
     <div class="cfgform">
-      <button class="pill addbtn" id="copyBtn">📋 复制更新指令</button>
+      <button class="pill addbtn" id="copyBtn">复制配置变更</button>
       <button class="pill" id="clearBtn">清空待生效项</button>
       <span id="copyStatus" style="font-size:13px;color:var(--accent-ink)"></span>
     </div>
@@ -348,7 +465,7 @@
 </div>
 
 <script>
-// ===== 检索配置（每周例程按此配置执行检索；新增单位/类型请用页面下方“检索配置”面板） =====
+// ===== 检索配置（本地每日更新读取此对象） =====
 const CONFIG = {
   units: [
     {key:"csg", name:"云南电网", full:"云南电网有限责任公司及下属各供电局（南方电网体系，主要来源 bidding.csg.cn）", status:"active"},
@@ -597,36 +714,43 @@ const DATA = [
 
 const CAT = {bid:["招标·采购",  "bid"], win:["中标·成交","win"], stop:["已终止","stop"]};
 const AIL = {core:["核心AI","aicore"], edge:["智能化相关","aiedge"], ref:["非AI·参考","ref"]};
+const UI_ICONS = {"file-search":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z\" />\n  <path d=\"M14 2v5a1 1 0 0 0 1 1h5\" />\n  <circle cx=\"11.5\" cy=\"14.5\" r=\"2.5\" />\n  <path d=\"M13.3 16.3 15 18\" />\n</svg>","search":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"m21 21-4.34-4.34\" />\n  <circle cx=\"11\" cy=\"11\" r=\"8\" />\n</svg>","moon":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401\" />\n</svg>","sun":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <circle cx=\"12\" cy=\"12\" r=\"4\" />\n  <path d=\"M12 2v2\" />\n  <path d=\"M12 20v2\" />\n  <path d=\"m4.93 4.93 1.41 1.41\" />\n  <path d=\"m17.66 17.66 1.41 1.41\" />\n  <path d=\"M2 12h2\" />\n  <path d=\"M20 12h2\" />\n  <path d=\"m6.34 17.66-1.41 1.41\" />\n  <path d=\"m19.07 4.93-1.41 1.41\" />\n</svg>","download":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M12 15V3\" />\n  <path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\" />\n  <path d=\"m7 10 5 5 5-5\" />\n</svg>","sliders-horizontal":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M10 5H3\" />\n  <path d=\"M12 19H3\" />\n  <path d=\"M14 3v4\" />\n  <path d=\"M16 17v4\" />\n  <path d=\"M21 12h-9\" />\n  <path d=\"M21 19h-5\" />\n  <path d=\"M21 5h-7\" />\n  <path d=\"M8 10v4\" />\n  <path d=\"M8 12H3\" />\n</svg>","x":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M18 6 6 18\" />\n  <path d=\"m6 6 12 12\" />\n</svg>","chevron-down":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"m6 9 6 6 6-6\" />\n</svg>","arrow-up-right":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M7 7h10v10\" />\n  <path d=\"M7 17 17 7\" />\n</svg>","arrow-down-wide-narrow":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"m3 16 4 4 4-4\" />\n  <path d=\"M7 20V4\" />\n  <path d=\"M11 4h10\" />\n  <path d=\"M11 8h7\" />\n  <path d=\"M11 12h4\" />\n</svg>","clock":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <circle cx=\"12\" cy=\"12\" r=\"10\" />\n  <path d=\"M12 6v6l4 2\" />\n</svg>","plus":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M5 12h14\" />\n  <path d=\"M12 5v14\" />\n</svg>","copy":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <rect width=\"14\" height=\"14\" x=\"8\" y=\"8\" rx=\"2\" ry=\"2\" />\n  <path d=\"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\" />\n</svg>"};
+function icon(name){ return UI_ICONS[name] || ""; }
 const state = {org:"all", year:"all", cat:"all", ai:"all", st:"all", plan:"all", sort:"new", q:""};
+const openProjects = new Set();
 
 function yearOf(r){ return String(r.ds).slice(0,4); }
-function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
-
-function pillOn(key, val){ return state[key]===val && !(val==="all"); }
+function esc(s){ return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function pillOn(key, val){ return state[key]===val; }
 function makePills(el, items, key){
   const box = document.getElementById(el);
-  box.style.display = "inline-flex"; box.style.flexWrap = "wrap"; box.style.gap = "6px";
   items.forEach(([val, label, cnt]) => {
     const b = document.createElement("button");
-    b.className = "pill" + (pillOn(key,val) ? " on" : "");
-    b.innerHTML = esc(label) + (cnt!=null ? ' <span class="cnt">'+cnt+'</span>' : '');
+    b.className = "pill";
+    b.innerHTML = (key==="sort" ? icon(val==="new"?"clock":"arrow-down-wide-narrow") : "") +
+      esc(label) + (cnt!=null ? ' <span class="cnt">'+cnt+'</span>' : '');
     b.onclick = () => { state[key] = val; refreshPills(); render(); };
     b.dataset.val = val; b.dataset.key = key;
-    if(key==="org" && val!=="all") b.dataset.org = val;
+    if(key==="org" && val!=="all"){
+      b.dataset.org = val;
+      b.title = CONFIG.units.find(u=>u.key===val)?.full || label;
+    }
     box.appendChild(b);
   });
 }
 function refreshPills(){
-  document.querySelectorAll(".pill").forEach(b=>{
-    if(b.dataset.key) b.classList.toggle("on", pillOn(b.dataset.key, b.dataset.val));
-  });
-  document.querySelectorAll(".oleg").forEach(el=>{
-    el.classList.toggle("on", state.org===el.dataset.org);
+  document.querySelectorAll(".pill[data-key]").forEach(b=>{
+    const selected = pillOn(b.dataset.key, b.dataset.val);
+    b.classList.toggle("on", selected);
+    b.setAttribute("aria-pressed", String(selected));
   });
   document.querySelectorAll(".selpill select").forEach(s=>{
-    if(s.value !== state[s.dataset.key]) s.value = state[s.dataset.key];
-    s.parentElement.classList.toggle("on", state[s.dataset.key] !== "all");
+    s.value = state[s.dataset.key];
+    s.parentElement.classList.toggle("on", s.value !== "all");
   });
+  const count = ["plan","ai"].filter(k=>state[k]!=="all").length;
+  document.getElementById("moreFilterCount").textContent = count;
+  document.getElementById("moreFilterCount").hidden = !count;
   buildChips();
 }
 function makeSelect(elId, labelText, items, key){
@@ -646,122 +770,160 @@ function makeSelect(elId, labelText, items, key){
   });
   sel.value = state[key];
   sel.onchange = () => { state[key] = sel.value; refreshPills(); render(); };
-  wrap.appendChild(lab); wrap.appendChild(sel);
-  host.appendChild(wrap);
+  wrap.appendChild(lab); wrap.appendChild(sel); host.appendChild(wrap);
 }
 function chipLabel(key){
+  if(key==="org") return ORGS[state.org];
+  if(key==="q") return "搜索："+state.q;
   if(key==="year") return state.year==="pre" ? "2021前" : state.year+"年";
   if(key==="st") return STYPES[state.st]||state.st;
   if(key==="cat") return CAT[state.cat][0];
-  if(key==="plan") return "即将招标";
+  if(key==="plan") return "招标计划";
   if(key==="ai") return AIL[state.ai][0];
   return "";
 }
+function resetFilters(){
+  ["org","year","st","cat","plan","ai"].forEach(k=>state[k]="all");
+  state.q = "";
+  document.getElementById("q").value = "";
+  refreshPills(); render();
+}
 function buildChips(){
   const box = document.getElementById("activeChips");
-  if(!box) return;
-  const keys = ["year","st","cat","plan","ai"].filter(k=>state[k]!=="all");
-  if(!keys.length){ box.classList.remove("show"); box.innerHTML=""; return; }
-  box.innerHTML = keys.map(k=>'<button class="fchip" data-k="'+k+'" title="点击移除该筛选">'+esc(chipLabel(k))+' ✕</button>').join("") +
-    '<button class="fclear">清除全部筛选</button>';
-  box.classList.add("show");
-  box.querySelectorAll(".fchip").forEach(b=>{ b.onclick=()=>{ state[b.dataset.k]="all"; refreshPills(); render(); }; });
-  box.querySelector(".fclear").onclick = ()=>{ ["year","st","cat","plan","ai"].forEach(k=>state[k]="all"); refreshPills(); render(); };
+  const keys = ["org","year","st","cat","plan","ai"].filter(k=>state[k]!=="all");
+  if(state.q) keys.push("q");
+  box.classList.toggle("show", !!keys.length);
+  box.innerHTML = keys.map(k=>'<button class="fchip" data-k="'+k+'" aria-label="移除'+esc(chipLabel(k))+'筛选">'+esc(chipLabel(k))+icon("x")+'</button>').join("") +
+    (keys.length ? '<button class="fclear">清除全部</button>' : '');
+  box.querySelectorAll(".fchip").forEach(b=>{
+    b.onclick=()=>{
+      const k=b.dataset.k;
+      state[k]=k==="q"?"":"all";
+      if(k==="q") document.getElementById("q").value="";
+      refreshPills(); render();
+    };
+  });
+  if(keys.length) box.querySelector(".fclear").onclick=resetFilters;
 }
 function fmtAmt(a){
   if(a==null) return null;
   return a>=10000 ? ((a/10000).toFixed(2).replace(/\.?0+$/,"")+"亿") : ((Math.round(a*100)/100)+"万");
 }
-
+function amountLabel(r){
+  const t=r.amtT;
+  if(/候选/.test(t)) return "候选人报价";
+  if(/预中标/.test(t)) return "预中标金额";
+  if(/成交/.test(t)) return "成交金额";
+  if(/中标/.test(t)) return "中标金额";
+  if(/报价/.test(t)) return "公告报价";
+  if(/预算|限价|拦标/.test(t)) return "预算 / 限价";
+  if(/估算|约/.test(t)) return "估算金额";
+  return "公告金额";
+}
 function isPlan(r){ return (r.type+r.name).includes("招标计划"); }
 function filtered(){
+  const dateOrder=(a,b)=>(b.ds-a.ds)||String(b.date).localeCompare(String(a.date));
   return DATA.filter(r =>
     (state.org==="all" || r.org===state.org) &&
     (state.year==="all"|| (state.year==="pre" ? r.ds<202200 : yearOf(r)===state.year)) &&
     (state.cat==="all" || r.cat===state.cat) &&
-    (state.ai==="all"  || r.ai===state.ai) &&
-    (state.st==="all"  || r.st===state.st) &&
-    (state.plan==="all"|| isPlan(r)) &&
+    (state.ai==="all" || r.ai===state.ai) &&
+    (state.st==="all" || r.st===state.st) &&
+    (state.plan==="all" || isPlan(r)) &&
     (!state.q || (r.name+r.buyer+r.sum+(r.winner||"")+ORGS[r.org]).toLowerCase().includes(state.q))
-  ).sort((a,b)=> state.sort==="amt" ? (((b.amt||-1)-(a.amt||-1)) || (b.ds-a.ds)) : (b.ds-a.ds));
+  ).sort((a,b)=>state.sort==="amt" ? (((b.amt??-1)-(a.amt??-1)) || dateOrder(a,b)) : dateOrder(a,b));
 }
-
 function render(){
-  const rows = filtered();
-  const box = document.getElementById("cards");
-  const sum = rows.reduce((s,r)=> s + (r.amt||0), 0);
-  const fParts = [];
-  if(state.org!=="all") fParts.push(ORGS[state.org]);
-  if(state.year!=="all") fParts.push(state.year==="pre" ? "2021前" : state.year+"年");
-  if(state.st!=="all") fParts.push(STYPES[state.st]);
-  if(state.cat!=="all") fParts.push(CAT[state.cat][0]);
-  if(state.plan!=="all") fParts.push("即将招标");
-  if(state.ai!=="all") fParts.push(AIL[state.ai][0]);
-  if(state.q) fParts.push('"'+state.q+'"');
-  document.getElementById("resultline").textContent =
-    "显示 " + rows.length + " 条 ／ 共 " + DATA.length + " 条" +
-    (sum>0 ? " · 可统计金额合计 " + sum.toFixed(2).replace(/\.00$/,"") + " 万元" : "") +
-    (fParts.length ? " ｜ 筛选：" + fParts.join(" × ") : "") +
-    (state.sort==="amt" ? " ｜ 按金额排序" : "");
-  if(!rows.length){ box.innerHTML = '<div class="empty">没有符合当前筛选条件的项目</div>'; return; }
-  box.innerHTML = rows.map(r=>{
-    const c = CAT[r.cat], a = AIL[r.ai];
-    const fa = fmtAmt(r.amt);
-    return '<article class="card ai-'+r.ai+'" data-org="'+r.org+'">' +
-      '<div class="amtbox">' +
-        (fa ? '<div class="amt">'+fa+'</div>' : '<div class="amt na">金额未公示</div>') +
-        '<div class="amtd">'+esc(r.date)+'</div>' +
-      '</div>' +
-      '<div class="row1">' +
-        '<span class="chip org" data-org="'+r.org+'">'+esc(ORGS[r.org])+'</span>' +
-        '<span class="chip '+c[1]+'">'+c[0]+'</span>' +
-        (STYPES[r.st] ? '<span class="chip st">'+esc(STYPES[r.st])+'</span>' : '') +
-        '<span class="chip '+a[1]+'">'+a[0]+'</span>' +
-      '</div>' +
-      '<h3>'+esc(r.name)+'</h3>' +
-      '<div class="kv">' +
-        '<span class="kl">采购／招标方</span><span class="kd">'+esc(r.buyer)+'</span>' +
-        '<span class="kl">方式</span><span class="kd">'+esc(r.type)+'</span>' +
-        '<span class="kl">金额</span><span class="kd money">'+esc(r.amtT)+'</span>' +
-        (r.winner ? '<span class="kl">中标／成交</span><span class="kd">'+esc(r.winner)+'</span>' : '') +
-      '</div>' +
-      '<p class="sum">'+esc(r.sum)+'</p>' +
-      '<a class="src" href="'+esc(r.url)+'" target="_blank" rel="noopener">来源公告 ↗</a>' +
-    '</article>';
+  const rows=filtered(), box=document.getElementById("cards");
+  const sum=rows.reduce((s,r)=>s+(r.amt||0),0);
+  const result=document.getElementById("resultline");
+  result.textContent=rows.length+" / "+DATA.length+" 条"+(sum>0?" · 金额合计 "+fmtAmt(sum):"");
+  result.title="当前结果可统计金额合计 "+sum.toFixed(2)+" 万元；含预算、估算及成交价，以原公告为准";
+  if(!rows.length){
+    box.innerHTML='<div class="empty">没有符合条件的项目<br><button class="pill" id="emptyReset">清除筛选</button></div>';
+    document.getElementById("emptyReset").onclick=resetFilters;
+    return;
+  }
+  box.innerHTML=rows.map(r=>{
+    const c=CAT[r.cat],a=AIL[r.ai],fa=fmtAmt(r.amt),idx=DATA.indexOf(r);
+    const pending=/待核实/.test(r.date+" "+r.winner);
+    return '<details class="project ai-'+r.ai+'" data-org="'+r.org+'" data-record="'+idx+'"'+(openProjects.has(idx)?' open':'')+'>'+
+      '<summary class="project-row" aria-label="项目详情：'+esc(r.name)+'">'+
+        '<div class="project-name"><h3>'+esc(r.name)+'</h3><div class="project-tags">'+
+          (STYPES[r.st]?'<span class="st">'+esc(STYPES[r.st])+'</span>':'')+
+          '<span class="chip '+a[1]+'">'+a[0]+'</span>'+
+          (pending?'<span class="chip pending">待核实</span>':'')+
+        '</div></div>'+
+        '<div class="row-unit">'+esc(ORGS[r.org])+'</div>'+
+        '<div class="row-status"><span class="chip '+c[1]+'">'+c[0]+'</span></div>'+
+        '<div class="row-amount'+(fa?'':' na')+'" title="'+esc(r.amtT)+'">'+(fa?esc(fa)+'<small>'+amountLabel(r)+'</small>':'金额未披露')+'</div>'+
+        '<div class="row-date">'+esc(r.date)+'</div>'+
+        '<span class="row-toggle">'+icon("chevron-down")+'</span>'+
+      '</summary>'+
+      '<div class="project-detail"><div class="kv">'+
+        '<span class="kl">采购／招标方</span><span class="kd">'+esc(r.buyer)+'</span>'+
+        '<span class="kl">采购方式</span><span class="kd">'+esc(r.type)+'</span>'+
+        '<span class="kl">金额说明</span><span class="kd money">'+esc(r.amtT)+'</span>'+
+        (r.winner?'<span class="kl">中标／成交方</span><span class="kd">'+esc(r.winner)+'</span>':'')+
+      '</div><p class="sum">'+esc(r.sum)+'</p>'+
+      '<a class="src" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">来源公告'+icon("arrow-up-right")+'</a>'+
+      '</div></details>';
   }).join("");
-}
-
-(function init(){
-  const orgCnt = {}; DATA.forEach(r=> orgCnt[r.org]=(orgCnt[r.org]||0)+1);
-  document.getElementById("orgLegend").innerHTML = CONFIG.units.map(u=>
-    '<span class="oleg" data-org="'+u.key+'" title="'+esc(u.full)+'（点击筛选）">'+esc(u.name)+'</span>').join("");
-  document.querySelectorAll(".oleg").forEach(el=>{
-    el.onclick = ()=>{
-      state.org = (state.org===el.dataset.org) ? "all" : el.dataset.org;
-      refreshPills(); render();
-    };
+  box.querySelectorAll(".project").forEach(el=>{
+    el.addEventListener("toggle",()=>{
+      const idx=+el.dataset.record;
+      if(el.open) openProjects.add(idx); else openProjects.delete(idx);
+    });
   });
-  makePills("fOrg", [["all","全部",DATA.length]].concat(Object.keys(ORGS).map(k=>[k,ORGS[k],orgCnt[k]||0])), "org");
-  const preCnt = DATA.filter(r=>r.ds<202200).length;
-  const years = [...new Set(DATA.map(yearOf))].filter(y=>+y>=2022).sort();
-  makeSelect("fYear", "年份", [["all","全部",null]].concat(preCnt?[["pre","2021前",preCnt]]:[]).concat(years.map(y=>[y,y,DATA.filter(r=>yearOf(r)===y).length])), "year");
-  const stCnt = {}; DATA.forEach(r=> stCnt[r.st]=(stCnt[r.st]||0)+1);
-  makeSelect("fSt", "标的类型", [["all","全部",null]].concat(CONFIG.stypes.filter(s=>stCnt[s.key]).map(s=>[s.key,s.label,stCnt[s.key]])), "st");
-  makeSelect("fCat", "公告", [["all","全部",null],["bid","招标·采购",null],["win","中标·成交",null],["stop","已终止",null]], "cat");
-  makeSelect("fPlan", "阶段", [["all","全部",null],["plan","即将招标",DATA.filter(isPlan).length]], "plan");
-  makeSelect("fAi", "AI关联", [["all","全部",null],["core","核心AI",null],["edge","智能化相关",null],["ref","非AI·参考",null]], "ai");
-  makePills("fSort", [["new","最新",null],["amt","金额↓",null]], "sort");
-  document.getElementById("q").addEventListener("input", e=>{ state.q = e.target.value.trim().toLowerCase(); render(); });
-
-  document.getElementById("statTotal").textContent = DATA.length;
-  const total = DATA.reduce((s,r)=> s+(r.amt||0), 0);
-  document.getElementById("statAmount").textContent = Math.round(total).toLocaleString("zh-CN");
-  render();
-  buildFocus();
-  initCsv();
-  checkStale();
-  initConfigPanel();
-})();
+}
+function initTheme(){
+  const btn=document.getElementById("themeBtn");
+  const refresh=()=>{
+    const dark=document.documentElement.dataset.theme==="dark";
+    btn.innerHTML=icon(dark?"sun":"moon");
+    btn.setAttribute("aria-label",dark?"切换到浅色模式":"切换到深色模式");
+    btn.dataset.tooltip=btn.getAttribute("aria-label");
+    btn.setAttribute("aria-pressed",String(dark));
+  };
+  btn.onclick=()=>{
+    const theme=document.documentElement.dataset.theme==="dark"?"light":"dark";
+    document.documentElement.dataset.theme=theme;
+    try{localStorage.setItem("yntb_theme",theme)}catch(e){}
+    refresh();
+  };
+  refresh();
+}
+function init(){
+  const orgCnt={}; DATA.forEach(r=>orgCnt[r.org]=(orgCnt[r.org]||0)+1);
+  makePills("fOrg",[["all","全部单位",DATA.length]].concat(CONFIG.units.map(u=>[u.key,u.name,orgCnt[u.key]||0])),"org");
+  const preCnt=DATA.filter(r=>r.ds<202200).length;
+  const years=[...new Set(DATA.map(yearOf))].filter(y=>+y>=2022).sort().reverse();
+  makeSelect("fYear","年份",[["all","全部",null]].concat(years.map(y=>[y,y,DATA.filter(r=>yearOf(r)===y).length])).concat(preCnt?[["pre","2021前",preCnt]]:[]),"year");
+  const stCnt={}; DATA.forEach(r=>stCnt[r.st]=(stCnt[r.st]||0)+1);
+  makeSelect("fSt","标的类型",[["all","全部",null]].concat(CONFIG.stypes.filter(s=>stCnt[s.key]).map(s=>[s.key,s.label,stCnt[s.key]])),"st");
+  makeSelect("fCat","公告",[["all","全部",null],["bid","招标·采购",null],["win","中标·成交",null],["stop","已终止",null]],"cat");
+  makeSelect("fPlan","阶段",[["all","全部",null],["plan","招标计划",DATA.filter(isPlan).length]],"plan");
+  makeSelect("fAi","AI关联",[["all","全部",null],["core","核心AI",null],["edge","智能化相关",null],["ref","非AI·参考",null]],"ai");
+  makePills("fSort",[["new","最新",null],["amt","金额",null]],"sort");
+  document.getElementById("q").addEventListener("input",e=>{
+    state.q=e.target.value.trim().toLowerCase(); refreshPills(); render();
+  });
+  document.getElementById("moreFiltersBtn").onclick=()=>{
+    const panel=document.getElementById("moreFilters");
+    panel.hidden=!panel.hidden;
+    document.getElementById("moreFiltersBtn").setAttribute("aria-expanded",String(!panel.hidden));
+  };
+  document.getElementById("statTotal").textContent=DATA.length;
+  document.getElementById("statAmount").textContent=Math.round(DATA.reduce((s,r)=>s+(r.amt||0),0)).toLocaleString("zh-CN");
+  const months=DATA.map(r=>r.ds).sort((a,b)=>a-b);
+  const monthText=m=>String(m).slice(0,4)+"年"+Number(String(m).slice(4))+"月";
+  document.getElementById("dataRange").textContent=monthText(months[0])+" – "+monthText(months.at(-1));
+  initTheme(); refreshPills(); render(); buildFocus(); initCsv(); checkStale(); initConfigPanel();
+  [["addUnitBtn","添加单位"],["addStBtn","添加标的类型"],["addTypeBtn","添加关键词"]].forEach(([id,label])=>{
+    document.getElementById(id).innerHTML=icon("plus")+label;
+  });
+  document.getElementById("copyBtn").innerHTML=icon("copy")+"复制配置变更";
+}
 
 // ===== 自动更新中断自检 =====
 function checkStale(){
@@ -815,21 +977,19 @@ function buildFocus(){
       const tier = x.days<=7 ? "" : (x.days<=15 ? " mid" : " soon");
       cd = '<span class="cd'+tier+'">'+t+'</span>';
     } else {
-      cd = '<span class="cd fresh">'+(x.ago===0?"今日新增":x.ago+"天前新增")+'</span>';
+      cd = '<span class="cd fresh">'+(x.ago===0?"今日公告":x.ago+"天前公告")+'</span>';
     }
-    return '<div class="fitem" data-url="'+esc(r.url)+'" title="'+esc(r.name)+'（点击打开原文公告）">'+cd+
+    return '<a class="fitem" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">'+cd+
       '<span class="ft">'+esc(r.name)+'</span>'+
-      '<span class="fm">'+esc(r.amtT)+' · '+esc(ORGS[r.org])+'</span></div>';
+      '<span class="fm">'+esc(ORGS[r.org])+' · '+(fmtAmt(r.amt)||'金额未披露')+'</span></a>';
   };
   let html = "";
-  if(ups.length) html += '<div class="fgroup"><h3>🔔 即将发标 · '+ups.length+'</h3>'+ups.map(item).join("")+'</div>';
-  if(frs.length) html += '<div class="fgroup"><h3>🆕 近14天新公告 · '+frs.length+'</h3>'+frs.map(item).join("")+'</div>';
+  if(ups.length) html += '<div class="fgroup"><h3>即将发标 / 开标 · '+ups.length+'</h3>'+ups.map(item).join("")+'</div>';
+  if(frs.length) html += '<div class="fgroup">'+(ups.length?'<h3>近14天公告 · '+frs.length+'</h3>':'')+frs.map(item).join("")+'</div>';
   document.getElementById("focusList").innerHTML = html;
-  document.querySelector("#focusBox h2").textContent = "📌 近期关注 · " + (ups.length + frs.length);
+  document.getElementById("focusTitle").textContent = "近期关注 · " + (ups.length + frs.length);
   document.getElementById("focusBox").hidden = false;
-  document.querySelectorAll(".fitem").forEach(el=>{
-    el.onclick = ()=>{ window.open(el.dataset.url, "_blank", "noopener"); };
-  });
+  document.getElementById("focusBox").open = window.matchMedia("(min-width: 900px)").matches;
 }
 
 // ===== CSV导出（Artifact查看器禁止下载，仅在GitHub Pages/本地显示按钮） =====
@@ -839,7 +999,7 @@ function initCsv(){
   btn.hidden = false;
   btn.onclick = ()=>{
     const head = ["单位","公告类型","AI关联","标的类型","日期","项目名称","采购/招标方","方式","金额","中标/成交方","简述","来源URL"];
-    const rows = DATA.map(r=>[ORGS[r.org], CAT[r.cat][0], AIL[r.ai][0], STYPES[r.st]||r.st, r.date, r.name, r.buyer, r.type, r.amtT, r.winner||"", r.sum, r.url]);
+    const rows = filtered().map(r=>[ORGS[r.org], CAT[r.cat][0], AIL[r.ai][0], STYPES[r.st]||r.st, r.date, r.name, r.buyer, r.type, r.amtT, r.winner||"", r.sum, r.url]);
     const csv = "﻿" + [head].concat(rows).map(row=>row.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(",")).join("\r\n");
     const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
     const a = document.createElement("a");
@@ -851,7 +1011,7 @@ function initCsv(){
 }
 
 // ===== 检索配置面板 =====
-const PAGE_URL = "https://claude.ai/code/artifact/061c4678-ef82-4d1d-a60d-1f13549b9f6b";
+const PAGE_URL = "https://gintai-skywall.github.io/yn-tender-db/";
 const LS_U = "yntb_pending_units", LS_T = "yntb_pending_types", LS_S = "yntb_pending_stypes";
 function lsGet(k){ try{ return JSON.parse(localStorage.getItem(k)||"[]"); }catch(e){ return []; } }
 function lsSet(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
@@ -891,10 +1051,10 @@ function initConfigPanel(){
     const status = document.getElementById("copyStatus");
     try{
       await navigator.clipboard.writeText(ta.value);
-      status.textContent = "已复制，请粘贴发送给 Claude";
+      status.textContent = "配置变更已复制";
     }catch(e){
       ta.focus(); ta.select();
-      try{ document.execCommand("copy"); status.textContent = "已复制，请粘贴发送给 Claude"; }
+      try{ document.execCommand("copy"); status.textContent = "配置变更已复制"; }
       catch(e2){ status.textContent = "复制失败，请手动全选文本框内容复制"; }
     }
     setTimeout(()=>{ status.textContent=""; }, 6000);
@@ -928,16 +1088,17 @@ function renderCfg(){
   const box = document.getElementById("pendingBox");
   if(pu.length || pt.length || ps.length){
     box.hidden = false;
-    let msg = "请更新我的「云南AI招投标数据库」网页（" + PAGE_URL + "）：\n";
-    if(pu.length) msg += "一、新增检索单位：" + pu.map(u=>u.name+(u.note?"（"+u.note+"）":"")).join("；") + "。请检索这些单位2010年以来AI及信息化、软件/算法开发相关的公开招投标信息，按页面既有 DATA 格式追加记录（含 st 标的类型字段），并把单位写入页面 CONFIG.units（分配新的 org key），使其此后纳入每周自动检索。\n";
+    let msg = "请更新本地「云南AI招投标数据库」index.html 的 CONFIG 配置（在线页面：" + PAGE_URL + "）：\n";
+    if(pu.length) msg += "一、新增检索单位：" + pu.map(u=>u.name+(u.note?"（"+u.note+"）":"")).join("；") + "。请写入 CONFIG.units，分配新的 org key 并明确收录范围，供本地每日更新读取。\n";
     if(ps.length) msg += "二、新增标的类型：" + ps.join("、") + "。请写入页面 CONFIG.stypes（分配新 key），检查现有 DATA 记录中属于该类型的项目并把其 st 字段改为新类型，此后新增记录也按此分类。\n";
     if(pt.length) msg += "三、新增检索关键词：" + pt.join("、") + "。请写入页面 CONFIG.keywords，并用这些关键词对全部检索单位补充检索一轮，新发现的项目按 DATA 格式追加。\n";
-    msg += "完成后用 Artifact 工具以相同 URL 重新发布（favicon 保持 🗂️），并更新页面「最后检索」「最后新增数据」日期。";
+    msg += "配置写入后使用现有本地更新流程检索并同步 GitHub 页面；只在真实检索或新增数据时更新相应日期。";
     document.getElementById("pendingText").value = msg;
   } else {
     box.hidden = true;
   }
 }
+init();
 </script>
 
 </html>
