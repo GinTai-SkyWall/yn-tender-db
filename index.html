@@ -122,6 +122,8 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
   .cd{font-size:11px;padding:2px 6px;border-radius:4px;background:var(--warn-bg);color:var(--warn-fg);white-space:nowrap;text-align:center}
   .cd.fresh{background:var(--chip-win-bg);color:var(--chip-win-fg)}
   .ft{color:var(--ink);min-width:0;overflow-wrap:anywhere}
+  .focus-project{display:grid;gap:4px;min-width:0}
+  .focus-buyer{font-size:12px;line-height:1.6;color:var(--muted);overflow-wrap:anywhere}
   .fm{color:var(--muted);font-size:11px;text-align:right;overflow-wrap:anywhere}
   .resultbar{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:18px 0 10px}
   .resultbar h2{margin:0;font-size:16px}
@@ -1186,7 +1188,7 @@ function buildFocus(){
       cd = '<span class="cd fresh">'+(x.ago===0?"今日公告":x.ago+"天前公告")+'</span>';
     }
     return '<a class="fitem" data-org="'+r.org+'" style="'+orgStyle(r.org)+'" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">'+cd+
-      '<span class="ft">'+esc(r.name)+'</span>'+
+      '<span class="focus-project"><span class="ft">'+esc(r.name)+'</span><span class="focus-buyer">采购／招标单位：'+esc(r.buyer||'单位未披露')+'</span></span>'+
       '<span class="fm">'+orgBadge(r.org)+'<span class="focus-amount">'+(fmtAmt(r.amt)||'金额未披露')+'</span></span></a>';
   };
   let html = "";
