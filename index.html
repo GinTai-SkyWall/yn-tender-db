@@ -123,7 +123,8 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
   .cd.fresh{background:var(--chip-win-bg);color:var(--chip-win-fg)}
   .ft{color:var(--ink);min-width:0;overflow-wrap:anywhere}
   .focus-project{display:grid;gap:4px;min-width:0}
-  .focus-buyer{font-size:12px;line-height:1.6;color:var(--muted);overflow-wrap:anywhere}
+  .focus-buyer{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 6px;font-size:12px;line-height:1.6;color:var(--muted);overflow-wrap:anywhere}
+  .focus-buyer-label{flex:none}
   .fm{color:var(--muted);font-size:11px;text-align:right;overflow-wrap:anywhere}
   .resultbar{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:18px 0 10px}
   .resultbar h2{margin:0;font-size:16px}
@@ -288,6 +289,9 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
   .unitdot{width:6px;height:6px;border-radius:50%;background:var(--org-fg,var(--accent));flex:none}
   .org-badge{display:inline-flex;align-items:center;gap:5px;max-width:100%;background:var(--org-wash);color:var(--org-fg);border-radius:4px;padding:4px 6px;font-size:11px;font-weight:600;line-height:1.45;overflow-wrap:anywhere}
   .org-badge .icon{width:13px;height:13px;flex:none}
+  .focus-buyer .org-badge{min-width:0;align-items:flex-start;font-size:12px}
+  .focus-buyer .org-badge>span{min-width:0}
+  .focus-buyer .org-badge .icon{margin-top:2px}
   .focus{border-top:1px solid var(--line);margin-top:18px}
   .focus>summary{padding:12px 0}
   .focus h2{display:flex;align-items:center;gap:7px;color:var(--accent-ink)}
@@ -888,8 +892,8 @@ function orgStyle(key){
   const v=orgVisual(key);
   return "--oc:"+v.color+";--oc-soft:"+v.soft+";--oc-light:"+v.light+";--oc-night:"+v.night;
 }
-function orgBadge(key){
-  return '<span class="org-badge" data-org="'+esc(key)+'" style="'+orgStyle(key)+'">'+icon(orgVisual(key).icon)+esc(ORGS[key]||key)+'</span>';
+function orgBadge(key,label=ORGS[key]||key){
+  return '<span class="org-badge" data-org="'+esc(key)+'" style="'+orgStyle(key)+'">'+icon(orgVisual(key).icon)+'<span>'+esc(label)+'</span></span>';
 }
 function makeUnitFilters(){
   const units=CONFIG.units.filter(u=>u.key!=="qs");
@@ -1188,7 +1192,7 @@ function buildFocus(){
       cd = '<span class="cd fresh">'+(x.ago===0?"今日公告":x.ago+"天前公告")+'</span>';
     }
     return '<a class="fitem" data-org="'+r.org+'" style="'+orgStyle(r.org)+'" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">'+cd+
-      '<span class="focus-project"><span class="ft">'+esc(r.name)+'</span><span class="focus-buyer">采购／招标单位：'+esc(r.buyer||'单位未披露')+'</span></span>'+
+      '<span class="focus-project"><span class="ft">'+esc(r.name)+'</span><span class="focus-buyer"><span class="focus-buyer-label">采购／招标单位：</span>'+orgBadge(r.org,r.buyer||'单位未披露')+'</span></span>'+
       '<span class="fm">'+orgBadge(r.org)+'<span class="focus-amount">'+(fmtAmt(r.amt)||'金额未披露')+'</span></span></a>';
   };
   let html = "";
