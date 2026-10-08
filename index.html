@@ -1043,6 +1043,8 @@ function chipLabel(key){
 function resetFilters(){
   ["org","year","st","cat","plan","ai"].forEach(k=>state[k]="all");
   state.q = "";
+  state.archive = "unique";
+  state.sort = "new";
   document.getElementById("q").value = "";
   refreshPills(); render();
 }
@@ -1094,7 +1096,13 @@ function filtered(){
     );
   }).sort((a,b)=>state.sort==="amt" ? (((b.amt??-1)-(a.amt??-1)) || dateOrder(a,b)) : dateOrder(a,b));
 }
+function updateFocusVisibility(){
+  const home=["org","year","st","cat","plan","ai"].every(key=>state[key]==="all") &&
+    !state.q.trim() && (state.archive??"unique")==="unique" && state.sort==="new";
+  document.getElementById("focusBox").hidden=!home || !document.getElementById("focusList").innerHTML.trim();
+}
 function render(){
+  updateFocusVisibility();
   const rows=filtered(), box=document.getElementById("cards");
   const scope=document.getElementById("resultScope");
   scope.textContent=state.org==="all"?"全部单位":displayText(ORGS[state.org]);
@@ -1261,7 +1269,7 @@ function buildFocus(){
   if(frs.length) html += '<div class="fgroup">'+(ups.length?'<h3>近14天公告 · '+frs.length+'</h3>':'')+frs.map(item).join("")+'</div>';
   document.getElementById("focusList").innerHTML = html;
   document.getElementById("focusTitle").innerHTML = icon("radar")+'近期关注 <span class="focus-num">'+(ups.length + frs.length)+'</span>';
-  document.getElementById("focusBox").hidden = false;
+  updateFocusVisibility();
   document.getElementById("focusBox").open = window.matchMedia("(min-width: 900px)").matches;
 }
 
