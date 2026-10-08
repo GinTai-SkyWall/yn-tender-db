@@ -14,8 +14,8 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
 
   :root{
     color-scheme:light;
-    --bg:#F4F6F8; --surface:#FFFFFF; --ink:#20262E; --muted:#606C78;
-    --line:#DEE4E9; --accent:#087F8C; --accent-soft:#E8F5F5; --accent-ink:#066875;
+    --bg:#F2F5F9; --surface:#FFFFFF; --ink:#1D2B3A; --muted:#5F7183;
+    --line:#D9E3ED; --accent:#176FA6; --accent-soft:#E9F3FB; --accent-ink:#115E91;
     --chip-bid-bg:#EAF1FC; --chip-bid-fg:#295FA3;
     --chip-win-bg:#E7F5EC; --chip-win-fg:#247547;
     --chip-stop-bg:#FCECEC; --chip-stop-fg:#B43E42;
@@ -27,7 +27,7 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
   :root[data-theme="dark"]{
     color-scheme:dark;
     --bg:#181A1D; --surface:#222529; --ink:#EBEEF0; --muted:#A7AFB7;
-    --line:#393E44; --accent:#68C7CF; --accent-soft:#263C3E; --accent-ink:#89D7DE;
+    --line:#393E44; --accent:#78C4F6; --accent-soft:#263744; --accent-ink:#9AD5FC;
     --chip-bid-bg:#26384B; --chip-bid-fg:#A2C8F6;
     --chip-win-bg:#253D30; --chip-win-fg:#9BDBB0;
     --chip-stop-bg:#472D31; --chip-stop-fg:#F5ADB2;
@@ -44,22 +44,28 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
   a{color:var(--accent-ink)}
   ::selection{background:var(--accent-soft);color:var(--accent-ink)}
   :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-  .wrap{max-width:1320px;margin:0 auto;padding:26px 32px 40px}
+  .wrap{max-width:1400px;margin:0 auto;padding:24px 32px 40px}
+  .masthead{background:var(--surface);border-bottom:1px solid var(--line)}
+  .masthead>.wrap{padding-bottom:0}
   .icon{width:18px;height:18px;flex:none;vertical-align:middle;stroke-width:1.8}
-  .top{padding-bottom:20px}
+  .top{padding-bottom:22px}
   .brandline{display:flex;justify-content:space-between;align-items:center;gap:16px}
-  .brand{display:flex;align-items:center;gap:12px;min-width:0}
-  .brandmark{display:grid;place-items:center;width:42px;height:42px;flex:none;background:var(--accent);color:var(--surface);border-radius:8px}
-  .brandmark .icon{width:23px;height:23px}
-  .eyebrow{font-size:11px;font-weight:500;color:var(--muted);margin-bottom:2px}
-  h1{font-size:26px;line-height:1.3;margin:0;font-weight:700}
-  .overview{display:flex;align-items:flex-end;gap:30px;margin-top:20px}
+  .brand{display:flex;align-items:center;gap:14px;min-width:0;flex:1}
+  .brand>div{min-width:0}
+  .brandmark{display:grid;place-items:center;width:46px;height:46px;flex:none;background:var(--accent);color:#FFFFFF;border-radius:8px;box-shadow:0 3px 10px rgba(23,111,166,.18)}
+  .brandmark .icon{width:26px;height:26px}
+  .eyebrow{font-size:11px;font-weight:600;color:var(--accent-ink);margin-bottom:5px}
+  h1{font-size:28px;line-height:1.3;margin:0;font-weight:700}
+  .overview{display:grid;grid-template-columns:auto auto auto minmax(0,1fr);align-items:end;gap:28px;margin-top:24px}
   .metric{display:flex;flex-direction:column;gap:2px;flex:none}
   .metric-label{font-size:12px;color:var(--muted)}
-  .metric-value{font-size:25px;font-weight:650;line-height:1.25;font-variant-numeric:tabular-nums}
+  .metric-value{font-size:27px;font-weight:650;line-height:1.25;font-variant-numeric:tabular-nums;font-family:var(--mono)}
+  .metric-label .icon{width:13px;height:13px;margin-right:5px;color:var(--accent)}
   .metric-value small{font-size:12px;font-weight:400;margin-left:5px;color:var(--muted)}
+  .amount-compact,.amount-compact-unit{display:none}
+  #statCore{color:var(--accent-ink)}
   .metric-secondary{padding-left:28px;border-left:1px solid var(--line)}
-  .syncinfo{margin-left:auto;text-align:right;font-size:12px;color:var(--muted);line-height:1.9}
+  .syncinfo{margin-left:auto;text-align:right;font-size:11px;color:var(--muted);line-height:1.9}
   .syncinfo b{font-weight:500;color:var(--ink)}
   .syncinfo .icon{width:13px;height:13px;margin-right:5px}
   .pill,.iconbtn,.command{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;display:inline-flex;align-items:center;justify-content:center;gap:6px}
@@ -70,12 +76,12 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
   .iconbtn{width:38px;height:38px;flex:none;position:relative}
   .iconbtn[data-tooltip]::after{content:attr(data-tooltip);display:none;position:absolute;right:0;top:calc(100% + 7px);padding:5px 9px;border-radius:4px;background:var(--ink);color:var(--surface);font-size:12px;white-space:nowrap;z-index:20;pointer-events:none}
   .iconbtn:hover::after,.iconbtn:focus-visible::after{display:block}
-  .toolbar{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0 12px}
+  .toolbar{background:var(--surface);border-top:2px solid var(--accent);border-bottom:1px solid var(--line);padding:16px 18px 14px}
   .searchrow{display:flex;gap:10px;align-items:center}
   .searchfield{position:relative;flex:1;min-width:0}
   .searchfield>.icon{position:absolute;top:12px;left:12px;color:var(--muted);pointer-events:none}
   .searchbox{width:100%;min-width:0;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;padding:8px 12px;font-size:14px}
-  .searchfield .searchbox{height:42px;padding-left:39px}
+  .searchfield .searchbox{height:44px;padding-left:39px;background:var(--bg)}
   .searchbox::placeholder{color:var(--muted)}
   .searchbox:focus{outline:2px solid var(--accent);outline-offset:1px}
   .sortgroup{display:inline-flex;align-items:center;gap:0!important;flex:none;border:1px solid var(--line);border-radius:6px;overflow:hidden}
@@ -121,14 +127,14 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
   .resultbar h2{margin:0;font-size:16px}
   .resultline{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;text-align:right}
   .list-head,.project-row{display:grid;grid-template-columns:minmax(280px,1fr) 118px 104px 110px 102px 22px;gap:16px;align-items:center}
-  .list-head{padding:10px 16px;background:var(--bg);font-size:11px;color:var(--muted);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .list-head{padding:11px 16px;background:var(--accent-soft);font-size:11px;font-weight:600;color:var(--accent-ink);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
   .list-head .amount-label,.list-head .date-label{text-align:right}
   .cards{background:var(--surface)}
-  .project{border-bottom:1px solid var(--line)}
-  .project-row{padding:15px 16px;list-style:none;cursor:pointer}
+  .project{border-bottom:1px solid var(--line);border-left:3px solid var(--org-fg,var(--line))}
+  .project-row{padding:17px 16px;list-style:none;cursor:pointer}
   .project-row:hover{background:var(--hover)}
   .project[open]>.project-row{background:var(--hover)}
-  .project h3{font-size:14px;line-height:1.55;font-weight:600;margin:0 0 5px;overflow-wrap:anywhere}
+  .project h3{font-size:14px;line-height:1.65;font-weight:650;margin:0 0 7px;overflow-wrap:anywhere}
   .project-tags{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:11px}
   .project-tags .st{font-size:11px}
   .chip{display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;font-size:11px;line-height:1.5}
@@ -140,14 +146,14 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
   .chip.aiedge{color:var(--muted);padding:0}
   .chip.pending{background:var(--warn-bg);color:var(--warn-fg)}
   .row-unit{font-size:12px;overflow-wrap:anywhere}
-  .row-amount{text-align:right;font-size:15px;font-weight:650;font-variant-numeric:tabular-nums}
+  .row-amount{text-align:right;font-size:16px;font-weight:650;font-variant-numeric:tabular-nums;font-family:var(--mono)}
   .row-amount small{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:2px}
   .row-amount.na{font-size:12px;color:var(--muted);font-weight:400}
   .row-date{text-align:right;color:var(--muted);font-size:11px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
   .row-toggle{color:var(--muted);display:grid;place-items:center}
   .row-toggle .icon{width:15px;height:15px;transition:transform .15s}
   .project[open] .row-toggle .icon{transform:rotate(180deg)}
-  .project-detail{padding:2px 22px 20px 32px;border-left:2px solid var(--accent);margin:0 16px 16px}
+  .project-detail{padding:2px 22px 20px 24px;border-left:2px solid var(--org-fg,var(--accent));margin:0 16px 16px;background:var(--hover)}
   .kv{display:grid;grid-template-columns:90px minmax(0,1fr);gap:7px 12px;font-size:12px;margin:12px 0}
   .kl{color:var(--muted)}
   .kd{color:var(--ink);min-width:0;overflow-wrap:anywhere}
@@ -177,7 +183,8 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
   @media(min-width:1100px){.toolbar{position:sticky;top:0;z-index:5}}
   @media(max-width:1050px){
     .wrap{padding:22px 22px 36px}
-    .overview{gap:22px}
+    .overview{gap:20px;grid-template-columns:auto auto auto}
+    .syncinfo{grid-column:1/-1;width:100%;margin:0;text-align:left;display:flex;flex-wrap:wrap;gap:2px 18px}
     .metric-secondary{padding-left:22px}
     .syncinfo{font-size:11px}
     .list-head,.project-row{grid-template-columns:minmax(220px,1fr) 96px 88px 88px 84px 16px;gap:12px}
@@ -186,7 +193,7 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
     .wrap{padding:20px 16px 30px}
     h1{font-size:23px}
     .brandmark{width:36px;height:36px}
-    .overview{flex-wrap:wrap;gap:14px 24px;margin-top:18px}
+    .overview{grid-template-columns:auto auto auto;gap:14px 20px;margin-top:18px}
     .metric-value{font-size:23px}
     .syncinfo{width:100%;margin:0;text-align:left;display:flex;flex-wrap:wrap;gap:2px 16px}
     .sortgroup .pill{padding:6px 9px}
@@ -198,7 +205,7 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
     .morebtn{margin-left:0}
     .list-head{display:none}
     .cards{display:flex;flex-direction:column;gap:10px;background:transparent}
-    .project{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+    .project{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--org-fg,var(--line));border-radius:8px;overflow:hidden}
     .project-row{grid-template-columns:minmax(0,1fr) auto;gap:9px 12px;padding:15px;position:relative;align-items:baseline}
     .project-name{grid-column:1/-1;padding-right:20px}
     .project h3{font-size:14px}
@@ -229,8 +236,15 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
     .sortgroup{order:2;margin-left:auto}
     .filterrow .morebtn{margin-left:auto}
     .filterrow{gap:8px 6px}
-    .metric-value{font-size:22px}
-    .metric-secondary{padding-left:20px}
+    .overview{gap:14px 12px;grid-template-columns:1fr 1.4fr 1fr}
+    .metric-value{font-size:21px}
+    .metric-secondary{padding-left:12px}
+    .metric-label{font-size:10px}
+    .metric-label .icon{display:none}
+    .metric-value small{font-size:9px;margin-left:3px}
+    #statAmount,.amount-full-unit{display:none}
+    .amount-compact,.amount-compact-unit{display:inline}
+    .toolbar{padding:12px 10px}
     .syncinfo{display:block;font-size:11px}
     .filterrow>span:first-child{flex:0 0 auto}
     .selpill select{max-width:8em}
@@ -239,7 +253,84 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
   }
   @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 
+  [data-org]{--org-fg:var(--oc,var(--accent));--org-wash:var(--oc-soft,var(--accent-soft))}
+  :root[data-theme="dark"] [data-org]{--org-fg:var(--oc-light,var(--accent));--org-wash:var(--oc-night,var(--accent-soft))}
+  .unitsection{margin:0 0 22px}
+  .sectioncap{display:flex;align-items:center;gap:12px;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap}
+  .section-title{display:flex;align-items:center;gap:9px}
+  .section-title h2{font-size:15px;font-weight:650;margin:0}
+  .section-title>.icon{color:var(--accent);width:18px;height:18px}
+  .scope-count{font-size:11px;color:var(--muted)}
+  .org-overview{display:flex;gap:7px;flex-wrap:wrap}
+  .org-overview .pill{font-size:12px;min-height:32px;background:var(--surface)}
+  .org-overview .pill.on{background:var(--accent-soft);border-color:var(--accent)}
+  .org-overview .pill[data-org].on{color:var(--org-fg);border-color:var(--org-fg);background:var(--org-wash)}
+  .unitgrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+  .unit-tile{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:7px;min-width:0;min-height:116px;padding:12px 13px 10px;background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--org-fg);border-radius:6px;color:var(--ink);text-align:left;box-shadow:0 2px 5px rgba(26,53,80,.025)}
+  .unit-tile:hover{border-color:var(--org-fg);background:var(--org-wash)}
+  .unit-tile.on{background:var(--org-wash);border-color:var(--org-fg);box-shadow:inset 0 0 0 1px var(--org-fg)}
+  .unit-top{display:flex;align-items:center;gap:8px;min-height:30px}
+  .unit-icon{display:grid;place-items:center;flex:none;width:28px;height:28px;border-radius:6px;background:var(--org-wash);color:var(--org-fg)}
+  .unit-icon .icon{width:17px;height:17px}
+  .unit-name{font-size:13px;font-weight:650;line-height:1.35;overflow-wrap:anywhere}
+  .unit-selected{position:absolute;right:7px;bottom:7px;color:var(--org-fg);visibility:hidden}
+  .unit-selected .icon{width:13px;height:13px}
+  .unit-tile.on .unit-selected{visibility:visible}
+  .unit-stat{display:flex;align-items:baseline;gap:6px}
+  .unit-stat strong{font-family:var(--mono);font-size:25px;line-height:1.1;font-weight:650;color:var(--org-fg)}
+  .unit-stat>span{font-size:10px;color:var(--muted)}
+  .unit-bottom{display:flex;align-items:center;gap:10px;padding-right:10px;font-size:10px;color:var(--muted)}
+  .unit-bottom b{color:var(--org-fg);font-weight:650}
+  .unit-bar{display:block;flex:1;min-width:12px;height:3px;background:var(--line);border-radius:2px;overflow:hidden}
+  .unit-bar i{display:block;height:100%;background:var(--org-fg)}
+  .unitdot{width:6px;height:6px;border-radius:50%;background:var(--org-fg,var(--accent));flex:none}
+  .org-badge{display:inline-flex;align-items:center;gap:5px;max-width:100%;background:var(--org-wash);color:var(--org-fg);border-radius:4px;padding:4px 6px;font-size:11px;font-weight:600;line-height:1.45;overflow-wrap:anywhere}
+  .org-badge .icon{width:13px;height:13px;flex:none}
+  .focus{border-top:1px solid var(--line);margin-top:18px}
+  .focus>summary{padding:12px 0}
+  .focus h2{display:flex;align-items:center;gap:7px;color:var(--accent-ink)}
+  .focus h2 .icon{width:15px;height:15px}
+  .focus-num{font-family:var(--mono);font-size:12px;background:var(--accent-soft);padding:0 6px;border-radius:3px}
+  .fitem{padding:9px 0}
+  .fm .org-badge{font-size:10px;padding:2px 5px}
+  .fm .focus-amount{display:block;margin-top:3px;font-family:var(--mono);color:var(--ink)}
+  .resultbar h2{display:flex;align-items:center;gap:10px}
+  .result-scope{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;color:var(--muted)}
+  .result-scope[data-org]{color:var(--org-fg)}
+  .resultbar h2::before{content:"";width:3px;height:15px;background:var(--accent);flex:none}
+  .project-tags .st{padding:1px 6px;background:var(--chip-ref-bg);border-radius:3px}
+  .project:hover{border-left-color:var(--org-fg)}
+  .project[open]>.project-row .row-toggle{color:var(--org-fg)}
+  .project[open] .row-unit .org-badge{font-weight:700}
+  .themebtn{background:var(--bg)}
+  @media(max-width:1100px){.unitgrid{grid-template-columns:repeat(3,minmax(0,1fr))}.unit-tile{min-height:106px}.unit-top{min-height:28px}}
+  @media(max-width:800px){.unitsection{margin-bottom:18px}.unitgrid{gap:10px}.unit-tile{padding:10px 12px;min-height:105px}.unit-stat strong{font-size:24px}.unit-bottom{font-size:10px}.result-scope{font-size:10px}.org-badge{font-size:11px}.sectioncap{gap:8px}.section-title h2{font-size:14px}}
+  @media(max-width:480px){
+    .unitgrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+    .unit-tile{min-height:102px;padding:9px;gap:5px}
+    .unit-top{min-height:29px;align-items:flex-start}
+    .unit-icon{display:none}
+    .unit-name{font-size:12px}
+    .unit-stat{gap:4px}
+    .unit-stat strong{font-size:23px}
+    .unit-stat>span{font-size:9px}
+    .unit-bottom{font-size:9px;line-height:1.4;padding-right:5px}
+    .unit-bar{display:none}
+    .unit-selected{right:4px;bottom:4px}
+    .sectioncap{align-items:flex-start}
+    .section-title{flex-wrap:wrap;gap:7px}
+    .org-overview{gap:5px}
+    .org-overview .pill{font-size:11px;min-height:30px;padding:4px 7px}
+    .org-overview .cnt{font-size:10px}
+    .resultbar h2{gap:6px;font-size:15px}
+    .result-scope{font-size:9px}
+    .masthead>.wrap{padding-bottom:0}
+    .row-amount{font-size:15px}
+  }
+  @media(prefers-reduced-motion:no-preference){.unit-tile,.org-badge,.pill{transition:background-color .15s,border-color .15s,color .15s}}
+
 </style>
+<div class="masthead">
 <div class="wrap notranslate" lang="zh-CN" translate="no">
 <div id="staleWarn" class="stalewarn"><svg aria-hidden="true" focusable="false" class="icon"
   xmlns="http://www.w3.org/2000/svg"
@@ -269,10 +360,11 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
   stroke-linecap="round"
   stroke-linejoin="round"
 >
-  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" />
-  <path d="M14 2v5a1 1 0 0 0 1 1h5" />
-  <circle cx="11.5" cy="14.5" r="2.5" />
-  <path d="M13.3 16.3 15 18" />
+  <rect x="16" y="16" width="6" height="6" rx="1" />
+  <rect x="2" y="16" width="6" height="6" rx="1" />
+  <rect x="9" y="2" width="6" height="6" rx="1" />
+  <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" />
+  <path d="M12 12V8" />
 </svg></div>
       <div><div class="eyebrow notranslate" lang="zh-CN" translate="no">云南 · 人工智能招投标情报</div>
       <h1 class="notranslate" translate="no">云南人工智能招投标数据库</h1></div>
@@ -293,7 +385,33 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
   </div>
   <div class="overview">
     <div class="metric"><span class="metric-label">收录项目</span><div class="metric-value"><b id="statTotal">–</b><small>个</small></div></div>
-    <div class="metric metric-secondary"><span class="metric-label">可统计金额合计</span><div class="metric-value"><b id="statAmount">–</b><small>万元</small></div></div>
+    <div class="metric metric-secondary"><span class="metric-label">可统计金额合计</span><div class="metric-value"><b id="statAmount">–</b><b class="amount-compact" id="statAmountCompact">–</b><small class="amount-full-unit">万元</small><small class="amount-compact-unit" id="statAmountCompactUnit">亿元</small></div></div>
+    <div class="metric metric-secondary"><span class="metric-label"><svg aria-hidden="true" focusable="false" class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  width="18"
+  height="18"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M12 20v2" />
+  <path d="M12 2v2" />
+  <path d="M17 20v2" />
+  <path d="M17 2v2" />
+  <path d="M2 12h2" />
+  <path d="M2 17h2" />
+  <path d="M2 7h2" />
+  <path d="M20 12h2" />
+  <path d="M20 17h2" />
+  <path d="M20 7h2" />
+  <path d="M7 20v2" />
+  <path d="M7 2v2" />
+  <rect x="4" y="4" width="16" height="16" rx="2" />
+  <rect x="8" y="8" width="8" height="8" rx="1" />
+</svg>核心人工智能</span><div class="metric-value"><b id="statCore">–</b><small>个</small></div></div>
     <div class="syncinfo">
       <div><svg aria-hidden="true" focusable="false" class="icon"
   xmlns="http://www.w3.org/2000/svg"
@@ -314,6 +432,35 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
     </div>
   </div>
 </header>
+</div>
+</div>
+<div class="wrap notranslate" lang="zh-CN" translate="no">
+<section class="unitsection" aria-labelledby="unitHeading">
+  <div class="sectioncap">
+    <div class="section-title"><svg aria-hidden="true" focusable="false" class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  width="18"
+  height="18"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M19.07 4.93A10 10 0 0 0 6.99 3.34" />
+  <path d="M4 6h.01" />
+  <path d="M2.29 9.62A10 10 0 1 0 21.31 8.35" />
+  <path d="M16.24 7.76A6 6 0 1 0 8.23 16.67" />
+  <path d="M12 18h.01" />
+  <path d="M17.99 11.66A6 6 0 0 1 15.77 16.67" />
+  <circle cx="12" cy="12" r="2" />
+  <path d="m13.41 10.59 5.66-5.66" />
+</svg><h2 id="unitHeading">重点单位</h2><span class="scope-count"><span id="trackedCount">–</span> 家跟踪单位</span></div>
+    <div class="org-overview" id="orgOverview" role="group" aria-label="全部项目与全省其他"></div>
+  </div>
+  <div class="unitgrid" id="fOrg" role="group" aria-label="重点单位筛选"></div>
+</section>
 
 <div class="toolbar" role="search" aria-label="项目检索">
   <div class="searchrow">
@@ -348,7 +495,7 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
   <path d="m7 10 5 5 5-5" />
 </svg></button>
   </div>
-  <div class="orgrow" id="fOrg" role="group" aria-label="单位筛选"></div>
+
   <div class="filterrow">
     <span id="fYear"></span><span id="fSt"></span><span id="fCat"></span>
     <button class="pill morebtn" id="moreFiltersBtn" aria-expanded="false" aria-controls="moreFilters"><svg aria-hidden="true" focusable="false" class="icon"
@@ -393,7 +540,7 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
 </svg></summary>
   <div id="focusList"></div>
 </details>
-<div class="resultbar"><h2>项目库</h2><div class="resultline" id="resultline" role="status" aria-live="polite"></div></div>
+<div class="resultbar"><h2>项目库<span class="result-scope" id="resultScope"></span></h2><div class="resultline" id="resultline" role="status" aria-live="polite"></div></div>
 <div class="list-head" aria-hidden="true"><span>项目名称 / 标的类型</span><span>单位</span><span>公告状态</span><span class="amount-label">金额</span><span class="date-label">公告日期</span><span></span></div>
 <div class="cards" id="cards"></div>
 
@@ -717,9 +864,55 @@ const DATA = [
 ];
 
 const CAT = {bid:["招标·采购",  "bid"], win:["中标·成交","win"], stop:["已终止","stop"]};
-const AIL = {core:["核心AI","aicore"], edge:["智能化相关","aiedge"], ref:["非AI·参考","ref"]};
-const UI_ICONS = {"file-search":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z\" />\n  <path d=\"M14 2v5a1 1 0 0 0 1 1h5\" />\n  <circle cx=\"11.5\" cy=\"14.5\" r=\"2.5\" />\n  <path d=\"M13.3 16.3 15 18\" />\n</svg>","search":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"m21 21-4.34-4.34\" />\n  <circle cx=\"11\" cy=\"11\" r=\"8\" />\n</svg>","moon":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401\" />\n</svg>","sun":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <circle cx=\"12\" cy=\"12\" r=\"4\" />\n  <path d=\"M12 2v2\" />\n  <path d=\"M12 20v2\" />\n  <path d=\"m4.93 4.93 1.41 1.41\" />\n  <path d=\"m17.66 17.66 1.41 1.41\" />\n  <path d=\"M2 12h2\" />\n  <path d=\"M20 12h2\" />\n  <path d=\"m6.34 17.66-1.41 1.41\" />\n  <path d=\"m19.07 4.93-1.41 1.41\" />\n</svg>","download":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M12 15V3\" />\n  <path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\" />\n  <path d=\"m7 10 5 5 5-5\" />\n</svg>","sliders-horizontal":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M10 5H3\" />\n  <path d=\"M12 19H3\" />\n  <path d=\"M14 3v4\" />\n  <path d=\"M16 17v4\" />\n  <path d=\"M21 12h-9\" />\n  <path d=\"M21 19h-5\" />\n  <path d=\"M21 5h-7\" />\n  <path d=\"M8 10v4\" />\n  <path d=\"M8 12H3\" />\n</svg>","x":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M18 6 6 18\" />\n  <path d=\"m6 6 12 12\" />\n</svg>","chevron-down":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"m6 9 6 6 6-6\" />\n</svg>","arrow-up-right":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M7 7h10v10\" />\n  <path d=\"M7 17 17 7\" />\n</svg>","arrow-down-wide-narrow":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"m3 16 4 4 4-4\" />\n  <path d=\"M7 20V4\" />\n  <path d=\"M11 4h10\" />\n  <path d=\"M11 8h7\" />\n  <path d=\"M11 12h4\" />\n</svg>","clock":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <circle cx=\"12\" cy=\"12\" r=\"10\" />\n  <path d=\"M12 6v6l4 2\" />\n</svg>","plus":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M5 12h14\" />\n  <path d=\"M12 5v14\" />\n</svg>","copy":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <rect width=\"14\" height=\"14\" x=\"8\" y=\"8\" rx=\"2\" ry=\"2\" />\n  <path d=\"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\" />\n</svg>"};
+const AIL = {core:["核心人工智能","aicore"], edge:["智能化相关","aiedge"], ref:["非人工智能·参考","ref"]};
+const UI_ICONS = {"file-search":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z\" />\n  <path d=\"M14 2v5a1 1 0 0 0 1 1h5\" />\n  <circle cx=\"11.5\" cy=\"14.5\" r=\"2.5\" />\n  <path d=\"M13.3 16.3 15 18\" />\n</svg>","search":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"m21 21-4.34-4.34\" />\n  <circle cx=\"11\" cy=\"11\" r=\"8\" />\n</svg>","moon":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401\" />\n</svg>","sun":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <circle cx=\"12\" cy=\"12\" r=\"4\" />\n  <path d=\"M12 2v2\" />\n  <path d=\"M12 20v2\" />\n  <path d=\"m4.93 4.93 1.41 1.41\" />\n  <path d=\"m17.66 17.66 1.41 1.41\" />\n  <path d=\"M2 12h2\" />\n  <path d=\"M20 12h2\" />\n  <path d=\"m6.34 17.66-1.41 1.41\" />\n  <path d=\"m19.07 4.93-1.41 1.41\" />\n</svg>","download":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M12 15V3\" />\n  <path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\" />\n  <path d=\"m7 10 5 5 5-5\" />\n</svg>","sliders-horizontal":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M10 5H3\" />\n  <path d=\"M12 19H3\" />\n  <path d=\"M14 3v4\" />\n  <path d=\"M16 17v4\" />\n  <path d=\"M21 12h-9\" />\n  <path d=\"M21 19h-5\" />\n  <path d=\"M21 5h-7\" />\n  <path d=\"M8 10v4\" />\n  <path d=\"M8 12H3\" />\n</svg>","x":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M18 6 6 18\" />\n  <path d=\"m6 6 12 12\" />\n</svg>","chevron-down":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"m6 9 6 6 6-6\" />\n</svg>","arrow-up-right":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M7 7h10v10\" />\n  <path d=\"M7 17 17 7\" />\n</svg>","arrow-down-wide-narrow":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"m3 16 4 4 4-4\" />\n  <path d=\"M7 20V4\" />\n  <path d=\"M11 4h10\" />\n  <path d=\"M11 8h7\" />\n  <path d=\"M11 12h4\" />\n</svg>","clock":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <circle cx=\"12\" cy=\"12\" r=\"10\" />\n  <path d=\"M12 6v6l4 2\" />\n</svg>","plus":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M5 12h14\" />\n  <path d=\"M12 5v14\" />\n</svg>","copy":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <rect width=\"14\" height=\"14\" x=\"8\" y=\"8\" rx=\"2\" ry=\"2\" />\n  <path d=\"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\" />\n</svg>","zap":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z\" />\n</svg>","plane":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z\" />\n</svg>","route":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <circle cx=\"6\" cy=\"19\" r=\"3\" />\n  <path d=\"M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15\" />\n  <circle cx=\"18\" cy=\"5\" r=\"3\" />\n</svg>","flask-conical":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2\" />\n  <path d=\"M6.453 15h11.094\" />\n  <path d=\"M8.5 2h7\" />\n</svg>","network":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <rect x=\"16\" y=\"16\" width=\"6\" height=\"6\" rx=\"1\" />\n  <rect x=\"2\" y=\"16\" width=\"6\" height=\"6\" rx=\"1\" />\n  <rect x=\"9\" y=\"2\" width=\"6\" height=\"6\" rx=\"1\" />\n  <path d=\"M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3\" />\n  <path d=\"M12 12V8\" />\n</svg>","waypoints":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"m10.586 5.414-5.172 5.172\" />\n  <path d=\"m18.586 13.414-5.172 5.172\" />\n  <path d=\"M6 12h12\" />\n  <circle cx=\"12\" cy=\"20\" r=\"2\" />\n  <circle cx=\"12\" cy=\"4\" r=\"2\" />\n  <circle cx=\"20\" cy=\"12\" r=\"2\" />\n  <circle cx=\"4\" cy=\"12\" r=\"2\" />\n</svg>","radar":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M19.07 4.93A10 10 0 0 0 6.99 3.34\" />\n  <path d=\"M4 6h.01\" />\n  <path d=\"M2.29 9.62A10 10 0 1 0 21.31 8.35\" />\n  <path d=\"M16.24 7.76A6 6 0 1 0 8.23 16.67\" />\n  <path d=\"M12 18h.01\" />\n  <path d=\"M17.99 11.66A6 6 0 0 1 15.77 16.67\" />\n  <circle cx=\"12\" cy=\"12\" r=\"2\" />\n  <path d=\"m13.41 10.59 5.66-5.66\" />\n</svg>","cpu":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M12 20v2\" />\n  <path d=\"M12 2v2\" />\n  <path d=\"M17 20v2\" />\n  <path d=\"M17 2v2\" />\n  <path d=\"M2 12h2\" />\n  <path d=\"M2 17h2\" />\n  <path d=\"M2 7h2\" />\n  <path d=\"M20 12h2\" />\n  <path d=\"M20 17h2\" />\n  <path d=\"M20 7h2\" />\n  <path d=\"M7 20v2\" />\n  <path d=\"M7 2v2\" />\n  <rect x=\"4\" y=\"4\" width=\"16\" height=\"16\" rx=\"2\" />\n  <rect x=\"8\" y=\"8\" width=\"8\" height=\"8\" rx=\"1\" />\n</svg>","check":"<svg aria-hidden=\"true\" focusable=\"false\" class=\"icon\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"18\"\n  height=\"18\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M20 6 9 17l-5-5\" />\n</svg>"};
 function icon(name){ return UI_ICONS[name] || ""; }
+const ORG_VISUALS = {
+  csg:{color:"#2472AE",soft:"#EDF5FC",light:"#8AC8F7",night:"#243B4D",icon:"zap"},
+  dk:{color:"#00757C",soft:"#E8F6F5",light:"#77D6D3",night:"#213D3E",icon:"plane"},
+  glj:{color:"#955F17",soft:"#FBF3E5",light:"#EAC47C",night:"#423827",icon:"route"},
+  gky:{color:"#247D54",soft:"#ECF6F0",light:"#84D3A6",night:"#253D30",icon:"flask-conical"},
+  sz:{color:"#7757AC",soft:"#F3EEFA",light:"#BDA4E6",night:"#393045",icon:"network"},
+  jt:{color:"#47639F",soft:"#EFF2FA",light:"#A3B9EC",night:"#2C3548",icon:"waypoints"},
+  qs:{color:"#53667B",soft:"#EEF2F6",light:"#B2C0CF",night:"#30383F",icon:"file-search"}
+};
+function orgVisual(key){
+  if(ORG_VISUALS[key]) return ORG_VISUALS[key];
+  const palette=Object.values(ORG_VISUALS).slice(0,6);
+  const hash=[...String(key)].reduce((n,c)=>n+c.charCodeAt(0),0);
+  return {...palette[hash%palette.length],icon:"file-search"};
+}
+function orgStyle(key){
+  const v=orgVisual(key);
+  return "--oc:"+v.color+";--oc-soft:"+v.soft+";--oc-light:"+v.light+";--oc-night:"+v.night;
+}
+function orgBadge(key){
+  return '<span class="org-badge" data-org="'+esc(key)+'" style="'+orgStyle(key)+'">'+icon(orgVisual(key).icon)+esc(ORGS[key]||key)+'</span>';
+}
+function makeUnitFilters(){
+  const units=CONFIG.units.filter(u=>u.key!=="qs");
+  const box=document.getElementById("fOrg");
+  document.getElementById("trackedCount").textContent=units.length;
+  units.forEach(u=>{
+    const rows=DATA.filter(r=>r.org===u.key),core=rows.filter(r=>r.ai==="core").length;
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="unit-tile";
+    button.dataset.org=u.key;button.dataset.val=u.key;button.dataset.key="org";
+    button.style.cssText=orgStyle(u.key);
+    button.title=u.full;
+    button.innerHTML='<span class="unit-top"><span class="unit-icon">'+icon(orgVisual(u.key).icon)+'</span><span class="unit-name">'+esc(u.name)+'</span></span>'+
+      '<span class="unit-stat"><strong>'+rows.length+'</strong><span>个项目</span></span>'+
+      '<span class="unit-bottom"><span>核心人工智能 <b>'+core+'</b></span><span class="unit-bar" aria-hidden="true"><i style="width:'+(rows.length?Math.round(core/rows.length*100):0)+'%"></i></span></span>'+
+      '<span class="unit-selected">'+icon("check")+'</span>';
+    button.onclick=()=>{state.org=state.org===u.key?"all":u.key;refreshPills();render();};
+    box.appendChild(button);
+  });
+  const others=CONFIG.units.find(u=>u.key==="qs");
+  const items=[["all","全部项目",DATA.length]];
+  if(others)items.push(["qs",others.name,DATA.filter(r=>r.org==="qs").length]);
+  makePills("orgOverview",items,"org");
+}
 const state = {org:"all", year:"all", cat:"all", ai:"all", st:"all", plan:"all", sort:"new", q:""};
 const openProjects = new Set();
 
@@ -737,13 +930,15 @@ function makePills(el, items, key){
     b.dataset.val = val; b.dataset.key = key;
     if(key==="org" && val!=="all"){
       b.dataset.org = val;
+      b.style.cssText = orgStyle(val);
+      b.innerHTML = '<span class="unitdot"></span>'+b.innerHTML;
       b.title = CONFIG.units.find(u=>u.key===val)?.full || label;
     }
     box.appendChild(b);
   });
 }
 function refreshPills(){
-  document.querySelectorAll(".pill[data-key]").forEach(b=>{
+  document.querySelectorAll(".pill[data-key],.unit-tile[data-key]").forEach(b=>{
     const selected = pillOn(b.dataset.key, b.dataset.val);
     b.classList.toggle("on", selected);
     b.setAttribute("aria-pressed", String(selected));
@@ -839,6 +1034,10 @@ function filtered(){
 }
 function render(){
   const rows=filtered(), box=document.getElementById("cards");
+  const scope=document.getElementById("resultScope");
+  scope.textContent=state.org==="all"?"全部单位":ORGS[state.org];
+  if(state.org==="all"){scope.removeAttribute("data-org");scope.removeAttribute("style");}
+  else{scope.dataset.org=state.org;scope.style.cssText=orgStyle(state.org);}
   const sum=rows.reduce((s,r)=>s+(r.amt||0),0);
   const result=document.getElementById("resultline");
   result.textContent=rows.length+" / "+DATA.length+" 条"+(sum>0?" · 金额合计 "+fmtAmt(sum):"");
@@ -851,14 +1050,14 @@ function render(){
   box.innerHTML=rows.map(r=>{
     const c=CAT[r.cat],a=AIL[r.ai],fa=fmtAmt(r.amt),idx=DATA.indexOf(r);
     const pending=/待核实/.test(r.date+" "+r.winner);
-    return '<details class="project ai-'+r.ai+'" data-org="'+r.org+'" data-record="'+idx+'"'+(openProjects.has(idx)?' open':'')+'>'+
+    return '<details class="project ai-'+r.ai+'" data-org="'+r.org+'" style="'+orgStyle(r.org)+'" data-record="'+idx+'"'+(openProjects.has(idx)?' open':'')+'>'+
       '<summary class="project-row" aria-label="项目详情：'+esc(r.name)+'">'+
         '<div class="project-name"><h3>'+esc(r.name)+'</h3><div class="project-tags">'+
           (STYPES[r.st]?'<span class="st">'+esc(STYPES[r.st])+'</span>':'')+
           '<span class="chip '+a[1]+'">'+a[0]+'</span>'+
           (pending?'<span class="chip pending">待核实</span>':'')+
         '</div></div>'+
-        '<div class="row-unit">'+esc(ORGS[r.org])+'</div>'+
+        '<div class="row-unit">'+orgBadge(r.org)+'</div>'+
         '<div class="row-status"><span class="chip '+c[1]+'">'+c[0]+'</span></div>'+
         '<div class="row-amount'+(fa?'':' na')+'" title="'+esc(r.amtT)+'">'+(fa?esc(fa)+'<small>'+amountLabel(r)+'</small>':'金额未披露')+'</div>'+
         '<div class="row-date">'+esc(r.date)+'</div>'+
@@ -898,8 +1097,7 @@ function initTheme(){
   refresh();
 }
 function init(){
-  const orgCnt={}; DATA.forEach(r=>orgCnt[r.org]=(orgCnt[r.org]||0)+1);
-  makePills("fOrg",[["all","全部单位",DATA.length]].concat(CONFIG.units.map(u=>[u.key,u.name,orgCnt[u.key]||0])),"org");
+  makeUnitFilters();
   const preCnt=DATA.filter(r=>r.ds<202200).length;
   const years=[...new Set(DATA.map(yearOf))].filter(y=>+y>=2022).sort().reverse();
   makeSelect("fYear","年份",[["all","全部",null]].concat(years.map(y=>[y,y,DATA.filter(r=>yearOf(r)===y).length])).concat(preCnt?[["pre","2021前",preCnt]]:[]),"year");
@@ -907,7 +1105,7 @@ function init(){
   makeSelect("fSt","标的类型",[["all","全部",null]].concat(CONFIG.stypes.filter(s=>stCnt[s.key]).map(s=>[s.key,s.label,stCnt[s.key]])),"st");
   makeSelect("fCat","公告",[["all","全部",null],["bid","招标·采购",null],["win","中标·成交",null],["stop","已终止",null]],"cat");
   makeSelect("fPlan","阶段",[["all","全部",null],["plan","招标计划",DATA.filter(isPlan).length]],"plan");
-  makeSelect("fAi","AI关联",[["all","全部",null],["core","核心AI",null],["edge","智能化相关",null],["ref","非AI·参考",null]],"ai");
+  makeSelect("fAi","人工智能关联",[["all","全部",null],["core","核心人工智能",null],["edge","智能化相关",null],["ref","非人工智能·参考",null]],"ai");
   makePills("fSort",[["new","最新",null],["amt","金额",null]],"sort");
   document.getElementById("q").addEventListener("input",e=>{
     state.q=e.target.value.trim().toLowerCase(); refreshPills(); render();
@@ -918,7 +1116,11 @@ function init(){
     document.getElementById("moreFiltersBtn").setAttribute("aria-expanded",String(!panel.hidden));
   };
   document.getElementById("statTotal").textContent=DATA.length;
+  document.getElementById("statCore").textContent=DATA.filter(r=>r.ai==="core").length;
   document.getElementById("statAmount").textContent=Math.round(DATA.reduce((s,r)=>s+(r.amt||0),0)).toLocaleString("zh-CN");
+  const totalAmount=DATA.reduce((s,r)=>s+(r.amt||0),0);
+  document.getElementById("statAmountCompact").textContent=(totalAmount>=10000?totalAmount/10000:totalAmount).toFixed(2).replace(/\.?0+$/,"");
+  document.getElementById("statAmountCompactUnit").textContent=totalAmount>=10000?"亿元":"万元";
   const months=DATA.map(r=>r.ds).sort((a,b)=>a-b);
   const monthText=m=>String(m).slice(0,4)+"年"+Number(String(m).slice(4))+"月";
   document.getElementById("dataRange").textContent=monthText(months[0])+" – "+monthText(months.at(-1));
@@ -983,15 +1185,15 @@ function buildFocus(){
     } else {
       cd = '<span class="cd fresh">'+(x.ago===0?"今日公告":x.ago+"天前公告")+'</span>';
     }
-    return '<a class="fitem" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">'+cd+
+    return '<a class="fitem" data-org="'+r.org+'" style="'+orgStyle(r.org)+'" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">'+cd+
       '<span class="ft">'+esc(r.name)+'</span>'+
-      '<span class="fm">'+esc(ORGS[r.org])+' · '+(fmtAmt(r.amt)||'金额未披露')+'</span></a>';
+      '<span class="fm">'+orgBadge(r.org)+'<span class="focus-amount">'+(fmtAmt(r.amt)||'金额未披露')+'</span></span></a>';
   };
   let html = "";
   if(ups.length) html += '<div class="fgroup"><h3>即将发标 / 开标 · '+ups.length+'</h3>'+ups.map(item).join("")+'</div>';
   if(frs.length) html += '<div class="fgroup">'+(ups.length?'<h3>近14天公告 · '+frs.length+'</h3>':'')+frs.map(item).join("")+'</div>';
   document.getElementById("focusList").innerHTML = html;
-  document.getElementById("focusTitle").textContent = "近期关注 · " + (ups.length + frs.length);
+  document.getElementById("focusTitle").innerHTML = icon("radar")+'近期关注 <span class="focus-num">'+(ups.length + frs.length)+'</span>';
   document.getElementById("focusBox").hidden = false;
   document.getElementById("focusBox").open = window.matchMedia("(min-width: 900px)").matches;
 }
