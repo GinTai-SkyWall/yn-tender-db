@@ -158,7 +158,7 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
   .tracking-error{color:var(--warn-fg)}
   .focus-tracking{font-size:11px;color:var(--muted);overflow-wrap:anywhere}
   .row-unit{font-size:12px;overflow-wrap:anywhere}
-  .row-amount{text-align:right;font-size:16px;font-weight:650;font-variant-numeric:tabular-nums;font-family:var(--mono)}
+  .row-amount{text-align:right;overflow-wrap:anywhere;font-size:14px;font-weight:650;font-variant-numeric:tabular-nums;font-family:var(--mono)}
   .row-amount small{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:2px}
   .row-amount.na{font-size:12px;color:var(--muted);font-weight:400}
   .row-date{text-align:right;color:var(--muted);font-size:11px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
@@ -345,6 +345,23 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
   @media(prefers-reduced-motion:no-preference){.unit-tile,.org-badge,.pill{transition:background-color .15s,border-color .15s,color .15s}}
 
 .quality-summary{color:var(--muted);font-size:12px;line-height:1.8;margin:12px 0}.review-note{margin:16px 0;padding:14px;border:1px solid var(--line);border-radius:10px;line-height:1.8;font-size:12px}.review-note p{margin:6px 0}.review-source{color:var(--accent)}.history-original{margin-top:10px}.history-original summary{cursor:pointer}.chip.candidate,.chip.notice{color:#996324;background:#eeb85b20}.chip.reviewed{color:#37816b;background:#5dba9320}
+
+/* 首页重点：有限待办、完整项目库、按需查看追踪细节 */
+.masthead .wrap{padding-top:18px}.top{padding-bottom:16px}.overview{margin-top:16px}.metric-value{font-size:24px}
+.unitsection{margin-bottom:16px}.unit-tile{min-height:88px;padding:9px 12px;gap:3px}.unit-top{min-height:26px}.unit-stat strong{font-size:21px}.unit-icon{width:24px;height:24px}.unit-bottom{font-size:10px}
+.focus{background:var(--surface);border:1px solid var(--line);border-radius:8px;margin-top:14px;padding:0 16px;overflow:hidden}
+.focus>summary{padding:12px 0}.focus h2{font-size:16px;color:var(--ink)}.focus-meta{font-size:12px}
+.focus-counts{display:flex;flex-wrap:wrap;gap:8px 24px;padding:0 0 10px;font-size:12px;color:var(--muted);border-bottom:1px solid var(--line)}
+.focus-counts b{font-family:var(--mono);font-size:17px;color:var(--accent-ink);margin-right:4px}.focus-counts .focus-backlog-count b{color:var(--muted)}
+.focus .fitem{grid-template-columns:110px minmax(0,1fr) 150px;padding:12px 0;gap:14px}.focus .ft{font-size:14px;line-height:1.6;font-weight:650}.focus .cd{font-size:12px;padding:3px 7px}
+.focus-buyer{gap:3px 8px;font-size:12px}.focus-buyer .org-badge{background:transparent;padding:0;font-weight:400;color:var(--muted)}.focus-buyer .org-badge .icon{display:none}.focus-key-time{font-size:12px;color:var(--muted)}
+.fm .focus-amount{font-size:15px;font-weight:650;margin:0}.focus-amount-kind{display:block;font-size:11px;color:var(--muted)}
+.focus-outcome{font-size:12px;color:var(--accent-ink);overflow-wrap:anywhere}
+.focus-more,.focus-archive{border-top:1px solid var(--line)}.focus-more>summary,.focus-archive>summary{cursor:pointer;font-size:12px;color:var(--accent-ink);padding:10px 0;display:flex;gap:6px;align-items:center}.focus-archive>summary{color:var(--muted)}.focus-more>summary .icon,.focus-archive>summary .icon{margin-left:auto;width:14px;height:14px}.focus-scroll{max-height:360px;overflow:auto;overscroll-behavior:contain;padding-right:6px}.focus-empty{font-size:13px;color:var(--muted);margin:14px 0}
+.tracking-summary{gap:4px 8px;font-size:12px;margin-top:5px;align-items:center}.tracking-summary>span:not(.chip){flex-basis:auto}.tracking-summary .chip{background:transparent;padding:0;color:var(--muted)}
+.quality-summary{font-size:11px;margin:10px 0;color:var(--muted)}.resultbar{margin:16px 0 10px}.resultbar h2{font-size:18px}.project-row{padding-top:14px;padding-bottom:14px}
+@media(max-width:800px){.focus{padding:0 12px}.focus .fitem{grid-template-columns:100px minmax(0,1fr);gap:6px 10px}.focus .fm{grid-column:2;display:flex;align-items:baseline;gap:8px;text-align:left}.fm .focus-amount{font-size:15px}.focus-amount-kind{display:inline}.focus-counts{gap:4px 16px}.focus-counts b{font-size:15px}.focus-meta{display:none}.unit-tile{min-height:84px}.unit-top{min-height:24px}.unit-bottom{font-size:9px}}
+@media(max-width:480px){.focus .fitem{grid-template-columns:1fr auto;gap:6px}.focus .cd{grid-column:1;justify-self:start}.focus-project{grid-column:1/-1;grid-row:2}.focus .fm{grid-column:2;grid-row:1}.focus .ft{font-size:14px}.focus-counts{gap:4px 12px;font-size:11px}.focus-key-time{flex-basis:100%}.unit-stat strong{font-size:20px}.unit-tile{padding:8px;min-height:82px}}
 </style>
 <div class="masthead">
 <div class="wrap notranslate" lang="zh-CN" translate="no">
@@ -541,7 +558,7 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
 </div>
 
 <details class="focus" id="focusBox" hidden>
-  <summary><h2 id="focusTitle">近期关注</h2><span class="focus-meta">持续追踪 · 近期公告</span><svg aria-hidden="true" focusable="false" class="icon"
+  <summary><h2 id="focusTitle">近期关注</h2><span class="focus-meta">先看临近事项与新进展</span><svg aria-hidden="true" focusable="false" class="icon"
   xmlns="http://www.w3.org/2000/svg"
   width="18"
   height="18"
@@ -644,9 +661,19 @@ function trackingDate(value){
   const m=String(value||'').match(/^(\d{4}-\d{2}-\d{2})(?:[T ](\d{2}:\d{2}))?/);
   return m?m[1]+(m[2]?' '+m[2]:''):'';
 }
-function trackingSummary(r){
+function trackingKeyTime(r,now=new Date()){
   const t=r.tracking;if(!t)return '';
-  return '<div class="tracking-summary"><span class="chip pending">'+uiText(trackingLabel(r))+'</span><span>'+uiText('开标 '+(trackingDate(t.openingAt)||'未披露')+' · 截止 '+(trackingDate(t.deadlineAt)||'未披露'))+'</span><span>'+uiText('最近检查 '+(trackingDate(t.lastAttemptAt)||'尚未检查')+' · 最近成功 '+(trackingDate(t.lastSuccessAt)||'暂无'))+'</span></div>';
+  const dates=[['截止',trackingDate(t.deadlineAt)],['开标',trackingDate(t.openingAt)]].filter(x=>x[1]);
+  if(['candidate','opened','awarded','terminated'].includes(t.status)&&t.openingAt)return '开标 '+trackingDate(t.openingAt);
+  dates.sort((a,b)=>a[1].localeCompare(b[1]));
+  const today=new Date(now.getTime()+8*3600000).toISOString().slice(0,10);
+  const key=dates.find(x=>x[1].slice(0,10)>=today)||dates.at(-1);
+  return key?key.join(' '):'';
+}
+function trackingSummary(r){
+  if(!r.tracking)return '';
+  const time=trackingKeyTime(r);
+  return '<div class="tracking-summary"><span class="chip pending">'+uiText(trackingLabel(r))+'</span>'+(time?'<span>'+uiText(time)+'</span>':'')+'</div>';
 }
 function trackingHtml(r){
   const t=r.tracking;if(!t)return '';
@@ -659,9 +686,9 @@ function trackingHtml(r){
     '<span class="kl">投标截止</span><span class="kd">'+uiText(trackingDate(t.deadlineAt)||'未披露')+'</span>'+
     '<span class="kl">最近检查</span><span class="kd">'+uiText(trackingDate(t.lastAttemptAt)||'尚未检查')+'</span>'+
     '<span class="kl">最近成功</span><span class="kd">'+uiText(trackingDate(t.lastSuccessAt)||'暂无')+'</span></div>'+
-    (candidate?'<p class="tracking-candidate">候选单位：'+uiText(candidate.name||'未披露')+' · 候选报价：'+uiText(typeof candidate.amount==='number'&&Number.isFinite(candidate.amount)?candidate.amount+' 万元':candidate.amount||'未披露')+'（以正式结果为准）</p>':'')+
+    (candidate?'<p class="tracking-candidate">候选单位：'+esc(candidate.name||'未披露')+' · 候选报价：'+uiText(typeof candidate.amount==='number'&&Number.isFinite(candidate.amount)?candidate.amount+' 万元':candidate.amount||'未披露')+'（以正式结果为准）</p>':'')+
     (t.lastError?'<p class="tracking-error">'+uiText(t.lastError)+'</p>':'')+
-    (evidence.length?'<div class="tracking-evidence">'+evidence.map(e=>'<a class="tracking-source" href="'+esc(e.url)+'" target="_blank" rel="noopener noreferrer">'+uiText(e.title||'官方追踪依据')+'</a>'+((e.date||e.kind)?'<span class="tracking-evidence-meta">'+uiText([trackingDate(e.date),e.kind].filter(Boolean).join(' · '))+'</span>':'')).join('<br>')+'</div>':'<p>暂无可用官方证据，继续等待核验。</p>')+'</details>';
+    (evidence.length?'<div class="tracking-evidence">'+evidence.map(e=>'<a class="tracking-source" href="'+esc(e.url)+'" target="_blank" rel="noopener noreferrer">'+esc(e.title||'官方追踪依据')+'</a>'+((e.date||e.kind)?'<span class="tracking-evidence-meta">'+uiText([trackingDate(e.date),e.kind].filter(Boolean).join(' · '))+'</span>':'')).join('<br>')+'</div>':'<p>暂无可用官方证据，继续等待核验。</p>')+'</details>';
 }
 function recordStage(r){
   if(r.review?.stage)return r.review.stage;
@@ -692,8 +719,8 @@ function reviewHtml(r){
   const raw=DATA[r._index];
   return '<div class="review-note"><strong>核查记录 · '+esc(review.checkedAt||'')+'</strong><p>'+uiText((review.notes||[]).join('；'))+'</p>'+
     (review.duplicateOf?'<p>此条为已确认重复记录，默认项目统计已排除。</p>':'')+
-    evidence.map(e=>'<a class="review-source" href="'+esc(e.url)+'" target="_blank" rel="noopener noreferrer">'+uiText(e.title||'核查依据')+'</a>').join(' · ')+
-    (review.corrected?'<details class="history-original"><summary>查看核查前记录</summary><p>'+uiText(raw.type+'；'+raw.date+'；'+raw.amtT+'；'+(raw.winner||''))+'</p><p>'+uiText(raw.sum)+'</p>'+(/^https?:\/\//i.test(raw.url||'')?'<a href="'+esc(raw.url)+'" target="_blank" rel="noopener noreferrer">原始来源</a>':'')+'</details>':'')+'</div>';
+    evidence.map(e=>'<a class="review-source" href="'+esc(e.url)+'" target="_blank" rel="noopener noreferrer">'+esc(e.title||'核查依据')+'</a>').join(' · ')+
+    (review.corrected?'<details class="history-original"><summary>查看核查前记录</summary><p>'+esc(raw.type+'；'+raw.date+'；'+raw.amtT+'；'+(raw.winner||''))+'</p><p>'+uiText(raw.sum)+'</p>'+(/^https?:\/\//i.test(raw.url||'')?'<a href="'+esc(raw.url)+'" target="_blank" rel="noopener noreferrer">原始来源</a>':'')+'</details>':'')+'</div>';
 }
 
 // ===== 检索配置（本地每日更新读取此对象） =====
@@ -893,7 +920,7 @@ const DATA = [
  {"org":"qs","cat":"win","ai":"edge","date":"2026-06","ds":202606,"st":"sw","name":"云南省滇中引水工程地质风险管控平台（香炉山段）建设","buyer":"云南省滇中引水工程有限公司","type":"中标候选人公示","amt":2880.16,"amtT":"第一候选人报价2880.16万元（拦标价2973万元）","winner":"长江三峡勘测研究院有限公司（武汉）（第一中标候选人）","sum":"建设香炉山隧洞段地质风险管控平台（建设期270天＋运维5年），对标引江补汉数字孪生地质风险管控平台，涵盖地质灾害监测预警、智能化巡检与风险研判。","url":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=18fc3b86-e005-4b71-a016-0d64d914dbdc&colCode=1&from=jiaoYi&rowCode=%E4%B8%AD%E6%A0%87%E5%80%99%E9%80%89%E4%BA%BA%E5%85%AC%E7%A4%BA","id":"history-20261008-149","review":{"checkedAt":"2026-10-08","notes":["2026-06-18原候选公告同项目GC530000202600116001001。","2026-06-30管理局结果公告明确决定第一候选人为中标人，投标报价28801600.00元。","结果公告确认中标，不代表工程交付或运行维护已完成。"],"evidence":[{"url":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=18fc3b86-e005-4b71-a016-0d64d914dbdc&colCode=1&from=jiaoYi&rowCode=%E4%B8%AD%E6%A0%87%E5%80%99%E9%80%89%E4%BA%BA%E5%85%AC%E7%A4%BA","title":"原公告链接"},{"url":"https://dzys.yn.gov.cn/gsgg/202606/t20260630_3061292.html","title":"official-final"}],"stage":"win","pending":false,"corrected":{"cat":"win","type":"中标结果公告","date":"2026-06-30","ds":202606,"amt":2880.16,"amtT":"中标金额2880.16万元","winner":"长江三峡勘测研究院有限公司（武汉）","url":"https://dzys.yn.gov.cn/gsgg/202606/t20260630_3061292.html"}}},
  {"org":"qs","cat":"bid","ai":"core","date":"2026-06-22","ds":202606,"st":"rjkf","name":"玉溪市智慧政务协同工作平台AI应用升级、功能改造及运行保障服务","buyer":"玉溪市数字玉溪建设服务中心（代理：云南中诏项目管理有限公司）","type":"竞争性磋商公告（响应截止2026-07-03）","amt":150,"amtT":"预算150万元","winner":"未公开（未检索到成交结果公告）","sum":"对玉溪市智慧政务协同工作平台开展AI应用升级与功能改造，采购内容含知识库建库、智能审校、智能检索、智能分析、配套服务及平台运维保障（运维期自合同签订起一年），经政采云全流程电子化采购。本轮补录：公告日期早于30天检索窗口，系此前各通道未覆盖的州市级政务AI应用采购；预算、采购人、代理机构、截止时间经聚合页与检索结果双源一致核对，最高限价与完整项目编号在转载页被脱敏，成交结果暂未公开。","url":"http://www.cdoview.cn/notice_detail/4b1aa147c30f4481a477b0ab44e8eb52","id":"history-20261008-150","tracking":{"version":1,"correctionFingerprint":"418f27c0dd7580b21c60c15ce7edd5932139c61d679aa9fa7444f6868d47736d","budget":{"amount":150,"evidence":"预算150万元","url":"http://www.cdoview.cn/notice_detail/4b1aa147c30f4481a477b0ab44e8eb52","date":"2026-06-22"},"key":"history-20261008-150","originalUrl":"http://www.cdoview.cn/notice_detail/4b1aa147c30f4481a477b0ab44e8eb52","projectCode":null,"lotCode":null,"lot":null,"round":"首次","status":"unconfirmed","openingAt":null,"deadlineAt":null,"checkStatus":"pending","lastAttemptAt":null,"lastSuccessAt":null,"evidence":[]}},
  {"org":"qs","cat":"win","ai":"edge","date":"2026-09-15","ds":202609,"st":"xxh","name":"磨憨铁矿石智慧查验项目（二次）","buyer":"云南铁路发展有限公司（监督：中国铁路昆明局集团）","type":"中标结果公告（中标候选人公示2026-09-11至2026-09-14）","amt":808.33,"amtT":"中标808.331万元（合同估算价850万元）","winner":"中铁二院昆明勘察设计研究院有限责任公司（联合体：中铁二十五局集团电务工程有限公司）","sum":"磨憨铁路口岸铁矿石智慧查验系统的勘察、设计、设备采购安装调试总承包，工期60天；公告未详列AI技术清单，智慧查验类系统通常含智能识别查验能力，契合度以招标文件为准。2026-09-15发布中标结果公告，确认中标人及808.331万元中标价，与9月11日候选人公示一致。","url":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=8290f129-9a06-40b3-bc41-8db9c21c2b6f&colCode=1&from=jiaoYi&rowCode=%E4%B8%AD%E6%A0%87%E7%BB%93%E6%9E%9C%E5%85%AC%E7%A4%BA","id":"history-20261008-151","tracking":{"version":1,"correctionFingerprint":"418f27c0dd7580b21c60c15ce7edd5932139c61d679aa9fa7444f6868d47736d","budget":{"amount":808.33,"evidence":"中标808.331万元（合同估算价850万元）","url":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=8290f129-9a06-40b3-bc41-8db9c21c2b6f&colCode=1&from=jiaoYi&rowCode=%E4%B8%AD%E6%A0%87%E7%BB%93%E6%9E%9C%E5%85%AC%E7%A4%BA","date":"2026-09-15"},"key":"history-20261008-151","originalUrl":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=8290f129-9a06-40b3-bc41-8db9c21c2b6f&colCode=1&from=jiaoYi&rowCode=%E4%B8%AD%E6%A0%87%E7%BB%93%E6%9E%9C%E5%85%AC%E7%A4%BA","projectCode":null,"lotCode":null,"lot":null,"round":"二次","status":"candidate","openingAt":null,"deadlineAt":null,"checkStatus":"pending","lastAttemptAt":null,"lastSuccessAt":null,"evidence":[],"candidate":{"name":"中铁二院昆明勘察设计研究院有限责任公司（联合体：中铁二十五局集团电务工程有限公司）","amount":null}}},
- {"org":"qs","cat":"bid","ai":"core","date":"2026-09-20","ds":202609,"st":"rjkf","name":"云南省数智防汛“1262”预报预警系统：AI数字预警系统建设（二次）","buyer":"云南省气象局","type":"招标公告（首次2026-09-08开标未成、二次招标公告2026-09-20发布）","amt":660,"amtT":"标段合同估算价660万元","winner":"未开标","sum":"建设“预报专家＋数字预报员”智能体：基于通用大模型的预报服务产品智能制作、数字预报员Agent群组、多源数据融合与自然语言交互等8大模块开发，支撑12/6/2小时强降水临灾预警叫应；首次招标未能确定中标结果，2026-09-20发布二次招标公告，规模仍为660万元。","url":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=fe63e5cb-f5d6-4315-85da-856aa5a5630f&colCode=7&from=jiaoYi&rowCode=%E6%8B%9B%E6%A0%87%E5%85%AC%E5%91%8A","id":"history-20261008-152","review":{"checkedAt":"2026-10-08","notes":["按项目、标段和采购轮次核对，确认2条为同一公告记录。"],"evidence":[{"url":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=fe63e5cb-f5d6-4315-85da-856aa5a5630f&colCode=7&from=jiaoYi&rowCode=%E6%8B%9B%E6%A0%87%E5%85%AC%E5%91%8A","title":"招标公告"},{"url":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=6a9e5aeb-929c-4254-bded-194a7d5436ff&colCode=7&from=jiaoYi&rowCode=%E5%BC%82%E5%B8%B8%E5%85%AC%E5%91%8A","title":"异常公告"}],"stage":"bid","pending":false,"corrected":{"amtT":"二次招标标段合同估算价660万元","winner":"未公开（投标截止2026-10-12 09:00）","type":"公开招标（二次招标公告；投标截止2026-10-12 09:00）","sum":"首轮于2026-09-04因项目有重大变更终止；2026-09-20发布二次招标公告，标段ZH530000202600077001001，合同估算价660万元。建设“预报专家+数字预报员”智能体和具身应用载体服务，包含多源数据感知与数据融合、知识内化与辅助决策、自然语言交互与产品智能生产3大功能，支持12/6/2小时强降水落区研判和临灾预警叫应。投标截止2026-10-12 09:00。"},"projectCode":"ZH530000202600077001","lotCode":"ZH530000202600077001001"},"tracking":{"version":1,"correctionFingerprint":"0a81600c61c33490cb4ff1dd148792c74971c8a5100dc47ddfde7b9613c82e9c","budget":{"amount":660,"evidence":"二次招标标段合同估算价660万元","url":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=fe63e5cb-f5d6-4315-85da-856aa5a5630f&colCode=7&from=jiaoYi&rowCode=%E6%8B%9B%E6%A0%87%E5%85%AC%E5%91%8A","date":"2026-09-20"},"key":"history-20261008-152","originalUrl":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=fe63e5cb-f5d6-4315-85da-856aa5a5630f&colCode=7&from=jiaoYi&rowCode=%E6%8B%9B%E6%A0%87%E5%85%AC%E5%91%8A","projectCode":"ZH530000202600077001","lotCode":"ZH530000202600077001001","lot":null,"round":"二次","status":"candidate","openingAt":"2026-10-12T09:00:00+08:00","deadlineAt":"2026-10-12T09:00:00+08:00","checkStatus":"pending","lastAttemptAt":null,"lastSuccessAt":null,"evidence":[{"url":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=057055be-7994-49f8-8f8a-ecc29e66c140&colCode=7&from=jiaoYi&rowCode=%E4%B8%AD%E6%A0%87%E5%80%99%E9%80%89%E4%BA%BA%E5%85%AC%E7%A4%BA","title":"云南省加密气象观测网建设项目（2025年—2026年）-云南省数智防汛“1262”预报预警系统-AI数字预警系统建设（二次）（中标候选人公示）","date":"2026-10-14","kind":"candidate","contentHash":"ccdca1e945e79a1d5b44856517fdf044b4b883efce733d59f8b3202feaddc850"}],"candidate":{"name":"福建华网信息科技有限公司","amount":655,"amountEvidence":"报价： 655（价格类型：万元）","url":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=057055be-7994-49f8-8f8a-ecc29e66c140&colCode=7&from=jiaoYi&rowCode=%E4%B8%AD%E6%A0%87%E5%80%99%E9%80%89%E4%BA%BA%E5%85%AC%E7%A4%BA","date":"2026-10-14"},"eventDate":"2026-10-14"}},
+ {"org":"qs","cat":"bid","ai":"core","date":"2026-09-20","ds":202609,"st":"rjkf","name":"云南省数智防汛“1262”预报预警系统：AI数字预警系统建设（二次）","buyer":"云南省气象局","type":"招标公告（首次2026-09-08开标未成、二次招标公告2026-09-20发布）","amt":660,"amtT":"标段合同估算价660万元","winner":"未开标","sum":"建设“预报专家＋数字预报员”智能体：基于通用大模型的预报服务产品智能制作、数字预报员Agent群组、多源数据融合与自然语言交互等8大模块开发，支撑12/6/2小时强降水临灾预警叫应；首次招标未能确定中标结果，2026-09-20发布二次招标公告，规模仍为660万元。","url":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=fe63e5cb-f5d6-4315-85da-856aa5a5630f&colCode=7&from=jiaoYi&rowCode=%E6%8B%9B%E6%A0%87%E5%85%AC%E5%91%8A","id":"history-20261008-152","review":{"checkedAt":"2026-10-08","notes":["按项目、标段和采购轮次核对，确认2条为同一公告记录。"],"evidence":[{"url":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=fe63e5cb-f5d6-4315-85da-856aa5a5630f&colCode=7&from=jiaoYi&rowCode=%E6%8B%9B%E6%A0%87%E5%85%AC%E5%91%8A","title":"招标公告"},{"url":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=6a9e5aeb-929c-4254-bded-194a7d5436ff&colCode=7&from=jiaoYi&rowCode=%E5%BC%82%E5%B8%B8%E5%85%AC%E5%91%8A","title":"异常公告"}],"stage":"bid","pending":false,"corrected":{"amtT":"二次招标标段合同估算价660万元","winner":"未公开（投标截止2026-10-12 09:00）","type":"公开招标（二次招标公告；投标截止2026-10-12 09:00）","sum":"首轮于2026-09-04因项目有重大变更终止；2026-09-20发布二次招标公告，标段ZH530000202600077001001，合同估算价660万元。建设“预报专家+数字预报员”智能体和具身应用载体服务，包含多源数据感知与数据融合、知识内化与辅助决策、自然语言交互与产品智能生产3大功能，支持12/6/2小时强降水落区研判和临灾预警叫应。投标截止2026-10-12 09:00。"},"projectCode":"ZH530000202600077001","lotCode":"ZH530000202600077001001"},"tracking":{"version":1,"correctionFingerprint":"0a81600c61c33490cb4ff1dd148792c74971c8a5100dc47ddfde7b9613c82e9c","budget":{"amount":660,"evidence":"二次招标标段合同估算价660万元","url":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=fe63e5cb-f5d6-4315-85da-856aa5a5630f&colCode=7&from=jiaoYi&rowCode=%E6%8B%9B%E6%A0%87%E5%85%AC%E5%91%8A","date":"2026-09-20"},"key":"history-20261008-152","originalUrl":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=fe63e5cb-f5d6-4315-85da-856aa5a5630f&colCode=7&from=jiaoYi&rowCode=%E6%8B%9B%E6%A0%87%E5%85%AC%E5%91%8A","projectCode":"ZH530000202600077001","lotCode":"ZH530000202600077001001","lot":null,"round":"二次","status":"candidate","openingAt":"2026-10-12T09:00:00+08:00","deadlineAt":"2026-10-12T09:00:00+08:00","checkStatus":"pending","lastAttemptAt":null,"lastSuccessAt":null,"evidence":[{"url":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=057055be-7994-49f8-8f8a-ecc29e66c140&colCode=7&from=jiaoYi&rowCode=%E4%B8%AD%E6%A0%87%E5%80%99%E9%80%89%E4%BA%BA%E5%85%AC%E7%A4%BA","title":"云南省加密气象观测网建设项目（2025年—2026年）-云南省数智防汛“1262”预报预警系统-AI数字预警系统建设（二次）（中标候选人公示）","date":"2026-10-15","kind":"candidate","contentHash":"ccdca1e945e79a1d5b44856517fdf044b4b883efce733d59f8b3202feaddc850"}],"candidate":{"name":"福建华网信息科技有限公司","amount":655,"amountEvidence":"报价： 655（价格类型：万元）","url":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=057055be-7994-49f8-8f8a-ecc29e66c140&colCode=7&from=jiaoYi&rowCode=%E4%B8%AD%E6%A0%87%E5%80%99%E9%80%89%E4%BA%BA%E5%85%AC%E7%A4%BA","date":"2026-10-15"},"eventDate":"2026-10-15","dateCorrections":[{"url":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=057055be-7994-49f8-8f8a-ecc29e66c140&colCode=7&from=jiaoYi&rowCode=%E4%B8%AD%E6%A0%87%E5%80%99%E9%80%89%E4%BA%BA%E5%85%AC%E7%A4%BA","from":"2026-10-14","to":"2026-10-15","rawPublishTime":"2026-10-14T16:00:00.000+00:00","reason":"官方UTC时间戳按北京时间归日","checkedAt":"2026-10-15T10:46:13.009Z"}]}},
  {"org":"qs","cat":"win","ai":"edge","date":"2026-09-15","ds":202609,"st":"sv","name":"G4216华丽高速（三川至拉市段）公路技术状况检测评定","buyer":"云南华丽高速公路投资开发有限公司（中国铁建系PPP项目公司）","type":"中标结果公告（中标候选人公示2026-09-11至2026-09-14）","amt":134.15,"amtT":"中标134.1465万元（合同估算价136.89万元）","winner":"中咨公路养护检测技术有限公司","sum":"K818+924～K882+892段路基、路面、桥梁、隧道（含隧道机电）技术状况检测评定并出具科学决策报告，自动化快速检测＋病害识别为该类项目主流技术路线，服务周期1年、45日历天完成检测并出具报告。2026-09-15发布中标结果公告，确认中标人及134.1465万元中标价，与9月11日候选人公示一致。","url":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=ea934d04-0ebf-4c58-bb20-53f954c2c785&colCode=1&from=jiaoYi&rowCode=%E4%B8%AD%E6%A0%87%E7%BB%93%E6%9E%9C%E5%85%AC%E7%A4%BA","id":"history-20261008-153","tracking":{"version":1,"correctionFingerprint":"418f27c0dd7580b21c60c15ce7edd5932139c61d679aa9fa7444f6868d47736d","budget":{"amount":134.15,"evidence":"中标134.1465万元（合同估算价136.89万元）","url":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=ea934d04-0ebf-4c58-bb20-53f954c2c785&colCode=1&from=jiaoYi&rowCode=%E4%B8%AD%E6%A0%87%E7%BB%93%E6%9E%9C%E5%85%AC%E7%A4%BA","date":"2026-09-15"},"key":"history-20261008-153","originalUrl":"https://ggzy.yn.gov.cn/tradeHall/tradeDetail?guid=ea934d04-0ebf-4c58-bb20-53f954c2c785&colCode=1&from=jiaoYi&rowCode=%E4%B8%AD%E6%A0%87%E7%BB%93%E6%9E%9C%E5%85%AC%E7%A4%BA","projectCode":null,"lotCode":null,"lot":null,"round":"首次","status":"candidate","openingAt":null,"deadlineAt":null,"checkStatus":"pending","lastAttemptAt":null,"lastSuccessAt":null,"evidence":[],"candidate":{"name":"中咨公路养护检测技术有限公司","amount":null}}},
  {"org":"csg","cat":"bid","ai":"edge","date":"2026-08-26","ds":202608,"st":"sw","name":"2026年第1批电力物资整合专项采购 标8包1：OS2省级主站基础功能及平台（主网OMS新型电力系统电源调度管理及煤电容量管理等功能）","buyer":"云南电网有限责任公司（需求单位：电力调度控制中心）","type":"公开招标","amt":1611.52,"amtT":"预算1611.52万元","winner":"未公开（投标截止2026-09-17）","sum":"购置OS2省级调度主站主网OMS的新型电力系统电源调度管理、煤电容量管理等功能模块；为本批预算最大标包，也是本期全库最大软件类标的。项目编号CG0500022002371937。","url":"https://www.bidding.csg.cn/zbgg/1200440428.jhtml","id":"history-20261008-154","tracking":{"version":1,"correctionFingerprint":"418f27c0dd7580b21c60c15ce7edd5932139c61d679aa9fa7444f6868d47736d","budget":{"amount":1611.52,"evidence":"预算1611.52万元","url":"https://www.bidding.csg.cn/zbgg/1200440428.jhtml","date":"2026-08-26"},"key":"history-20261008-154","originalUrl":"https://www.bidding.csg.cn/zbgg/1200440428.jhtml","projectCode":"CG0500022002371937","lotCode":null,"lot":"标8包1","round":"首次","status":"due","openingAt":null,"deadlineAt":"2026-09-17","checkStatus":"pending","lastAttemptAt":null,"lastSuccessAt":null,"evidence":[]}},
  {"org":"csg","cat":"bid","ai":"edge","date":"2026-08-26","ds":202608,"st":"sw","name":"2026年第1批电力物资整合专项采购 标8包2：发电优化调度管理及多周期电力电量平衡辅助决策系统","buyer":"云南电网有限责任公司（需求单位：电力调度控制中心）","type":"公开招标","amt":840,"amtT":"预算840万元","winner":"未公开（投标截止2026-09-17）","sum":"建设发电优化调度管理与多周期电力电量平衡辅助决策系统，面向电源调度做优化计算与决策支持。项目编号CG0500022002371937。","url":"https://www.bidding.csg.cn/zbgg/1200440428.jhtml","id":"history-20261008-155","tracking":{"version":1,"correctionFingerprint":"418f27c0dd7580b21c60c15ce7edd5932139c61d679aa9fa7444f6868d47736d","budget":{"amount":840,"evidence":"预算840万元","url":"https://www.bidding.csg.cn/zbgg/1200440428.jhtml","date":"2026-08-26"},"key":"history-20261008-155","originalUrl":"https://www.bidding.csg.cn/zbgg/1200440428.jhtml","projectCode":"CG0500022002371937","lotCode":null,"lot":"标8包2","round":"首次","status":"due","openingAt":null,"deadlineAt":"2026-09-17","checkStatus":"pending","lastAttemptAt":null,"lastSuccessAt":null,"evidence":[]}},
@@ -985,7 +1012,7 @@ function orgStyle(key){
   return "--oc:"+v.color+";--oc-soft:"+v.soft+";--oc-light:"+v.light+";--oc-night:"+v.night;
 }
 function orgBadge(key,label=ORGS[key]||key){
-  return '<span class="org-badge" data-org="'+esc(key)+'" style="'+orgStyle(key)+'">'+icon(orgVisual(key).icon)+'<span>'+uiText(label)+'</span></span>';
+  return '<span class="org-badge" data-org="'+esc(key)+'" style="'+orgStyle(key)+'">'+icon(orgVisual(key).icon)+'<span>'+esc(label)+'</span></span>';
 }
 function makeUnitFilters(){
   const units=CONFIG.units.filter(u=>u.key!=="qs");
@@ -998,8 +1025,8 @@ function makeUnitFilters(){
     button.className="unit-tile";
     button.dataset.org=u.key;button.dataset.val=u.key;button.dataset.key="org";
     button.style.cssText=orgStyle(u.key);
-    button.title=displayText(u.full);
-    button.innerHTML='<span class="unit-top"><span class="unit-icon">'+icon(orgVisual(u.key).icon)+'</span><span class="unit-name">'+uiText(u.name)+'</span></span>'+
+    button.title=u.full;
+    button.innerHTML='<span class="unit-top"><span class="unit-icon">'+icon(orgVisual(u.key).icon)+'</span><span class="unit-name">'+esc(u.name)+'</span></span>'+
       '<span class="unit-stat"><strong>'+rows.length+'</strong><span>个项目</span></span>'+
       '<span class="unit-bottom"><span>核心人工智能 <b>'+core+'</b></span><span class="unit-bar" aria-hidden="true"><i style="width:'+(rows.length?Math.round(core/rows.length*100):0)+'%"></i></span></span>'+
       '<span class="unit-selected">'+icon("check")+'</span>';
@@ -1029,7 +1056,7 @@ function makePills(el, items, key){
     const b = document.createElement("button");
     b.className = "pill";
     b.innerHTML = (key==="sort" ? icon(val==="new"?"clock":"arrow-down-wide-narrow") : "") +
-      uiText(label) + (cnt!=null ? ' <span class="cnt">'+cnt+'</span>' : '');
+      esc(label) + (cnt!=null ? ' <span class="cnt">'+cnt+'</span>' : '');
     b.onclick = () => { state[key] = val; refreshPills(); render(); };
     b.dataset.val = val; b.dataset.key = key;
     if(key==="org" && val!=="all"){
@@ -1114,6 +1141,7 @@ function fmtAmt(a){
   if(a==null) return null;
   return a>=10000 ? ((a/10000).toFixed(2).replace(/\.?0+$/,"")+"亿") : ((Math.round(a*100)/100)+"万");
 }
+function fmtExactAmt(a){return typeof a==='number'&&Number.isFinite(a)?String(a)+'万元':null;}
 function amountLabel(r){
   const t=String(r.amtT||" ").split(/[（(]/)[0];
   if(/候选/.test(t)) return "候选人报价";
@@ -1163,11 +1191,11 @@ function render(){
     return;
   }
   box.innerHTML=rows.map(r=>{
-    const c=CAT[recordCategory(r)]||CAT.uncertain,a=AIL[r.ai],fa=fmtAmt(r.amt),idx=r._index;
+    const c=CAT[recordCategory(r)]||CAT.uncertain,a=AIL[r.ai],fa=fmtExactAmt(r.amt),idx=r._index;
     const pending=/待核实/.test(r.date+" "+r.winner)||r.review?.pending;
     return '<details class="project ai-'+r.ai+'" data-org="'+r.org+'" style="'+orgStyle(r.org)+'" data-record="'+idx+'"'+(openProjects.has(idx)?' open':'')+'>'+
-      '<summary class="project-row" aria-label="项目详情：'+uiText(r.name)+'">'+
-        '<div class="project-name"><h3>'+uiText(r.name)+'</h3><div class="project-tags">'+
+      '<summary class="project-row" aria-label="项目详情：'+esc(r.name)+'">'+
+        '<div class="project-name"><h3>'+esc(r.name)+'</h3><div class="project-tags">'+
           (STYPES[r.st]?'<span class="st">'+uiText(STYPES[r.st])+'</span>':'')+
           '<span class="chip '+a[1]+'">'+uiText(a[0])+'</span>'+
           (pending?'<span class="chip pending">待核实</span>':'')+(r.review?'<span class="chip reviewed">'+(r.review.pending?'已尝试核查':'有核查依据')+'</span>':'')+
@@ -1179,10 +1207,10 @@ function render(){
         '<span class="row-toggle">'+icon("chevron-down")+'</span>'+
       '</summary>'+
       '<div class="project-detail"><div class="kv">'+
-        '<span class="kl">采购／招标方</span><span class="kd">'+uiText(r.buyer)+'</span>'+
+        '<span class="kl">采购／招标方</span><span class="kd">'+esc(r.buyer)+'</span>'+
         '<span class="kl">采购方式</span><span class="kd">'+uiText(r.type)+'</span>'+
         '<span class="kl">金额说明</span><span class="kd money">'+uiText(r.amtT)+'</span>'+
-        (r.winner?'<span class="kl">'+(recordStage(r)==='candidate'?'候选／拟成交方':'中标／成交方')+'</span><span class="kd">'+uiText(r.winner)+'</span>':'')+
+        (r.winner?'<span class="kl">'+(recordStage(r)==='candidate'?'候选／拟成交方':'中标／成交方')+'</span><span class="kd">'+esc(r.winner)+'</span>':'')+
       '</div><p class="sum">'+uiText(r.sum)+'</p>'+trackingHtml(r)+reviewHtml(r)+
       (/^https?:\/\//i.test(r.url||'')?'<a class="src" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">来源公告'+icon("arrow-up-right")+'</a>':'')+
       '</div></details>';
@@ -1267,62 +1295,74 @@ function checkStale(){
 }
 
 // ===== 近期关注 =====
-function buildFocus(){
-  const now=new Date(),day=86400000;
-  const today=new Date(new Date(now.getTime()+8*3600000).toISOString().slice(0,10)+'T00:00:00+08:00').getTime();
+function focusModel(rows,now=new Date()){
+  const day=86400000;
   const calendar=value=>{const d=trackingDate(value).slice(0,10);return d?new Date(d+'T00:00:00+08:00').getTime():NaN;};
-  const items=[];
-  viewRecords().forEach(r=>{
-    const t=r.tracking;if(!t)return;
-    const final=['awarded','terminated'].includes(t.status);
-    const dates=[t.openingAt,t.deadlineAt].map(calendar).filter(Number.isFinite);
-    const event=dates.length?Math.min(...dates):NaN,days=Math.round((event-today)/day);
-    const resolved=(Array.isArray(t.evidence)?t.evidence:[]).filter(e=>/awarded|terminated|award|result|中标|成交|终止/i.test(e.kind||'')).map(e=>calendar(e.date)).filter(Number.isFinite);
-    const finalDate=resolved.length?Math.max(...resolved):calendar(r.date);
-    const recentFinal=final&&(today-finalDate)/day>=0&&(today-finalDate)/day<=14;
-    if(recentFinal||!final&&(t.status!=='scheduled'||days<=7))items.push({r,kind:'tracking',when:Number.isFinite(event)?event:today,days,overdue:t.status==='scheduled'&&days<0});
-  });
-  viewRecords().forEach(r=>{
-    if(r.tracking||!['bid','plan'].includes(recordStage(r)))return;
-    const txt=r.type+' '+r.sum;
-    let m=txt.match(/预计(?:招标日期)?(\d{4})-(\d{2})-(\d{2})/),verb='发标';
-    if(!m){m=txt.match(/(\d{4})-(\d{2})-(\d{2})开标/);verb='开标';}
-    if(!m){m=txt.match(/投标截止(?:时间)?[：:\s]*(\d{4})-(\d{2})-(\d{2})/);verb='截止投标';}
-    if(m){
-      const d=new Date(+m[1],+m[2]-1,+m[3]),days=Math.ceil((d-now)/day);
-      if(days>=-3&&days<=60)items.push({r,kind:'up',days,verb,when:d.getTime()});
+  const today=calendar(new Date(now.getTime()+8*3600000).toISOString());
+  const recent=value=>{const age=(today-value)/day;return Number.isFinite(age)&&age>=0&&age<=14;};
+  const primary=[],archive=[];
+  rows.forEach(r=>{
+    const t=r.tracking;
+    if(t){
+      const final=['awarded','terminated'].includes(t.status);
+      const dates=[['截止',calendar(t.deadlineAt)],['开标',calendar(t.openingAt)]].filter(x=>Number.isFinite(x[1])).sort((a,b)=>a[1]-b[1]);
+      const event=dates.find(x=>x[1]>=today)||dates.at(-1);
+      const when=event?.[1]??NaN,days=Math.round((when-today)/day);
+      const kind=({candidate:/candidate|候选|预成交/,opened:/opened|opening|开标/,awarded:/awarded|award|result|中标|成交/,terminated:/terminated|终止/,postponed:/postponed|amend|change|延期|更正/,suspended:/suspended|中止/})[t.status];
+      const evidence=(Array.isArray(t.evidence)?t.evidence:[]).filter(e=>kind&&kind.test(e.kind||'')&&calendar(e.date)<=today).sort((a,b)=>calendar(b.date)-calendar(a.date));
+      const progress=evidence.length?calendar(evidence[0].date):calendar(t.eventDate||r.date);
+      const source=evidence.find(e=>/^https?:\/\//i.test(e.url||''));
+      const upcoming=!final&&['scheduled','postponed'].includes(t.status)&&days>=0&&days<=7;
+      const followup=!final&&days<=0&&days>=-7&&['scheduled','due','opened'].includes(t.status)&&!upcoming;
+      const fresh=recent(progress);
+      if(final&&!fresh)return;
+      const x={r,when,days,progress,source,verb:event?.[0],kind:upcoming?'upcoming':followup?'followup':fresh?'progress':'archive'};
+      if(upcoming||followup||fresh)primary.push(x);else archive.push(x);
+      return;
     }
+    const text=r.type+' '+r.sum;
+    let m,verb;
+    if(['bid','plan'].includes(recordStage(r))){
+      m=text.match(/投标截止(?:时间)?[：:\s]*(\d{4}-\d{2}-\d{2})/);verb='截止';
+      if(!m){m=text.match(/(\d{4}-\d{2}-\d{2})开标/);verb='开标';}
+      if(!m){m=text.match(/预计(?:招标日期)?(\d{4}-\d{2}-\d{2})/);verb='预计发标';}
+    }
+    const when=calendar(m?.[1]),days=Math.round((when-today)/day),progress=calendar(r.date);
+    if(days>=0&&days<=7)primary.push({r,kind:'upcoming',when,days,verb});
+    else if(recent(progress))primary.push({r,kind:'progress',progress,when});
   });
-  viewRecords().forEach(r=>{
-    if(r.tracking||items.some(x=>x.r._index===r._index))return;
-    const m=String(r.date||'').match(/^(\d{4})-(\d{2})-(\d{2})/);
-    if(m){const d=new Date(+m[1],+m[2]-1,+m[3]),ago=Math.floor((now-d)/day);if(ago>=0&&ago<=14)items.push({r,kind:'fresh',ago,when:d.getTime()});}
-  });
-  const tracked=items.filter(x=>x.kind==='tracking').sort((a,b)=>a.when-b.when);
-  const ups=items.filter(x=>x.kind==='up').sort((a,b)=>a.when-b.when);
-  const frs=items.filter(x=>x.kind==='fresh').sort((a,b)=>b.when-a.when).slice(0,6);
+  const rank=x=>x.kind==='upcoming'?0:x.kind==='followup'?1:2;
+  primary.sort((a,b)=>rank(a)-rank(b)||(rank(a)<2?a.when-b.when:b.progress-a.progress)||a.r._index-b.r._index);
+  archive.sort((a,b)=>(Number.isFinite(b.when)?b.when:0)-(Number.isFinite(a.when)?a.when:0)||a.r._index-b.r._index);
+  return {primary,archive,urgent:primary.filter(x=>x.kind!=='progress').length,progress:primary.filter(x=>x.kind==='progress').length};
+}
+function buildFocus(){
+  const model=focusModel(viewRecords());
   const item=x=>{
     const r=x.r,t=r.tracking;
-    let cd;
-    if(t)cd='<span class="cd">'+uiText(x.overdue?'到期未见结果':trackingLabel(r))+'</span>';
-    else if(x.kind==='up'){
-      const v=x.verb||'发标',text=x.days<=0?v+'在即':x.days+'天后'+v,tier=x.days<=7?'':x.days<=15?' mid':' soon';
-      cd='<span class="cd'+tier+'">'+text+'</span>';
-    }else cd='<span class="cd fresh">'+(x.ago===0?'今日公告':x.ago+'天前公告')+'</span>';
-    const safe=/^https?:\/\//i.test(r.url||''),tag=safe?'a':'div';
-    return '<'+tag+' class="fitem" data-org="'+esc(r.org)+'" style="'+orgStyle(r.org)+'"'+(safe?' href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer"':'')+'>'+cd+
-      '<span class="focus-project"><span class="ft">'+uiText(r.name)+'</span><span class="focus-buyer"><span class="focus-buyer-label">采购／招标单位：</span>'+orgBadge(r.org,r.buyer||'单位未披露')+'</span>'+
-      (t?'<span class="focus-tracking">'+uiText('开标 '+(trackingDate(t.openingAt)||'未披露')+' · 截止 '+(trackingDate(t.deadlineAt)||'未披露'))+'</span><span class="focus-tracking">'+uiText('最近检查 '+(trackingDate(t.lastAttemptAt)||'尚未检查')+' · 最近成功 '+(trackingDate(t.lastSuccessAt)||'暂无'))+'</span>':'')+'</span>'+
-      '<span class="fm">'+orgBadge(r.org)+'<span class="focus-amount">'+esc(fmtAmt(r.amt)||'金额未披露')+'</span></span></'+tag+'>';
+    let label=t?trackingLabel(r):'近期公告';
+    if(x.kind==='upcoming')label=(x.days===0?'今天':x.days+'天后')+(x.verb||(trackingKeyTime(r).startsWith('截止')?'截止':'开标'));
+    if(x.kind==='followup')label='开标／截止已过';
+    const url=x.kind==='progress'&&x.source?x.source.url:r.url;
+    const safe=/^https?:\/\//i.test(url||''),tag=safe?'a':'div';
+    const progressDate=Number.isFinite(x.progress)?new Date(x.progress+8*3600000).toISOString().slice(0,10):'';
+    const time=x.kind==='progress'?(t&&x.source?(({candidate:'公示发布',awarded:'结果发布',terminated:'终止发布',opened:'开标信息发布',postponed:'变更发布',suspended:'中止发布'})[t.status]||'公告发布'):'公告发布')+' '+progressDate:t?trackingKeyTime(r):x.verb&&Number.isFinite(x.when)?x.verb+' '+new Date(x.when+8*3600000).toISOString().slice(0,10):r.date;
+    const candidate=t?.status==='candidate'?t.candidate:null;
+    const quote=typeof candidate?.amount==='number'&&Number.isFinite(candidate.amount);
+    const amount=quote?candidate.amount:r.amt,amountKind=quote?'候选报价':amountLabel(r);
+    return '<'+tag+' class="fitem" data-org="'+esc(r.org)+'" style="'+orgStyle(r.org)+'"'+(safe?' href="'+esc(url)+'" target="_blank" rel="noopener noreferrer"':'')+'><span class="cd'+(x.kind==='progress'?' fresh':'')+'">'+esc(label)+'</span>'+
+      '<span class="focus-project"><span class="ft">'+esc(r.name)+'</span><span class="focus-buyer"><span class="focus-buyer-label">采购方</span>'+orgBadge(r.org,r.buyer||'单位未披露')+(time?'<span class="focus-key-time">'+uiText(time)+'</span>':'')+'</span>'+(candidate?.name?'<span class="focus-outcome">候选单位：'+esc(candidate.name)+'</span>':'')+'</span>'+
+      '<span class="fm"><span class="focus-amount">'+esc(fmtExactAmt(amount)||'未披露')+'</span><span class="focus-amount-kind">'+uiText(amountKind)+'</span></span></'+tag+'>';
   };
-  let html='';
-  if(tracked.length)html+='<div class="fgroup"><h3>持续追踪 · '+tracked.length+'</h3>'+tracked.map(item).join('')+'</div>';
-  if(ups.length)html+='<div class="fgroup"><h3>即将发标 / 开标 · '+ups.length+'</h3>'+ups.map(item).join('')+'</div>';
-  if(frs.length)html+='<div class="fgroup"><h3>近14天公告 · '+frs.length+'</h3>'+frs.map(item).join('')+'</div>';
-  document.getElementById('focusList').innerHTML=html;
-  document.getElementById('focusTitle').innerHTML=icon('radar')+'近期关注 <span class="focus-num">'+(tracked.length+ups.length+frs.length)+'</span>';
+  const folded=(items,cls,label)=>items.length?'<details class="'+cls+'"><summary>'+label+' <b>'+items.length+'</b> 项'+icon('chevron-down')+'</summary><div class="focus-scroll">'+items.map(item).join('')+'</div></details>':'';
+  document.getElementById('focusList').innerHTML=
+    '<div class="focus-counts"><span><b>'+model.urgent+'</b> 临近 / 刚到期</span><span><b>'+model.progress+'</b> 近期进展 / 公告</span><span class="focus-backlog-count"><b>'+model.archive.length+'</b> 其他追踪</span></div>'+
+    '<div class="focus-primary">'+(model.primary.length?model.primary.slice(0,3).map(item).join(''):'<p class="focus-empty">暂无临近事项或近期进展，可在下方项目库查询全部项目。</p>')+'</div>'+
+    folded(model.primary.slice(3),'focus-more','更多优先事项')+
+    folded(model.archive,'focus-archive','其他追踪 · 历史待核实及远期事项');
+  document.getElementById('focusTitle').innerHTML=icon('radar')+'今日工作台';
   updateFocusVisibility();
-  document.getElementById('focusBox').open=window.matchMedia('(min-width: 900px)').matches;
+  document.getElementById('focusBox').open=true;
 }
 // ===== CSV导出（Artifact查看器禁止下载，仅在GitHub Pages/本地显示按钮） =====
 function initCsv(){
@@ -1401,8 +1441,8 @@ function renderCfg(){
   document.getElementById("stCount").textContent = "现有 " + CONFIG.stypes.length + " 类" + (ps.length? " · 待生效 "+ps.length+" 类":"");
   document.getElementById("typeCount").textContent = "已配置 " + CONFIG.keywords.length + " 个" + (pt.length? " · 待生效 "+pt.length+" 个":"");
   document.getElementById("unitList").innerHTML =
-    CONFIG.units.map(u=>'<span class="cfgitem" title="'+uiText(u.full)+'">'+uiText(u.name)+' <span class="active">检索中 · '+(orgCnt[u.key]||0)+'条</span></span>').join("") +
-    pu.map((u,i)=>'<span class="cfgitem">'+uiText(u.name)+' <span class="pend">待生效</span><button data-i="'+i+'" data-k="u" title="移除">✕</button></span>').join("");
+    CONFIG.units.map(u=>'<span class="cfgitem" title="'+esc(u.full)+'">'+esc(u.name)+' <span class="active">检索中 · '+(orgCnt[u.key]||0)+'条</span></span>').join("") +
+    pu.map((u,i)=>'<span class="cfgitem">'+esc(u.name)+' <span class="pend">待生效</span><button data-i="'+i+'" data-k="u" title="移除">✕</button></span>').join("");
   document.getElementById("stList").innerHTML =
     CONFIG.stypes.map(s=>'<span class="cfgitem">'+uiText(s.label)+' <span class="active">'+(stCnt2[s.key]||0)+'条</span></span>').join("") +
     ps.map((t,i)=>'<span class="cfgitem">'+uiText(t)+' <span class="pend">待生效</span><button data-i="'+i+'" data-k="s" title="移除">✕</button></span>').join("");
