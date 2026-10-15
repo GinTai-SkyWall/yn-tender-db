@@ -418,7 +418,7 @@ try{document.documentElement.dataset.theme=localStorage.getItem("yntb_theme")===
   </div>
   <div class="overview">
     <div class="metric"><span class="metric-label">收录项目</span><div class="metric-value"><b id="statTotal">–</b><small>个</small></div></div>
-    <div class="metric metric-secondary"><span class="metric-label">已披露成交额</span><div class="metric-value"><b id="statAmount">–</b><b class="amount-compact" id="statAmountCompact">–</b><small class="amount-full-unit">万元</small><small class="amount-compact-unit" id="statAmountCompactUnit">亿元</small></div></div>
+    <div class="metric metric-secondary"><span class="metric-label">已披露成交额（约）</span><div class="metric-value"><b id="statAmount">–</b><b class="amount-compact" id="statAmountCompact">–</b><small class="amount-full-unit">万元</small><small class="amount-compact-unit" id="statAmountCompactUnit">亿元</small></div></div>
     <div class="metric metric-secondary"><span class="metric-label"><svg aria-hidden="true" focusable="false" class="icon"
   xmlns="http://www.w3.org/2000/svg"
   width="18"
@@ -1183,7 +1183,7 @@ function render(){
   else{scope.dataset.org=state.org;scope.style.cssText=orgStyle(state.org);}
   const totals=amountTotals(rows);
   const result=document.getElementById("resultline");
-  result.textContent=rows.length+" / "+viewRecords(state.archive==="all").length+" 条 · 成交额 "+(fmtAmt(totals.award)||"0万")+" · 预算/估算 "+(fmtAmt(totals.budget)||"0万")+" · 缺金额 "+totals.missing+" 条";
+  result.textContent=rows.length+" / "+viewRecords(state.archive==="all").length+" 条 · 成交额约 "+(fmtAmt(totals.award)||"0万")+" · 预算/估算约 "+(fmtAmt(totals.budget)||"0万")+" · 缺金额 "+totals.missing+" 条";
   result.title="所有金额统计排除已确认重复记录；成交额仅汇总正式结果中明确标注的中标/成交金额。候选报价 "+totals.quote.toFixed(2)+" 万元；其他公告金额 "+totals.other.toFixed(2)+" 万元。预算不代表已成交，未披露金额不按零估计。";
   if(!rows.length){
     box.innerHTML='<div class="empty">没有符合条件的项目<br><button class="pill" id="emptyReset">清除筛选</button></div>';
